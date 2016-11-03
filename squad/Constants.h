@@ -7,8 +7,6 @@
 //
 
 #import <Firebase.h>
-//#import <Parse/Parse.h>
-
 
 #ifndef nimbustest_Constants_h
 #define nimbustest_Constants_h
@@ -35,7 +33,7 @@
 #define kAppIDNumber @"appIDNumber"
 
 
-#warning change me before release... to 3 or 2??
+#warning change the following before release
 #define debugLvl 3
 // Level 1 Everything (Verbose)
 // Level 2 Some (Debug)
@@ -53,7 +51,6 @@
 +(void)incrementMethodCallCount;
 +(int)getMethodCallCount;
 
-//+(NSMutableDictionary*)storeMessageLocally:(PFObject*)message;
 //+(Firebase*) firebasePath;
 //+(Firebase*) firebasePathGeofences;
 
