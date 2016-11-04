@@ -12,33 +12,17 @@ import UIKit
 
 class friendRequests: UITableViewController {
     
-  //  var ref: FIRDatabaseReference!
     
     var items: [individualFriendRequest] = []
 
-    let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
-    
-    
-  //  let ref = FIRDatabase.database().reference(withPath: "grocery-items")
-    var userCountBarButtonItem: UIBarButtonItem!
-
-    
+  
     override func viewDidLoad() {
         
         super.viewDidLoad()
-        
-        /*
-        tableView.allowsMultipleSelectionDuringEditing = false
-        
-        userCountBarButtonItem = UIBarButtonItem(title: "1",
-                                                 style: .plain,
-                                                 target: self,
-                                                 action: nil)
-        userCountBarButtonItem.tintColor = UIColor.white
-        navigationItem.leftBarButtonItem = userCountBarButtonItem
-        */
-        
+      
+        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+
         self.navigationItem.title = "Friend Requests"
 
         let friendRequestsPath = FIRDatabase.database().reference().child("users").child(userId).child("friendRequests")
@@ -56,9 +40,6 @@ class friendRequests: UITableViewController {
 
             self.tableView.reloadData()
         })
-        
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -155,10 +136,12 @@ class friendRequests: UITableViewController {
     
     
     func removeFriendRequest (request requestItem: individualFriendRequest) {
+        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+
         let specifictFriendRequest = FIRDatabase.database().reference().child("users").child(userId).child("friendRequests").child(requestItem.requestersPin)
         
         specifictFriendRequest.removeValue(completionBlock: { (error, ref) in
-            if error != nil {
+            if error == nil {
                 // success
                 
                 // add comments here

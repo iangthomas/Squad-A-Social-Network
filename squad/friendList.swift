@@ -12,11 +12,10 @@ class friendList : UITableViewController {
 
     
     var items: [individualFriend] = []
-    let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
     
     
-    private var channelRefHandle: FIRDatabaseHandle?
-    private var channels: [Channel] = []
+ //   private var channelRefHandle: FIRDatabaseHandle?
+ //   private var channels: [Channel] = []
     
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
@@ -27,6 +26,7 @@ class friendList : UITableViewController {
         super.viewDidLoad()
         
         self.navigationItem.title = "Friends List"
+        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
         let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
         friendsPath.observe(.value, with: { snapshot in
@@ -70,10 +70,111 @@ class friendList : UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-       // if (indexPath as NSIndexPath).section == Section.currentChannelsSection.rawValue {
-            let channel = channels[(indexPath as NSIndexPath).row]
-            self.performSegue(withIdentifier: "ShowChannel", sender: channel)
-       // }
+
+        // do these folks have a channel together?
+        
+        
+        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+
+        // generate the main channel
+       // let channelsPath = FIRDatabase.database().reference().child("channels")
+        let newChannelPathId = channelRef.childByAutoId()
+        
+        var channelItem: [String: Any]
+        
+        channelItem = [
+            "name": "ConverstionTest"
+        ]
+
+        newChannelPathId.setValue(channelItem) { (error, ref) in
+            if error == nil {
+            
+                
+                
+                
+                
+                // make the new channel for this user
+                let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels").child(newChannelPathId.key)
+                thisUserPath.setValue(true) { (error, ref) in
+                    if error == nil {
+                        
+                        
+                        
+                        // make the new channel for the friend
+                        let theFriend = self.items[(indexPath as NSIndexPath).row]
+                        
+                        let theFriendPin = theFriend.key
+                        
+                        let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriendPin)
+                        // get there uniqeu id
+                        friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                            
+                            let result = snapshot.value as? NSDictionary
+                            if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
+                                
+                                
+                                let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels").child(newChannelPathId.key)
+                                friendUserPath.setValue(true) { (error, ref) in
+                                    if error == nil {
+                                        
+                                        // the channel has been added to both the users.
+                                        
+                                        // now lets make a channel object to send to the next viewcontroller
+                                        
+                                        self.channelRef.child(newChannelPathId.key).observeSingleEvent(of: .value, with: { (snapshot) in
+                                                                                        let channelData = snapshot.value as! Dictionary<String, AnyObject>
+                                            let id = snapshot.key
+                                            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                                                
+                                               self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
+
+                                            }
+                                        })
+                                        
+                                        
+                                        
+                                        
+                                        
+                                        // add comments here
+                                    } else {
+                                        // add comments here
+                                    }
+                                }
+                                
+                            }
+                        })
+                        
+                        
+                        
+                        
+                    } else {
+                        // add comments here
+                    }
+                }
+                
+
+                
+                
+                
+            
+            }
+        }
+        
+
+        
+        
+        
+        
+
+        
+        
+        // yes -> show it
+        
+        
+        // no -> make one, added it to both users and show it.
+        
+      
+      //  }
     }
     
     
@@ -82,8 +183,7 @@ class friendList : UITableViewController {
         
         if let channel = sender as? Channel {
             let chatVc = segue.destination as! ChatViewController
-            
-            chatVc.senderDisplayName = senderDisplayName
+            chatVc.senderDisplayName = UserDefaults.standard.object(forKey: kPin) as! String
             chatVc.channel = channel
             chatVc.channelRef = channelRef.child(channel.id)
         }

@@ -15,7 +15,6 @@ struct individualFriend {
     let key: String
     let ref: FIRDatabaseReference?
     
-    
     init(time: String, key: String = "") {
         self.time = time
        // self.requestersPin = requestersPin
