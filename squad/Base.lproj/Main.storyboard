@@ -657,8 +657,16 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="iwA-nV-Ohh">
-                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="aob-BW-M8G"/>
-                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="HX5-zV-zzZ"/>
+                        <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="aob-BW-M8G">
+                            <connections>
+                                <action selector="cancel:" destination="088-il-qPl" id="Anc-St-ZoZ"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="HX5-zV-zzZ">
+                            <connections>
+                                <action selector="done:" destination="088-il-qPl" id="Mgc-44-3aL"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="cancel" destination="aob-BW-M8G" id="ADp-Lu-fvW"/>

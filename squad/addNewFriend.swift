@@ -26,6 +26,7 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         textField.becomeFirstResponder()
+        done.isEnabled = false
         
     }
     
@@ -54,7 +55,17 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         
-        attemptToSendPinRequest()
+        if textField.text != "" {
+            attemptToSendPinRequest()
+        }
+    }
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let oldText = textField.text! as NSString
+        let newText = oldText.replacingCharacters(in: range, with: string) as NSString
+        done.isEnabled = newText.length > 0
+        return true
     }
     
     
@@ -127,9 +138,10 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
         ref.setValue(dictionary) { (error, ref) in
             
             if error != nil {
-            
+             // add comments here
             } else {
-            
+                // add comments here
+
             }
             
         }
