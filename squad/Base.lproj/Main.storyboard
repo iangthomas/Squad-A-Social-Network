@@ -459,9 +459,13 @@
             <objects>
                 <navigationController id="feN-bp-e9G" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Profile" image="cog" id="oeB-5m-ihk"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5FM-k9-Nyp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="5FM-k9-Nyp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <connections>
                         <segue destination="RH3-LW-eda" kind="relationship" relationship="rootViewController" id="S5e-un-3e1"/>
@@ -531,9 +535,13 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6ax-Zp-TtB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="List" image="threeLines" id="cIE-KU-6tl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="laT-43-Ovx">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="laT-43-Ovx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -741,11 +749,13 @@
                     </view>
                     <navigationItem key="navigationItem" id="iwA-nV-Ohh">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="aob-BW-M8G">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="cancel:" destination="088-il-qPl" id="Anc-St-ZoZ"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" style="done" systemItem="done" id="HX5-zV-zzZ">
+                            <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                             <connections>
                                 <action selector="done:" destination="088-il-qPl" id="Mgc-44-3aL"/>
                             </connections>
@@ -766,9 +776,10 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i7u-WQ-Kwa" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9JG-W5-PsR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="9JG-W5-PsR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -785,9 +796,13 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="trU-kV-XBq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Requests" image="flag" id="1XT-1T-Lcl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="opS-pw-6KD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="opS-pw-6KD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>

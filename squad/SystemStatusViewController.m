@@ -832,13 +832,9 @@
     userProfile[@"Num_Launches"] = [NSString stringWithFormat:@"%ld", (long)[[NSUserDefaults standardUserDefaults] integerForKey:kNumLaunchesKey]];
     userProfile[@"DeviceName"] = [Constants platform];
     
-    FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
-   // Firebase *usersRef = [[Constants firebasePath] childByAppendingPath: @"users"];
-    
+    FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];    
     
     userProfile[@"dateCreated"] = [[Constants internetTimeDateFormatter] stringFromDate:[NSDate date]];
-    
-    userProfile[@"addEdit"] = @NO;
     
     userProfile[@"uniqueFirebaseId"] = [self generateUniqueId];
     
