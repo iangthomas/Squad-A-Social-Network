@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */; };
 		3C2E735D1DCC050400C2B809 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C2E735C1DCC050400C2B809 /* Settings.bundle */; };
+		3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */; };
+		3C2E73651DCC05CC00C2B809 /* PVAttractionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */; };
+		3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */; };
 		3C69C1BB1DCB043600898FA7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1BA1DCB043600898FA7 /* main.m */; };
 		3C69C1C11DCB043600898FA7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1C01DCB043600898FA7 /* ViewController.m */; };
 		3C69C1C41DCB043600898FA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C21DCB043600898FA7 /* Main.storyboard */; };
@@ -29,6 +32,12 @@
 		3C2E73591DCBEE7200C2B809 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		3C2E735C1DCC050400C2B809 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
+		3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mapViewViewController.h; sourceTree = "<group>"; };
+		3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mapViewViewController.m; sourceTree = "<group>"; };
+		3C2E73611DCC05CC00C2B809 /* PVAttractionAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVAttractionAnnotation.h; sourceTree = "<group>"; };
+		3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotation.m; sourceTree = "<group>"; };
+		3C2E73631DCC05CC00C2B809 /* PVAttractionAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVAttractionAnnotationView.h; sourceTree = "<group>"; };
+		3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotationView.m; sourceTree = "<group>"; };
 		3C69C1B61DCB043600898FA7 /* squad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = squad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C69C1BA1DCB043600898FA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3C69C1BF1DCB043600898FA7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -67,6 +76,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3C2E73671DCC05D100C2B809 /* Map Aux */ = {
+			isa = PBXGroup;
+			children = (
+				3C2E73611DCC05CC00C2B809 /* PVAttractionAnnotation.h */,
+				3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */,
+				3C2E73631DCC05CC00C2B809 /* PVAttractionAnnotationView.h */,
+				3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */,
+			);
+			name = "Map Aux";
+			sourceTree = "<group>";
+		};
 		3C69C1AD1DCB043600898FA7 = {
 			isa = PBXGroup;
 			children = (
@@ -91,17 +111,20 @@
 				3C69C1D41DCB062400898FA7 /* squad.entitlements */,
 				3C69C1E51DCB069900898FA7 /* AppDelegate.h */,
 				3C69C1E61DCB069900898FA7 /* AppDelegate.m */,
+				3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */,
+				3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */,
 				3C69C1BF1DCB043600898FA7 /* ViewController.h */,
 				3C69C1C01DCB043600898FA7 /* ViewController.m */,
-				3C69C1C21DCB043600898FA7 /* Main.storyboard */,
 				3C2E73591DCBEE7200C2B809 /* ProfileViewController.h */,
 				3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */,
 				3C69C1C51DCB043600898FA7 /* Assets.xcassets */,
+				3C69C1C21DCB043600898FA7 /* Main.storyboard */,
 				3C69C1C71DCB043600898FA7 /* LaunchScreen.storyboard */,
 				3C69C1DF1DCB066500898FA7 /* Constants.h */,
 				3C69C1E01DCB066500898FA7 /* Constants.m */,
 				3C69C1E11DCB066500898FA7 /* Reachability.h */,
 				3C69C1E21DCB066500898FA7 /* Reachability.m */,
+				3C2E73671DCC05D100C2B809 /* Map Aux */,
 				3C69C1DE1DCB065500898FA7 /* Tutorial */,
 				3C69C1D21DCB060900898FA7 /* GoogleService-Info.plist */,
 				3C69C1CA1DCB043600898FA7 /* Info.plist */,
@@ -307,11 +330,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */,
+				3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */,
 				3C69C1C11DCB043600898FA7 /* ViewController.m in Sources */,
 				3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */,
 				3C69C1E41DCB066500898FA7 /* Reachability.m in Sources */,
 				3C69C1DB1DCB064900898FA7 /* TutViewController.m in Sources */,
 				3C69C1BB1DCB043600898FA7 /* main.m in Sources */,
+				3C2E73651DCC05CC00C2B809 /* PVAttractionAnnotation.m in Sources */,
 				3C69C1E71DCB069900898FA7 /* AppDelegate.m in Sources */,
 				3C69C1DC1DCB064900898FA7 /* TutPageContentViewController.m in Sources */,
 				3C69C1E31DCB066500898FA7 /* Constants.m in Sources */,
