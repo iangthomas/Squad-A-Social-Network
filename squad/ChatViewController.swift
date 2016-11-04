@@ -319,6 +319,7 @@ final class ChatViewController: JSQMessagesViewController {
         }
     }
     
+    /*
     private func addPhotoMessage(withId id: String, key: String, mediaItem: JSQPhotoMediaItem) {
         if let message = JSQMessage(senderId: id, displayName: "", media: mediaItem) {
             messages.append(message)
@@ -330,7 +331,7 @@ final class ChatViewController: JSQMessagesViewController {
             collectionView.reloadData()
         }
     }
-    
+    */
     // MARK: UITextViewDelegate methods
     
     override func textViewDidChange(_ textView: UITextView) {
