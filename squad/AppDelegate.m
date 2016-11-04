@@ -58,6 +58,7 @@
                                  @"", kidOfGenfenceDeviceIsIn,
                                  @"NO", kOnDuty,
                                  @"", kDocentUserId,
+                                 @"", kPin,
                                  @"", kAppIDNumber,
                                  @"YES", kauto_anonymous_stats,
                                  @"YES", kauto_crash_reporting,

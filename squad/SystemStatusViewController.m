@@ -425,7 +425,9 @@
     if (_loginWithEmailButton.hidden == YES) {
         
         _loginWithEmailButton.hidden = NO;
-        _loginWithFacebook.hidden = NO;
+        
+        //facebook disabled
+        //_loginWithFacebook.hidden = NO;
         
         _loginWithEmailButton.alpha = 0.0;
         _loginWithFacebook.alpha = 0.0;
@@ -842,6 +844,10 @@
     
     userProfile[@"e-mail"] = emailTextBox.text;
     
+    userProfile[@"pin"] = [self generatePin];
+    [[NSUserDefaults standardUserDefaults] setObject:userProfile[@"pin"] forKey:kPin];
+
+    
     [_activityView startAnimating];
     [self setButton:_SocialImageButton toColor:@"Red"];
 
@@ -912,28 +918,53 @@
                                     
                                    // FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
 
-                                    FIRDatabaseReference *uniqueIdRef = [usersRef child:userProfile[@"uniqueFirebaseId"]];
-                                    [uniqueIdRef setValue:userProfile withCompletionBlock:
-                                    ^(NSError *error, FIRDatabaseReference *ref) {
-                                        
-                                        [_activityView stopAnimating];
-                                        
+                                    
+                                    
+                                    // update pin list
+                                    
+                                        FIRDatabaseReference *pinRef = [[[[FIRDatabase database] reference] child:@"pins"] child: userProfile[@"pin"]];
+                                    
+                                    [pinRef setValue:@{@"uniqueId": userProfile[@"uniqueFirebaseId"]} withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+                                            
                                         if (error) {
-                                            [Constants debug:@3 withContent:@"ERROR: Firebase e-mail adding to database."];
+                                            [Constants debug:@3 withContent:@"ERROR: Firebase Pin adding to database."];
                                             [Constants makeErrorReportWithDescription:error.localizedDescription];
                                         } else {
-                                            [Constants debug:@2 withContent:@"Successful Firebase e-mail user added to database."];
-                                            [[NSNotificationCenter defaultCenter] postNotificationName:@"makeProfile" object:userProfile[@"uniqueFirebaseId"]];
+                                            [Constants debug:@2 withContent:@"Successful Firebase pin added to database."];
                                             
-                                            [self hideAllLoginOptions];
-                                            [self hideEmailBox];
-                                            if (_SocialTextButton.hidden == YES) {
-                                                [self showSocialButton];
-                                            }
-                                            [self updateSocialButton];
-                                            [self updateGetStartedButton:nil];
+                                            
+                                            
+                                            
+                                            
+                                            // now add the user profile itself to the database
+                                            
+                                            FIRDatabaseReference *uniqueIdRef = [usersRef child:userProfile[@"uniqueFirebaseId"]];
+                                            [uniqueIdRef setValue:userProfile withCompletionBlock:
+                                             ^(NSError *error, FIRDatabaseReference *ref) {
+                                                 
+                                                 [_activityView stopAnimating];
+                                                 
+                                                 if (error) {
+                                                     [Constants debug:@3 withContent:@"ERROR: Firebase e-mail adding to database."];
+                                                     [Constants makeErrorReportWithDescription:error.localizedDescription];
+                                                 } else {
+                                                     [Constants debug:@2 withContent:@"Successful Firebase e-mail user added to database."];
+                                                     [[NSNotificationCenter defaultCenter] postNotificationName:@"makeProfile" object:userProfile[@"uniqueFirebaseId"]];
+                                                     
+                                                     [self hideAllLoginOptions];
+                                                     [self hideEmailBox];
+                                                     if (_SocialTextButton.hidden == YES) {
+                                                         [self showSocialButton];
+                                                     }
+                                                     [self updateSocialButton];
+                                                     [self updateGetStartedButton:nil];
+                                                 }
+                                             }];
                                         }
+                                        
                                     }];
+                                    
+
                                 }
                                 
     }];
@@ -950,6 +981,14 @@
     NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%10000000)+1];
     
     return [NSString stringWithFormat:@"%@ - %i", dateString, randNumber.intValue];
+}
+
+
+-(NSString*) generatePin {
+    
+    NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%100)+1];
+    
+    return [NSString stringWithFormat:@"%i", randNumber.intValue];
 }
 
 

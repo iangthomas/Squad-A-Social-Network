@@ -39,10 +39,8 @@
     
     
 	// Create the data model
-    /*
-    _pageTitles = @[@"With Flock it's easy to get great deals when you shop and eat with your friends.", @"Check the map for circles, each one is a deal.", @"Here's what a deal card looks like.", @"This is what appears when the deal is unlocked.", @"Almost there!"];*/
-    
-    _pageTitles = @[@"With Flock it's easy to get deals when you shop and eat with your friends", @"Check the map to find great deals", @"Once a deal has enough people, everyone can unlock", @"Just show the cashier or waiter, the Flock App to enjoy your savings", @"That's all you need to know!"];
+
+    _pageTitles = @[@"With Squad it's easy to connect with nearby friends", @"Check the map to find your friends", @"Once a deal has enough people, everyone can unlock", @"Just show the cashier or waiter, the Flock App to enjoy your savings", @"That's all you need to know!"];
     
     
   //  _pageImages = @[@"example", @"tutMapImage", @"tutDealImage", @"tutClaimImage", @"example"];

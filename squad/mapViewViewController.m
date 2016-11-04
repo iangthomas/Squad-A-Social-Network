@@ -6,32 +6,16 @@
 //  Copyright © 2015 Geodex. All rights reserved.
 //
 
-//#import "PVParkMapViewController.h"
-/*
-#import "PVMapOptionsViewController.h"
-#import "PVPark.h"
-#import "PVParkMapOverlayView.h"
-#import "PVParkMapOverlay.h"
- */
+
 #import "PVAttractionAnnotation.h"
 #import "PVAttractionAnnotationView.h"
 //#import "PVCharacter.h"
 #import "mapViewViewController.h"
 
-//#import "Plane.h"
-//#import "PlaneOverlayView.h"
-//#import "PlaneMapOverlay.h"
-
-#import "AppDelegate.h"
-//#import <Parse/Parse.h>
-//#import "ProgressViewController.h"
-
 #import "Constants.h"
 
 #import "QuartzCore/QuartzCore.h"
 #import "Reachability.h"
-
-#import "SystemStatusViewController.h"
 
 #import "TutViewController.h"
 
@@ -132,12 +116,11 @@
    
     [self initialyHideTheDisplayBeaconView];
     
-    UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"cog"] style:UIBarButtonItemStylePlain target:self action:@selector(showSettings:)];
-    item.tintColor = [UIColor whiteColor];
     
+    UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewFriend:)];
+    add.tintColor = [UIColor whiteColor];
     
-    self.navigationItem.leftBarButtonItem = item;
-    
+    self.navigationItem.rightBarButtonItem = add;
     
     
     _theGeofencesBeingAdded = [[NSMutableArray alloc] init];
@@ -150,9 +133,9 @@
 }
 
 
--(IBAction)showSettings:(id)sender {
+-(IBAction)addNewFriend:(id)sender {
 
-    [self performSegueWithIdentifier:@"settings" sender:self];
+    [self performSegueWithIdentifier:@"addNewFriend" sender:self];
 }
 
 
@@ -189,13 +172,16 @@
     [self.navigationController.navigationBar
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
 
-    self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title"]];
+    self.navigationItem.title = @"Squad";
+    
+    // displays a logo
+    //self.navigationItem.titleView = [[UIImageView alloc] initWithImage:[UIImage imageNamed:@"title"]];
 }
 
 
 -(void)zoomMapNonNotif {
 
-
+/*
     MKCoordinateRegion mapRegion;
     mapRegion.center = CLLocationCoordinate2DMake(41.828794, -71.400701);
     
@@ -204,10 +190,10 @@
     
     
     [_theMapView setRegion:mapRegion animated:YES];
-    
+    */
     
     // old way, when the app was actauly in use, we zoomed to the users locaitons, now we zoom to the sight to show it off
-    /*
+    
      
     if (_theMapView.userLocation.location) {
         
@@ -225,7 +211,7 @@
         [Constants debug:@1 withContent:@"Trying to find user locaiton, waiting another second to try again"];
         [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(zoomMap:) userInfo:nil repeats:NO];
     }
-     */
+    
 }
 
 
@@ -525,19 +511,12 @@
             [self viewedDeal: uniqueId];
         }
         
-    } else if ([[segue identifier] isEqualToString:@"settings"]) {
-        
-     UINavigationController *navController = [segue destinationViewController];
-
-        SystemStatusViewController *nextVC = (SystemStatusViewController *)([navController viewControllers][0]);
-        nextVC.showHiddenStuff = YES;
-        
-        
-    
-    } else if ([[segue identifier] isEqualToString:@"geofences"]) {
+    }  else if ([[segue identifier] isEqualToString:@"geofences"]) {
     
      //   UINavigationController *navController = [segue destinationViewController];
      //   FlockListTableViewController *nextVC = (FlockListTableViewController *)([navController viewControllers][0]);
+    } else if ([[segue identifier] isEqualToString: @"addNewFriend"]) {
+    
     }
 }
 
@@ -802,17 +781,6 @@
                          //  [self.view layoutIfNeeded];
                      }];
 }
-
-
-
-// #warning handle if the user taps the same annotation multiple times - DONE
-// #warning handle changin between annotations -- DONE
-
-
-
-// #warning tapping on the current user possition causes some prevents subsiquent taps on the anntations from appearing properly - DONE
-
-//#warning when looking at the new geofecne detail view the view dissapears and then reappears! - DONE
 
 
 

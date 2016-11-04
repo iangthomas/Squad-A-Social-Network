@@ -12,8 +12,8 @@
 		3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */; };
 		3C2E73651DCC05CC00C2B809 /* PVAttractionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */; };
 		3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */; };
+		3C2E736A1DCC3E1A00C2B809 /* addNewFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */; };
 		3C69C1BB1DCB043600898FA7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1BA1DCB043600898FA7 /* main.m */; };
-		3C69C1C11DCB043600898FA7 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1C01DCB043600898FA7 /* ViewController.m */; };
 		3C69C1C41DCB043600898FA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C21DCB043600898FA7 /* Main.storyboard */; };
 		3C69C1C61DCB043600898FA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C51DCB043600898FA7 /* Assets.xcassets */; };
 		3C69C1C91DCB043600898FA7 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C71DCB043600898FA7 /* LaunchScreen.storyboard */; };
@@ -38,10 +38,10 @@
 		3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotation.m; sourceTree = "<group>"; };
 		3C2E73631DCC05CC00C2B809 /* PVAttractionAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVAttractionAnnotationView.h; sourceTree = "<group>"; };
 		3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotationView.m; sourceTree = "<group>"; };
+		3C2E73681DCC3E1A00C2B809 /* squad-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "squad-Bridging-Header.h"; sourceTree = "<group>"; };
+		3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewFriend.swift; sourceTree = "<group>"; };
 		3C69C1B61DCB043600898FA7 /* squad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = squad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C69C1BA1DCB043600898FA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		3C69C1BF1DCB043600898FA7 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		3C69C1C01DCB043600898FA7 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		3C69C1C31DCB043600898FA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3C69C1C51DCB043600898FA7 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3C69C1C81DCB043600898FA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -113,8 +113,7 @@
 				3C69C1E61DCB069900898FA7 /* AppDelegate.m */,
 				3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */,
 				3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */,
-				3C69C1BF1DCB043600898FA7 /* ViewController.h */,
-				3C69C1C01DCB043600898FA7 /* ViewController.m */,
+				3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */,
 				3C2E73591DCBEE7200C2B809 /* ProfileViewController.h */,
 				3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */,
 				3C69C1C51DCB043600898FA7 /* Assets.xcassets */,
@@ -129,6 +128,7 @@
 				3C69C1D21DCB060900898FA7 /* GoogleService-Info.plist */,
 				3C69C1CA1DCB043600898FA7 /* Info.plist */,
 				3C69C1B91DCB043600898FA7 /* Supporting Files */,
+				3C2E73681DCC3E1A00C2B809 /* squad-Bridging-Header.h */,
 			);
 			path = squad;
 			sourceTree = "<group>";
@@ -209,6 +209,7 @@
 					3C69C1B51DCB043600898FA7 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = 79DFX3SWE8;
+						LastSwiftMigration = 0800;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Keychain = {
@@ -332,7 +333,6 @@
 			files = (
 				3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */,
 				3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */,
-				3C69C1C11DCB043600898FA7 /* ViewController.m in Sources */,
 				3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */,
 				3C69C1E41DCB066500898FA7 /* Reachability.m in Sources */,
 				3C69C1DB1DCB064900898FA7 /* TutViewController.m in Sources */,
@@ -342,6 +342,7 @@
 				3C69C1DC1DCB064900898FA7 /* TutPageContentViewController.m in Sources */,
 				3C69C1E31DCB066500898FA7 /* Constants.m in Sources */,
 				3C69C1DD1DCB064900898FA7 /* SystemStatusViewController.m in Sources */,
+				3C2E736A1DCC3E1A00C2B809 /* addNewFriend.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -464,12 +465,16 @@
 			baseConfigurationReference = C7DB3CE0722E3A987D8106A0 /* Pods.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = squad/squad.entitlements;
 				DEVELOPMENT_TEAM = 79DFX3SWE8;
 				INFOPLIST_FILE = squad/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kkitcreations.squad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "squad/squad-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Debug;
 		};
@@ -478,12 +483,15 @@
 			baseConfigurationReference = 9A0274FB52EB2C6D331F81A7 /* Pods.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = squad/squad.entitlements;
 				DEVELOPMENT_TEAM = 79DFX3SWE8;
 				INFOPLIST_FILE = squad/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.kkitcreations.squad;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "squad/squad-Bridging-Header.h";
+				SWIFT_VERSION = 3.0;
 			};
 			name = Release;
 		};

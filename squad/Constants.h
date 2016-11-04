@@ -28,6 +28,7 @@
 #define kidOfGenfenceDeviceIsIn @"idOfGenfenceDeviceIsIn"
 #define kOnDuty @"onDuty"
 #define kDocentUserId @"docentUserId"
+#define kPin @"pin"
 #define kNumLaunchesKey @"numTimesAppLaunched"
 
 #define kAppIDNumber @"appIDNumber"
