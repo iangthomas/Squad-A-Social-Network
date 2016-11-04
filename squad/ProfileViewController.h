@@ -10,5 +10,6 @@
 
 @interface ProfileViewController : UIViewController
 @property (weak, nonatomic) IBOutlet UISegmentedControl *onOffGrid;
+@property (weak, nonatomic) IBOutlet UILabel *pinLabel;
 
 @end

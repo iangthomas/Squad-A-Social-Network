@@ -93,15 +93,18 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    
-#warning we need an equivilet observer (for the one below) for the lsit view... do we??? why???
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(addAttractionsPinsNotification:) name:@"currentGeofenceList" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(zoomMap:) name:@"zoomMap" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showSlideUpView:) name:@"showSlideUpView" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideSlideUpView:) name:@"hideSlideUpView" object:nil];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(showTheUserLocation:) name:@"showTheUserLocation" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideTheUserLocation:) name:@"hideTheUserLocation" object:nil];
+
     
     
     [Constants debug:@1 withContent:@"mapViewViewController"];
@@ -508,7 +511,7 @@
         progressView.geofenceUniqueId = uniqueId;
         */
         if (uniqueId != nil) {
-            [self viewedDeal: uniqueId];
+          //  [self viewedDeal: uniqueId];
         }
         
     }  else if ([[segue identifier] isEqualToString:@"geofences"]) {
@@ -820,22 +823,12 @@
 }
 
 
--(BOOL) bothNumbersPresent {
-    return _targetNumberReady && _currentNumberReady;
-}
-
-
 
 - (IBAction)detailsButtonPressed:(id)sender {
     
     [self performSegueWithIdentifier:@"details" sender:_showBeaconViewUniqueId];
 }
 
-
--(void) updateCountdown:(NSTimer*)theTimer{
-
-   _expiresLabel.text = [NSString stringWithFormat:@"Expires: %@", [self updateRemainingTimeFromDateString:theTimer.userInfo]];
-}
 
 
 -(void) setupDateFromatters {
@@ -850,29 +843,14 @@
 }
 
 
-- (NSString*)updateRemainingTimeFromDateString:(NSString *)strDate {
-    
-    return [_theExpiresComponentsFormatter stringFromTimeInterval:[[_theExpiresDateFormatter dateFromString:strDate] timeIntervalSinceDate:[NSDate date]]];
+-(void) showTheUserLocation:(NSNotification*)notif {
+    self.theMapView.showsUserLocation = YES;
 }
 
-
-- (void)viewedDeal:(NSString*) uniqueId {
-    
-    NSString *dev;
-    
-#if DEBUG == 1
-    dev = @"YES";
-#else
-    dev = @"NO";
-#endif
-    
-    NSMutableDictionary* report = [[NSMutableDictionary alloc] initWithDictionary:@{@"uniqueId":uniqueId,
-                                                                                    @"dev": dev,
-                                                                                    @"docentUserId": [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId],
-                                                                                    @"appVersion": [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]
-                                                                                    }];
-    [Answers logCustomEventWithName:@"Deal Card Viewed" customAttributes:report];
+-(void) hideTheUserLocation:(NSNotification*)notif {
+    self.theMapView.showsUserLocation = NO;
 }
+
 
 
 @end

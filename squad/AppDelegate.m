@@ -570,9 +570,11 @@
                  [self startDocentLocationStuff];
              }
             [locationManager startUpdatingLocation];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"showTheUserLocation" object:nil];
         
     } else {
         [self disableDocentStuff];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"hideTheUserLocation" object:nil];
     }
 }
 
@@ -581,10 +583,9 @@
     
     [Constants debug:@1 withContent:@"disableDocentStuff called."];
     [locationManager stopUpdatingLocation];
-    
     [self setFirebaseToOffGrid];
-    
 }
+
 
 -(void) setFirebaseToOffGrid {
 

@@ -20,6 +20,10 @@
     [super viewDidLoad];
     // Do any additional setup after loading the view.
     
+    self.navigationItem.title = @"Your Profile";
+        
+    _pinLabel.text = [[NSUserDefaults standardUserDefaults] stringForKey:kPin];
+    
     [self setInitialSwitchPositionAndUi];
 }
 

@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import FirebaseDatabase
 
 class addNewFriend: UIViewController, UITextFieldDelegate {
     
@@ -141,9 +140,7 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
              // add comments here
             } else {
                 // add comments here
-
             }
-            
         }
         
         
