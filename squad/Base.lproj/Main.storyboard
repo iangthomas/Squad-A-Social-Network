@@ -385,6 +385,7 @@
                     <navigationItem key="navigationItem" id="LqI-r8-UnF"/>
                     <connections>
                         <segue destination="i7u-WQ-Kwa" kind="presentation" identifier="addNewFriend" id="KVI-wE-3o9"/>
+                        <segue destination="nqs-FH-81V" kind="show" identifier="ShowChannel" id="5Sj-Tx-Pm2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YlH-VC-qE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -459,7 +460,7 @@
             <objects>
                 <navigationController id="feN-bp-e9G" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Profile" image="cog" id="oeB-5m-ihk"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="5FM-k9-Nyp">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="5FM-k9-Nyp">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -535,7 +536,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="6ax-Zp-TtB" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="List" image="threeLines" id="cIE-KU-6tl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="laT-43-Ovx">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="laT-43-Ovx">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -776,7 +777,7 @@
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="i7u-WQ-Kwa" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="9JG-W5-PsR">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="9JG-W5-PsR">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -796,7 +797,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="trU-kV-XBq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Requests" image="flag" id="1XT-1T-Lcl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="opS-pw-6KD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="opS-pw-6KD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
@@ -812,6 +813,25 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wry-Ps-ldp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="129" y="1766"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="CIS-f9-wzZ">
+            <objects>
+                <viewController id="nqs-FH-81V" customClass="ChatViewController" customModule="ChatChat" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="2Mn-C0-9hW"/>
+                        <viewControllerLayoutGuide type="bottom" id="y5j-Su-cns"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Sbl-MO-ek6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="NFH-8G-TXE"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gfz-UF-ab7" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1825" y="342"/>
         </scene>
     </scenes>
     <resources>

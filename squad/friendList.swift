@@ -14,6 +14,14 @@ class friendList : UITableViewController {
     var items: [individualFriend] = []
     let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
     
+    
+    private var channelRefHandle: FIRDatabaseHandle?
+    private var channels: [Channel] = []
+    
+    private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
+    
+    
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -60,9 +68,31 @@ class friendList : UITableViewController {
         return cell
     }
     
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+       // if (indexPath as NSIndexPath).section == Section.currentChannelsSection.rawValue {
+            let channel = channels[(indexPath as NSIndexPath).row]
+            self.performSegue(withIdentifier: "ShowChannel", sender: channel)
+       // }
+    }
+    
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
+        
+        if let channel = sender as? Channel {
+            let chatVc = segue.destination as! ChatViewController
+            
+            chatVc.senderDisplayName = senderDisplayName
+            chatVc.channel = channel
+            chatVc.channelRef = channelRef.child(channel.id)
+        }
+    }
+    
+    
+    
+    
     /*
-     
-     
      UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewFriend:)];
      add.tintColor = [UIColor whiteColor];
      
@@ -73,10 +103,6 @@ class friendList : UITableViewController {
      
      [self performSegueWithIdentifier:@"addNewFriend" sender:self];
      }
-     
-     
-     
-     
      */
     
     
