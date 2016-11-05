@@ -10,22 +10,17 @@ import UIKit
 
 class friendList : UITableViewController {
 
-    
     var items: [individualFriend] = []
-    
-    
- //   private var channelRefHandle: FIRDatabaseHandle?
- //   private var channels: [Channel] = []
     
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
-    
-    
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.navigationItem.title = "Friends List"
+        
+        addPlusButton()
+        
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
         let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
@@ -43,12 +38,22 @@ class friendList : UITableViewController {
         
     }
     
+    func addPlusButton() {
+        
+        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
+        addButton.tintColor = UIColor.white
+        self.navigationItem.rightBarButtonItem = addButton
+    }
+    
+    func addNewFriend() {
+        self.performSegue(withIdentifier: "addNewFriend", sender: self)
+    }
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -58,7 +63,6 @@ class friendList : UITableViewController {
         return items.count
     }
     
-    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath)
         let requestItem = items[indexPath.row]
@@ -67,9 +71,6 @@ class friendList : UITableViewController {
         
         return cell
     }
-    
-    
-    
     
     func makeNewChannel (_ theFriend: individualFriend) {
     
@@ -85,19 +86,16 @@ class friendList : UITableViewController {
             var channelItem: [String: Any]
             
             channelItem = [
-                "name": "ConverstionTest"
+                "name": "Chat"
             ]
             
             newChannelPathId.setValue(channelItem) { (error, ref) in
                 if error == nil {
                     
-                    
-                    
                     // make the new channel for this user
                     let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels").child(newChannelPathId.key)
                     thisUserPath.setValue(true) { (error, ref) in
                         if error == nil {
-                            
                             
                             
                             // make the new channel for the friend
@@ -118,22 +116,10 @@ class friendList : UITableViewController {
                                         if error == nil {
                                             
                                             // the channel has been added to both the users.
-                                            
                                             // now lets make a channel object to send to the next viewcontroller
                                             
                                             self.pushToChannel(self.channelRef.child(newChannelPathId.key))
                                             
-                                            /*
-                                            self.channelRef.child(newChannelPathId.key).observeSingleEvent(of: .value, with: { (snapshot) in
-                                                let channelData = snapshot.value as! Dictionary<String, AnyObject>
-                                                let id = snapshot.key
-                                                if let name = channelData["name"] as! String!, name.characters.count > 0 {
-                                                    
-                                                    self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
-                                                    
-                                                }
-                                            })
-                                            */
                                             // add comments here
                                         } else {
                                             // add comments here
@@ -153,7 +139,7 @@ class friendList : UITableViewController {
     
     
     
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // do these folks have a channel together?
@@ -202,22 +188,9 @@ class friendList : UITableViewController {
                             
                             } else {
                             // yes there was a matched channel -> show it
-
-                        
+                                
                                 self.pushToChannel(self.channelRef.child(theKeyString))
-                                
-                                /*
-                            self.channelRef.child(theKeyString).observeSingleEvent(of: .value, with: { (snapshot) in
-                                let channelData = snapshot.value as! Dictionary<String, AnyObject>
-                                let id = snapshot.key
-                                if let name = channelData["name"] as! String!, name.characters.count > 0 {
-                                    
-                                    self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
-                                    
-                                }
-                            })*/
-                                
-                                
+ 
                             }
                         } else {
                             if madeNewChannel == false {
@@ -238,8 +211,6 @@ class friendList : UITableViewController {
         })
     }
     
-    
-    
     func pushToChannel (_ theRef: FIRDatabaseReference) {
         
         theRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -253,9 +224,6 @@ class friendList : UITableViewController {
         })
     }
     
-    
-    
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
@@ -266,22 +234,4 @@ class friendList : UITableViewController {
             chatVc.channelRef = channelRef.child(channel.id)
         }
     }
-    
-    
-    
-    
-    /*
-     UIBarButtonItem *add = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:self action:@selector(addNewFriend:)];
-     add.tintColor = [UIColor whiteColor];
-     
-     self.navigationItem.rightBarButtonItem = add;
-     
-     
-     -(IBAction)addNewFriend:(id)sender {
-     
-     [self performSegueWithIdentifier:@"addNewFriend" sender:self];
-     }
-     */
-    
-    
 }

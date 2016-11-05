@@ -730,7 +730,7 @@
                                     <outlet property="delegate" destination="088-il-qPl" id="474-75-5Jx"/>
                                 </connections>
                             </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Pin Number to Send Request" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Xo-X1-dxT">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enter Pin Number to Send a Friend Request" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4Xo-X1-dxT">
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -739,12 +739,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="4Xo-X1-dxT" firstAttribute="leading" secondItem="gTM-wN-qcM" secondAttribute="leadingMargin" constant="38" id="8DD-3n-s6r"/>
-                            <constraint firstItem="5YA-xZ-o4V" firstAttribute="top" secondItem="4Xo-X1-dxT" secondAttribute="bottom" constant="59" id="ELu-rD-orl"/>
                             <constraint firstItem="5YA-xZ-o4V" firstAttribute="top" secondItem="blF-0W-t01" secondAttribute="bottom" constant="137" id="LB9-eW-PTI"/>
                             <constraint firstItem="5YA-xZ-o4V" firstAttribute="leading" secondItem="gTM-wN-qcM" secondAttribute="leadingMargin" constant="34" id="TVl-Ea-vPy"/>
                             <constraint firstAttribute="trailingMargin" secondItem="5YA-xZ-o4V" secondAttribute="trailing" constant="32" id="cB5-SH-SjX"/>
                             <constraint firstAttribute="trailingMargin" secondItem="4Xo-X1-dxT" secondAttribute="trailing" constant="39" id="dnB-ac-u9E"/>
                             <constraint firstItem="4Xo-X1-dxT" firstAttribute="top" secondItem="blF-0W-t01" secondAttribute="bottom" constant="57" id="uid-3f-rs8"/>
+                            <constraint firstItem="5YA-xZ-o4V" firstAttribute="top" secondItem="4Xo-X1-dxT" secondAttribute="bottom" constant="25" id="wjJ-fd-wgz"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="iwA-nV-Ohh">
@@ -769,7 +769,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dH0-Ef-Pb5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2271" y="-381"/>
+            <point key="canvasLocation" x="2536.8000000000002" y="-380.05997001499253"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FRo-hR-SMz">
@@ -796,12 +796,12 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="trU-kV-XBq" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Requests" image="flag" id="1XT-1T-Lcl"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="opS-pw-6KD">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="opS-pw-6KD">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="barTintColor" red="0.22187619389999999" green="0.74951451729999996" blue="0.63629211340000003" alpha="1" colorSpace="calibratedRGB"/>
                         <textAttributes key="titleTextAttributes">
-                            <color key="textShadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                            <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
