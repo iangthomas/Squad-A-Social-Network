@@ -442,16 +442,15 @@
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     
- 
     
+
+    NSNumber *lat = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
+    NSNumber *lon = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
+
     /*
-    NSString *lat = [[[NSNumber numberWithDouble:userLoc.coordinate.latitude] stringValue] substringToIndex:3];
-    NSString *lon = [[[NSNumber numberWithDouble:userLoc.coordinate.longitude] stringValue] substringToIndex:3];
-    */
-    
-    NSNumber *lat = [f numberFromString: [[[NSNumber numberWithDouble:userLoc.coordinate.latitude] stringValue] substringToIndex:4]];
-    NSNumber *lon = [f numberFromString: [[[NSNumber numberWithDouble:userLoc.coordinate.longitude] stringValue] substringToIndex:4]];
-    
+    NSNumber *lat = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
+    NSNumber *lon = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
+*/
     
     NSDictionary *locDic = @{
                              @"lon": lon,
