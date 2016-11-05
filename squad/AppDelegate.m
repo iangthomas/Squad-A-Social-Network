@@ -44,8 +44,6 @@
 
     [FIRApp configure];
     
-    [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
-    
     _sendCheckInTimes = NO;
     
     
@@ -440,8 +438,21 @@
     FIRDatabaseReference *coorRef = [userRef child:@"coor"];
     
 
-    NSNumber *lat = [NSNumber numberWithDouble:userLoc.coordinate.latitude];
-    NSNumber *lon = [NSNumber numberWithDouble:userLoc.coordinate.longitude];
+    
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    
+ 
+    
+    /*
+    NSString *lat = [[[NSNumber numberWithDouble:userLoc.coordinate.latitude] stringValue] substringToIndex:3];
+    NSString *lon = [[[NSNumber numberWithDouble:userLoc.coordinate.longitude] stringValue] substringToIndex:3];
+    */
+    
+    NSNumber *lat = [f numberFromString: [[[NSNumber numberWithDouble:userLoc.coordinate.latitude] stringValue] substringToIndex:4]];
+    NSNumber *lon = [f numberFromString: [[[NSNumber numberWithDouble:userLoc.coordinate.longitude] stringValue] substringToIndex:4]];
+    
+    
     NSDictionary *locDic = @{
                              @"lon": lon,
                              @"lat": lat,

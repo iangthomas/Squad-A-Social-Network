@@ -60,7 +60,7 @@ class friendList : UITableViewController {
                     friendCoorPath.observe(FIRDataEventType.value, with: { (snapshot) in
                         if let coor = snapshot.value as? NSDictionary {
                             
-                            self.items[index].location = CLLocationCoordinate2D(latitude: coor.object(forKey: "lat") as! CLLocationDegrees, longitude: coor.object(forKey: "lat") as! CLLocationDegrees)
+                            self.items[index].location = CLLocationCoordinate2D(latitude: coor.object(forKey: "lat") as! CLLocationDegrees, longitude: coor.object(forKey: "lon") as! CLLocationDegrees)
                             
                             self.updateSpecificCellWithNewLoctaion(index)
 
@@ -116,7 +116,7 @@ class friendList : UITableViewController {
         cell.textLabel?.text = requestItem.key
         
         if let theLocation = requestItem.location as CLLocationCoordinate2D! {
-            cell.detailTextLabel?.text = ("lon \(theLocation.longitude)")
+            cell.detailTextLabel?.text = ("lat\(theLocation.latitude), lon \(theLocation.longitude)")
         } else {
             cell.detailTextLabel?.text = "Off Grid"
         }
