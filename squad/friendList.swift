@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreLocation
 
 class friendList : UITableViewController {
 
@@ -25,18 +26,63 @@ class friendList : UITableViewController {
 
         let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
         friendsPath.observe(.value, with: { snapshot in
+            
             var newItems: [individualFriend] = []
             
             for item in snapshot.children {
                 let requestItem = individualFriend(snapshot: item as! FIRDataSnapshot)
                 newItems.append(requestItem)
             }
-            
             self.items = newItems
+            
+            
+            // now get the distances between you and them
+            // items must already be setup!
+            self.getDistancesToFriends();
+          
+
             self.tableView.reloadData()
         })
-        
     }
+    
+    func getDistancesToFriends () {
+        for (index, theItem) in self.items.enumerated() {
+            var theFriend = theItem
+            
+            let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriend.key)
+            // get their unique id
+            friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                let result = snapshot.value as? NSDictionary
+                if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
+                    theFriend.uniqueId = uniqueFriendId
+                    
+                    let friendCoorPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("coor")
+                    friendCoorPath.observe(FIRDataEventType.value, with: { (snapshot) in
+                        if let coor = snapshot.value as? NSDictionary {
+                            
+                            self.items[index].location = CLLocationCoordinate2D(latitude: coor.object(forKey: "lat") as! CLLocationDegrees, longitude: coor.object(forKey: "lat") as! CLLocationDegrees)
+                            
+                            self.updateSpecificCellWithNewLoctaion(index)
+
+                        } else {
+                            // no location or off grid
+                            self.items[index] .location = nil
+                            
+                            self.updateSpecificCellWithNewLoctaion(index)
+                        }
+                    })
+                }
+            })
+        }
+    }
+    
+    
+    func updateSpecificCellWithNewLoctaion (_ index: Int) {
+    
+        let theCellIndexPath = IndexPath(item: index, section: 0)
+        self.tableView.reloadRows(at: [theCellIndexPath], with: .automatic)
+    }
+    
     
     func addPlusButton() {
         
@@ -68,6 +114,12 @@ class friendList : UITableViewController {
         let requestItem = items[indexPath.row]
         
         cell.textLabel?.text = requestItem.key
+        
+        if let theLocation = requestItem.location as CLLocationCoordinate2D! {
+            cell.detailTextLabel?.text = ("lon \(theLocation.longitude)")
+        } else {
+            cell.detailTextLabel?.text = "Off Grid"
+        }
         
         return cell
     }

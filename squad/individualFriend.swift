@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreLocation
 
 struct individualFriend {
     
@@ -14,12 +15,16 @@ struct individualFriend {
     //let requestersPin: String
     let key: String
     let ref: FIRDatabaseReference?
+    var location: CLLocationCoordinate2D?
+    var uniqueId: String?
     
     init(time: String, key: String = "") {
         self.time = time
        // self.requestersPin = requestersPin
         self.key = key
         self.ref = nil
+        self.location = nil
+        self.uniqueId = nil
     }
     
     init(snapshot: FIRDataSnapshot) {
@@ -27,14 +32,16 @@ struct individualFriend {
         let snapshotValue = snapshot.value as! [String: AnyObject]
         time = snapshotValue["Date"] as! String
         ref = snapshot.ref
+        location = nil
+        self.uniqueId = nil
     }
     
-    
+    /*
     func toAnyObject() -> Any {
         return [
             "time": time,
             "key": key
         ]
-    }
+    }*/
     
 }
