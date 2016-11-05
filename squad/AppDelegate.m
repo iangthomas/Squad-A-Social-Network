@@ -116,7 +116,7 @@
     
     
     
-  //  [self setupFirebaseVars];
+    [self setupFirebaseVars];
     
     [self setupTabBar];
     
@@ -181,38 +181,31 @@
     }
 }
 */
-/*
+
 -(void) setupFirebaseVars {
 
-//#warning when releaseing update the initial vars to the battle-tested ones in firebase
+    if ([self docentProfileEmpty] == NO) {
     
-    Firebase *control = [[Constants firebasePath] childByAppendingPath:@"controlVars"];
-
-    // temp setting the initial values
-    _lowishAccuracyThreshold = [NSNumber numberWithLong:25];
+    FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
     
-    Firebase* lowishAccuracyThreshold = [control childByAppendingPath:@"lowishAccuracyThreshold"];
-    [lowishAccuracyThreshold observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *threshold) {
-        _lowishAccuracyThreshold = threshold.value;
+    [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        
+        if (snapshot.value != [NSNull null]) {
+        NSDictionary *friendRequestsDict = snapshot.value;
+   
+            UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+            UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:3];
+            
+            if (friendRequestsDict.count > 0) {
+                friendRequestTabBarItem.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)friendRequestsDict.count];
+            } else if (friendRequestsDict.count == 0) {
+                friendRequestTabBarItem.badgeValue = nil;
+            }
+        }
     }];
-
-    
-    _geofenceCutoffDistanceForAlert = [NSNumber numberWithLong:300];
-    
-    Firebase* geofenceCutoffDistacneForAlert = [control childByAppendingPath:@"geofenceCutoffDistacneForAlert"];
-    [geofenceCutoffDistacneForAlert observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *threshold) {
-        _geofenceCutoffDistanceForAlert = threshold.value;
-    }];
-    
-    
-    _maxDistanceFromGeofence = [NSNumber numberWithLong:700];
-    
-    Firebase* maxDistanceFromGeofence = [control childByAppendingPath:@"maxDistanceFromGeofence"];
-    [maxDistanceFromGeofence observeEventType:FEventTypeValue withBlock:^(FDataSnapshot *threshold) {
-        _maxDistanceFromGeofence = threshold.value;
-    }];
+    }
 }
-*/
+
 
 // if the user is on duty then force them off duty
 -(void)takeDeviceOffDuty {

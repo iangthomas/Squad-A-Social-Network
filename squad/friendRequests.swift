@@ -35,9 +35,6 @@ class friendRequests: UITableViewController {
             }
             
             self.items = newItems
-            
-            self.navigationController?.tabBarItem.badgeValue = "\(self.items.count)"
-
             self.tableView.reloadData()
         })
     }
@@ -81,21 +78,48 @@ class friendRequests: UITableViewController {
         let alert = UIAlertController(title: "Friend Request", message: "Accept this person's friend request", preferredStyle: .alert)
         let acceptAction = UIAlertAction(title: "Accept", style: .default, handler: { action in
         
-            let friends = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(requestItem.requestersPin)
-            
-            
-            let formatter = Constants.internetTimeDateFormatter()
-            let dictionary: NSDictionary = [
-                "Date" : formatter!.string(from: Date.init())
-            ]
-            
-            friends.setValue(dictionary) { (error, ref) in
+            let friendsRefWithPin = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(requestItem.requestersPin)
+            friendsRefWithPin.setValue(self.dictionaryWithOnlyTime()) { (error, ref) in
                 
                 if error == nil {
                     //success
-                    self.removeFriendRequest(request: requestItem)
-                  
-                    // add comments here
+                    
+                    // now add more friendship so it is reciprocal
+                    
+                    // 1 get the friend's unique id path
+                    let friendPinPath = FIRDatabase.database().reference().child("pins").child(requestItem.requestersPin)
+                    // get there unique id
+                    friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                        
+                        let result = snapshot.value as? NSDictionary
+                        if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
+                            
+                            
+                            
+                            
+                            // add me to their list
+                            let myPin = UserDefaults.standard.object(forKey: kPin) as! String
+
+                            let friends = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("friends").child(myPin)
+                            friends.setValue(self.dictionaryWithOnlyTime()) { (error, ref) in
+                                
+                                if error == nil {
+                                    //success
+                                    
+                                    self.removeFriendRequest(request: requestItem)
+                                } else {
+                                    // error
+                                }
+                            }
+                            
+                            
+                      
+                            
+                            
+                        }
+                    })
+                    
+                    // add constants comments here
                 } else {
                     // add comments here
                 }
@@ -111,12 +135,13 @@ class friendRequests: UITableViewController {
             let declinedFriends = FIRDatabase.database().reference().child("users").child(userId).child("declinedFriends").child(requestItem.requestersPin)
             
             //refactor this into a method
+            /*
             let formatter = Constants.internetTimeDateFormatter()
             let dictionary: NSDictionary = [
                 "Date" : formatter!.string(from: Date.init())
-            ]
+            ]*/
             
-            declinedFriends.setValue(dictionary) { (error, ref) in
+            declinedFriends.setValue(self.dictionaryWithOnlyTime()) { (error, ref) in
                 
                 if error == nil {
                     // success
@@ -150,6 +175,15 @@ class friendRequests: UITableViewController {
             }
         })
     }
+    
+    func dictionaryWithOnlyTime() -> NSDictionary {
+        let formatter = Constants.internetTimeDateFormatter()
+        let dictionary: NSDictionary = [
+            "Date" : formatter!.string(from: Date.init())
+        ]
+        return dictionary
+    }
+    
     
     
   
