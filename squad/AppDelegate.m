@@ -188,23 +188,33 @@
     
     FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
     
-    [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-        
-        if (snapshot.value != [NSNull null]) {
-        NSDictionary *friendRequestsDict = snapshot.value;
-   
-            UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-            UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:3];
-            
-            if (friendRequestsDict.count > 0) {
-                friendRequestTabBarItem.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)friendRequestsDict.count];
-            } else if (friendRequestsDict.count == 0) {
-                friendRequestTabBarItem.badgeValue = nil;
-            }
-        }
-    }];
+        [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+            [self updateBadgeIcon:snapshot];
+        }];
     }
 }
+
+
+-(void)updateBadgeIcon:(FIRDataSnapshot*) snapshot {
+
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:3];
+    
+    if (snapshot.value != [NSNull null]) {
+        NSDictionary *friendRequestsDict = snapshot.value;
+        
+        if (friendRequestsDict.count > 0) {
+            friendRequestTabBarItem.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)friendRequestsDict.count];
+        } else if (friendRequestsDict.count == 0) {
+            friendRequestTabBarItem.badgeValue = nil;
+        }
+    } else if (friendRequestTabBarItem.badgeValue != nil) {
+        friendRequestTabBarItem.badgeValue = nil;
+    }
+}
+
+
+
 
 
 // if the user is on duty then force them off duty
