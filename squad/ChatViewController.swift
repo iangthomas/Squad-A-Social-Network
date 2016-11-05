@@ -67,6 +67,8 @@ final class ChatViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+       // self.navigationController?.hidesBottomBarWhenPushed = true
+        
         self.senderId = FIRAuth.auth()?.currentUser?.uid
         observeMessages()
         

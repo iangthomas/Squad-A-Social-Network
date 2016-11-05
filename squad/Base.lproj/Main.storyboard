@@ -352,7 +352,7 @@
         <!--Friend List-->
         <scene sceneID="mwg-E9-6Uf">
             <objects>
-                <tableViewController id="ocL-uX-oZo" customClass="friendList" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController hidesBottomBarWhenPushed="YES" id="ocL-uX-oZo" customClass="friendList" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="iIb-3x-bhC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -384,7 +384,7 @@
                     <navigationItem key="navigationItem" id="LqI-r8-UnF"/>
                     <connections>
                         <segue destination="i7u-WQ-Kwa" kind="presentation" identifier="addNewFriend" id="KVI-wE-3o9"/>
-                        <segue destination="nqs-FH-81V" kind="presentation" identifier="ShowChannel" id="5Sj-Tx-Pm2"/>
+                        <segue destination="nqs-FH-81V" kind="show" identifier="ShowChannel" id="5Sj-Tx-Pm2"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YlH-VC-qE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
