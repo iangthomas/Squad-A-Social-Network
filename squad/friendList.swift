@@ -116,7 +116,15 @@ class friendList : UITableViewController {
         cell.textLabel?.text = requestItem.key
         
         if let theLocation = requestItem.location as CLLocationCoordinate2D! {
-            cell.detailTextLabel?.text = ("lat\(theLocation.latitude), lon \(theLocation.longitude)")
+
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            
+            let clCorr = CLLocation.init(latitude: theLocation.latitude, longitude: theLocation.longitude)
+            
+          //  let temp = appDelegate.findNearestLargeCity(clCorr)
+           // cell.detailTextLabel?.text = ("lat \(theLocation.latitude), lon \(theLocation.longitude)")
+            
+            cell.detailTextLabel?.text = appDelegate.findNearestLargeCity(clCorr)
         } else {
             cell.detailTextLabel?.text = "Off Grid"
         }

@@ -41,6 +41,8 @@
 
 @property (nonatomic, strong) NSString* geofenceVisitChildId;
 
+-(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation;
+
 
 @end
 

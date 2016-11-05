@@ -30,6 +30,10 @@
 
 @property (nonatomic, strong) NSDate *dateLowAccuracyAlertWasShown;
 
+@property (nonatomic, strong) NSMutableArray *colA;
+@property (nonatomic, strong) NSMutableArray *colB;
+@property (nonatomic, strong) NSMutableArray *colC;
+
 @end
 
 @implementation AppDelegate
@@ -119,6 +123,8 @@
     [self setupTabBar];
     
 //  [FBSDKLoginButton class];
+    
+    [self generateCityList];
     
     [Constants debug:@1 withContent:@"Starting App Done"];
 
@@ -1025,5 +1031,52 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
         [currentInstallation saveInBackground];
 }
 */
+
+
+-(void) generateCityList {
+    
+    _colA = [NSMutableArray array];
+    _colB = [NSMutableArray array];
+    _colC = [NSMutableArray array];
+    NSString *fileContents = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"cities15000" ofType:@"csv"] encoding:NSUTF8StringEncoding error:nil];
+
+    
+   // NSString* fileContents = [NSString stringWithContentsOfURL:@"cities150000.csv"];
+    NSArray* rows = [fileContents componentsSeparatedByString:@"\n"];
+    for (NSString *row in rows){
+        NSArray* columns = [row componentsSeparatedByString:@","];
+        [_colA addObject:columns[0]];
+        [_colB addObject:columns[1]];
+        [_colC addObject:columns[2]];
+    }
+
+}
+
+
+-(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation {
+    
+    int index = 0;
+    double lowestDistanceSoFar = DBL_MAX;
+    
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    
+    for (int i = 0; i < _colA.count; i++) {
+        
+        NSNumber * lat = [f numberFromString:_colB[i]];
+        NSNumber * lon = [f numberFromString:_colC[i]];
+
+        CLLocation* possibleCity = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
+        
+        NSNumber* theCurrentDistance = [NSNumber numberWithDouble:[theGoalLocation distanceFromLocation:possibleCity]];
+        
+        if (theCurrentDistance.doubleValue < lowestDistanceSoFar) {
+            lowestDistanceSoFar = theCurrentDistance.doubleValue;
+            index = i;
+        }
+    }
+    return _colA[index];
+}
+
 
 @end

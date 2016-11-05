@@ -19,6 +19,7 @@
 		3C2E73741DCD21F400C2B809 /* individualFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73731DCD21F400C2B809 /* individualFriend.swift */; };
 		3C2E73761DCD27FB00C2B809 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73751DCD27FB00C2B809 /* Channel.swift */; };
 		3C2E73781DCD282600C2B809 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73771DCD282600C2B809 /* ChatViewController.swift */; };
+		3C5481771DCE974600376A34 /* cities15000.csv in Resources */ = {isa = PBXBuildFile; fileRef = 3C5481761DCE974600376A34 /* cities15000.csv */; };
 		3C69C1BB1DCB043600898FA7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1BA1DCB043600898FA7 /* main.m */; };
 		3C69C1C41DCB043600898FA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C21DCB043600898FA7 /* Main.storyboard */; };
 		3C69C1C61DCB043600898FA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C51DCB043600898FA7 /* Assets.xcassets */; };
@@ -53,6 +54,7 @@
 		3C2E73731DCD21F400C2B809 /* individualFriend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = individualFriend.swift; sourceTree = "<group>"; };
 		3C2E73751DCD27FB00C2B809 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		3C2E73771DCD282600C2B809 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		3C5481761DCE974600376A34 /* cities15000.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cities15000.csv; sourceTree = "<group>"; };
 		3C69C1B61DCB043600898FA7 /* squad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = squad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C69C1BA1DCB043600898FA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3C69C1C31DCB043600898FA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -124,6 +126,7 @@
 				3C69C1D41DCB062400898FA7 /* squad.entitlements */,
 				3C2E73751DCD27FB00C2B809 /* Channel.swift */,
 				3C2E73771DCD282600C2B809 /* ChatViewController.swift */,
+				3C5481761DCE974600376A34 /* cities15000.csv */,
 				3C69C1E51DCB069900898FA7 /* AppDelegate.h */,
 				3C69C1E61DCB069900898FA7 /* AppDelegate.m */,
 				3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */,
@@ -265,6 +268,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3C5481771DCE974600376A34 /* cities15000.csv in Resources */,
 				3C69C1C91DCB043600898FA7 /* LaunchScreen.storyboard in Resources */,
 				3C69C1D31DCB060900898FA7 /* GoogleService-Info.plist in Resources */,
 				3C2E735D1DCC050400C2B809 /* Settings.bundle in Resources */,
