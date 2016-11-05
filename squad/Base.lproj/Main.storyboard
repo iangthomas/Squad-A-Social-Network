@@ -93,7 +93,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fj8-y9-YNc" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-164" y="2911"/>
+            <point key="canvasLocation" x="-197" y="2868"/>
         </scene>
         <!--Tut View Controller-->
         <scene sceneID="4Js-CH-pKT">
@@ -158,10 +158,10 @@
                         <viewControllerLayoutGuide type="bottom" id="EZ8-zD-NzQ"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="nhm-G1-7FO">
-                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Flock needs the following features enabled" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="bM4-Co-Wlf">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Squad the following features enabled" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumFontSize="13" translatesAutoresizingMaskIntoConstraints="NO" id="bM4-Co-Wlf">
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="Wnv-pv-LVN"/>
                                 </constraints>
@@ -269,7 +269,7 @@
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="5Oh-Ye-PCg">
                                 <color key="color" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                             </activityIndicatorView>
-                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="    e-mail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HYA-pV-0pK">
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder=" e-mail" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="HYA-pV-0pK">
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="211" id="6Sd-ZT-md1"/>
@@ -352,7 +352,7 @@
         <!--Friend List-->
         <scene sceneID="mwg-E9-6Uf">
             <objects>
-                <tableViewController hidesBottomBarWhenPushed="YES" id="ocL-uX-oZo" customClass="friendList" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="ocL-uX-oZo" customClass="friendList" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="iIb-3x-bhC">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -389,7 +389,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YlH-VC-qE8" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="878" y="340"/>
+            <point key="canvasLocation" x="908" y="341"/>
         </scene>
         <!--Map-->
         <scene sceneID="wcc-Bm-4LM">
@@ -452,7 +452,7 @@
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="upV-el-7CW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1068" y="1766"/>
+            <point key="canvasLocation" x="908" y="1839"/>
         </scene>
         <!--Profile-->
         <scene sceneID="ua0-Ns-6K0">
@@ -473,7 +473,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ca7-Jv-JTw" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="129" y="1038"/>
+            <point key="canvasLocation" x="70" y="1093"/>
         </scene>
         <!--Profile View Controller-->
         <scene sceneID="0SM-0s-gJa">
@@ -527,7 +527,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Fgj-7Q-SjC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="967" y="1037"/>
+            <point key="canvasLocation" x="908" y="1068"/>
         </scene>
         <!--List-->
         <scene sceneID="OXP-8N-5Nw">
@@ -705,7 +705,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="btd-pK-e6a" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="908" y="-380"/>
+            <point key="canvasLocation" x="908" y="-381"/>
         </scene>
         <!--Add New Friend-->
         <scene sceneID="OIH-I1-Jvo">
@@ -769,7 +769,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dH0-Ef-Pb5" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2684" y="-380.05997001499253"/>
+            <point key="canvasLocation" x="2271" y="-381"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="FRo-hR-SMz">
@@ -788,7 +788,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="567-lu-1Nb" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1744.8" y="-380.05997001499253"/>
+            <point key="canvasLocation" x="1745" y="-381"/>
         </scene>
         <!--Requests-->
         <scene sceneID="Pka-UH-rX7">
@@ -811,12 +811,12 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Wry-Ps-ldp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="129" y="1766"/>
+            <point key="canvasLocation" x="70" y="1839"/>
         </scene>
         <!--Chat View Controller-->
         <scene sceneID="CIS-f9-wzZ">
             <objects>
-                <viewController id="nqs-FH-81V" customClass="ChatViewController" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController hidesBottomBarWhenPushed="YES" id="nqs-FH-81V" customClass="ChatViewController" customModule="squad" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="2Mn-C0-9hW"/>
                         <viewControllerLayoutGuide type="bottom" id="y5j-Su-cns"/>
@@ -830,7 +830,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gfz-UF-ab7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1825" y="342"/>
+            <point key="canvasLocation" x="1745" y="343"/>
         </scene>
     </scenes>
     <resources>
@@ -843,7 +843,7 @@
         <image name="threeLines" width="22" height="22"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="KVI-wE-3o9"/>
-        <segue reference="swV-Cb-eHk"/>
+        <segue reference="OF4-3G-Fsq"/>
+        <segue reference="0Y3-hy-CyC"/>
     </inferredMetricsTieBreakers>
 </document>

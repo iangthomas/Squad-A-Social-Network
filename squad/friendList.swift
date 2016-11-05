@@ -69,11 +69,96 @@ class friendList : UITableViewController {
     }
     
     
+    
+    
+    func makeNewChannel (_ theFriend: individualFriend) {
+    
+            // no match, make a new channel
+            // no -> make one, add it to both users and show it.
+            
+            let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+            
+            // generate the main channel
+            // let channelsPath = FIRDatabase.database().reference().child("channels")
+            let newChannelPathId = self.channelRef.childByAutoId()
+            
+            var channelItem: [String: Any]
+            
+            channelItem = [
+                "name": "ConverstionTest"
+            ]
+            
+            newChannelPathId.setValue(channelItem) { (error, ref) in
+                if error == nil {
+                    
+                    
+                    
+                    // make the new channel for this user
+                    let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels").child(newChannelPathId.key)
+                    thisUserPath.setValue(true) { (error, ref) in
+                        if error == nil {
+                            
+                            
+                            
+                            // make the new channel for the friend
+                            //let theFriend = self.items[(indexPath as NSIndexPath).row]
+                            
+                            let theFriendPin = theFriend.key
+                            
+                            let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriendPin)
+                            // get there uniqeu id
+                            friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                                
+                                let result = snapshot.value as? NSDictionary
+                                if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
+                                    
+                                    
+                                    let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels").child(newChannelPathId.key)
+                                    friendUserPath.setValue(true) { (error, ref) in
+                                        if error == nil {
+                                            
+                                            // the channel has been added to both the users.
+                                            
+                                            // now lets make a channel object to send to the next viewcontroller
+                                            
+                                            self.pushToChannel(self.channelRef.child(newChannelPathId.key))
+                                            
+                                            /*
+                                            self.channelRef.child(newChannelPathId.key).observeSingleEvent(of: .value, with: { (snapshot) in
+                                                let channelData = snapshot.value as! Dictionary<String, AnyObject>
+                                                let id = snapshot.key
+                                                if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                                                    
+                                                    self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
+                                                    
+                                                }
+                                            })
+                                            */
+                                            // add comments here
+                                        } else {
+                                            // add comments here
+                                        }
+                                    }
+                                    
+                                }
+                            })
+                        } else {
+                            // add comments here
+                        }
+                    }
+                    
+                }
+            }
+    }
+    
+    
+    
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // do these folks have a channel together?
-        
+        var theKeyString = "no-match"
+        var madeNewChannel = false
         
         
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
@@ -83,34 +168,25 @@ class friendList : UITableViewController {
         let theFriend = self.items[(indexPath as NSIndexPath).row]
         let theFriendPin = theFriend.key
         let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriendPin)
-        // get there uniqeu id
+        // get there unique id
         friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
             
             let result = snapshot.value as? NSDictionary
             if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
                 let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels")
                 
-                
-                
                 // get all of this users channels
                 thisUserPath.observe(.value, with: {snapshot in
-                    let myChannels = snapshot.value as! NSDictionary
                     
-                    // let theArray = result?.allKeys
+                    if let myChannels = snapshot.value as? NSDictionary {
                     
-                    
-                    
-                    // all all the friend channels
+                    // all of the friend channels
                     friendUserPath.observeSingleEvent(of: .value, with: { (snapshot) in
-                        let friendsChannels = snapshot.value as! NSDictionary
+                        if let friendsChannels = snapshot.value as? NSDictionary {
                         
                         let myKeys = myChannels.allKeys
-                        let theirKeys = friendsChannels.allKeys
                         
                         // search for overlap
-                        
-                        var theKeyString = "no-match"
-                        
                         for key in myKeys {
                             if friendsChannels.object(forKey: key) != nil {
                                 // match
@@ -120,85 +196,17 @@ class friendList : UITableViewController {
                         }
                         
                         // now decide
-                        if theKeyString == "no-match" {
-                            // no match, make a new channel
-                            // no -> make one, add it to both users and show it.
-
-                            let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+                            if theKeyString == "no-match" {
                             
-                            // generate the main channel
-                            // let channelsPath = FIRDatabase.database().reference().child("channels")
-                            let newChannelPathId = self.channelRef.childByAutoId()
+                                self.makeNewChannel(theFriend)
                             
-                            var channelItem: [String: Any]
-                            
-                            channelItem = [
-                                "name": "ConverstionTest"
-                            ]
-                            
-                            newChannelPathId.setValue(channelItem) { (error, ref) in
-                                if error == nil {
-                                    
-                                    
-                                    
-                                    // make the new channel for this user
-                                    let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels").child(newChannelPathId.key)
-                                    thisUserPath.setValue(true) { (error, ref) in
-                                        if error == nil {
-                                            
-                                            
-                                            
-                                            // make the new channel for the friend
-                                            let theFriend = self.items[(indexPath as NSIndexPath).row]
-                                            
-                                            let theFriendPin = theFriend.key
-                                            
-                                            let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriendPin)
-                                            // get there uniqeu id
-                                            friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
-                                                
-                                                let result = snapshot.value as? NSDictionary
-                                                if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
-                                                    
-                                                    
-                                                    let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels").child(newChannelPathId.key)
-                                                    friendUserPath.setValue(true) { (error, ref) in
-                                                        if error == nil {
-                                                            
-                                                            // the channel has been added to both the users.
-                                                            
-                                                            // now lets make a channel object to send to the next viewcontroller
-                                                            
-                                                            self.channelRef.child(newChannelPathId.key).observeSingleEvent(of: .value, with: { (snapshot) in
-                                                                let channelData = snapshot.value as! Dictionary<String, AnyObject>
-                                                                let id = snapshot.key
-                                                                if let name = channelData["name"] as! String!, name.characters.count > 0 {
-                                                                    
-                                                                    self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
-                                                                    
-                                                                }
-                                                            })
-                                                             // add comments here
-                                                        } else {
-                                                            // add comments here
-                                                        }
-                                                    }
-                                                    
-                                                }
-                                            })
-                                                                                    } else {
-                                            // add comments here
-                                        }
-                                    }
-                                    
-                                }
-                            }
-                            
-                        } else {
+                            } else {
                             // yes there was a matched channel -> show it
 
                         
-                            
+                                self.pushToChannel(self.channelRef.child(theKeyString))
+                                
+                                /*
                             self.channelRef.child(theKeyString).observeSingleEvent(of: .value, with: { (snapshot) in
                                 let channelData = snapshot.value as! Dictionary<String, AnyObject>
                                 let id = snapshot.key
@@ -207,15 +215,45 @@ class friendList : UITableViewController {
                                     self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
                                     
                                 }
-                            })
-
+                            })*/
+                                
+                                
+                            }
+                        } else {
+                            if madeNewChannel == false {
+                                madeNewChannel = true
+                            self.makeNewChannel(theFriend)
+                            }
                         }
                         
                     })
+                    } else {
+                        if madeNewChannel == false {
+                            madeNewChannel = true
+                        self.makeNewChannel(theFriend)
+                        }
+                    }
                 })
             }
         })
     }
+    
+    
+    
+    func pushToChannel (_ theRef: FIRDatabaseReference) {
+        
+        theRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            let channelData = snapshot.value as! Dictionary<String, AnyObject>
+            let id = snapshot.key
+            if let name = channelData["name"] as! String!, name.characters.count > 0 {
+                
+                self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
+                
+            }
+        })
+    }
+    
+    
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
