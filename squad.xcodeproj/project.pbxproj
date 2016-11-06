@@ -20,6 +20,8 @@
 		3C2E73761DCD27FB00C2B809 /* Channel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73751DCD27FB00C2B809 /* Channel.swift */; };
 		3C2E73781DCD282600C2B809 /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73771DCD282600C2B809 /* ChatViewController.swift */; };
 		3C5481771DCE974600376A34 /* cities15000.csv in Resources */ = {isa = PBXBuildFile; fileRef = 3C5481761DCE974600376A34 /* cities15000.csv */; };
+		3C5481791DCEAB3200376A34 /* FriendTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C5481781DCEAB3200376A34 /* FriendTableViewCell.swift */; };
+		3C54817B1DCF02B300376A34 /* SwiftAppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C54817A1DCF02B300376A34 /* SwiftAppDelegate.swift */; };
 		3C69C1BB1DCB043600898FA7 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C69C1BA1DCB043600898FA7 /* main.m */; };
 		3C69C1C41DCB043600898FA7 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C21DCB043600898FA7 /* Main.storyboard */; };
 		3C69C1C61DCB043600898FA7 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3C69C1C51DCB043600898FA7 /* Assets.xcassets */; };
@@ -55,6 +57,8 @@
 		3C2E73751DCD27FB00C2B809 /* Channel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Channel.swift; sourceTree = "<group>"; };
 		3C2E73771DCD282600C2B809 /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		3C5481761DCE974600376A34 /* cities15000.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = cities15000.csv; sourceTree = "<group>"; };
+		3C5481781DCEAB3200376A34 /* FriendTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FriendTableViewCell.swift; sourceTree = "<group>"; };
+		3C54817A1DCF02B300376A34 /* SwiftAppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftAppDelegate.swift; sourceTree = "<group>"; };
 		3C69C1B61DCB043600898FA7 /* squad.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = squad.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3C69C1BA1DCB043600898FA7 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		3C69C1C31DCB043600898FA7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -129,9 +133,11 @@
 				3C5481761DCE974600376A34 /* cities15000.csv */,
 				3C69C1E51DCB069900898FA7 /* AppDelegate.h */,
 				3C69C1E61DCB069900898FA7 /* AppDelegate.m */,
+				3C54817A1DCF02B300376A34 /* SwiftAppDelegate.swift */,
 				3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */,
 				3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */,
 				3C2E73711DCD205B00C2B809 /* friendList.swift */,
+				3C5481781DCEAB3200376A34 /* FriendTableViewCell.swift */,
 				3C2E73731DCD21F400C2B809 /* individualFriend.swift */,
 				3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */,
 				3C2E736B1DCC65BB00C2B809 /* friendRequests.swift */,
@@ -409,6 +415,7 @@
 				3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */,
 				3C2E73761DCD27FB00C2B809 /* Channel.swift in Sources */,
 				3C2E736C1DCC65BB00C2B809 /* friendRequests.swift in Sources */,
+				3C54817B1DCF02B300376A34 /* SwiftAppDelegate.swift in Sources */,
 				3C69C1E41DCB066500898FA7 /* Reachability.m in Sources */,
 				3C69C1DB1DCB064900898FA7 /* TutViewController.m in Sources */,
 				3C2E73721DCD205B00C2B809 /* friendList.swift in Sources */,
@@ -420,6 +427,7 @@
 				3C69C1E31DCB066500898FA7 /* Constants.m in Sources */,
 				3C69C1DD1DCB064900898FA7 /* SystemStatusViewController.m in Sources */,
 				3C2E73781DCD282600C2B809 /* ChatViewController.swift in Sources */,
+				3C5481791DCEAB3200376A34 /* FriendTableViewCell.swift in Sources */,
 				3C2E736A1DCC3E1A00C2B809 /* addNewFriend.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

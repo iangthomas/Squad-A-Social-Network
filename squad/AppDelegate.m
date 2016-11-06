@@ -16,6 +16,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "TutViewController.h"
 
+#import <squad-Swift.h>
+
 @interface AppDelegate ()
 @property (nonatomic, assign) BOOL sendCheckInTimes;
 //@property (nonatomic, assign) BOOL hasRunDoubleCheck;
@@ -115,9 +117,6 @@
     
     [self makeAppReadyToUse];
     
-    
-    
-    
     [self setupFirebaseVars];
     
     [self setupTabBar];
@@ -126,9 +125,17 @@
     
     [self generateCityList];
     
+    [self setupSwiftAppDelegate];
+    
     [Constants debug:@1 withContent:@"Starting App Done"];
 
     return YES;
+}
+
+
+-(void) setupSwiftAppDelegate {
+    SwiftAppDelegateClass *swiftClass = [SwiftAppDelegateClass alloc];
+    [swiftClass startObservingChatChannels];
 }
 
 
@@ -337,73 +344,6 @@
     }
 }
 
-/*
--(void) showNearishLocations {
-
-    [Constants debug:@2 withContent:@"Prepairing to show nearish Locations"];
-    
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Nearby Deals"
-                                                                   message:@"We are not quite sure where you are. Help us out and please select which place you are nearest."
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    
-    NSEnumerator *geofenceEnumerator = [_currentGeofenceList keyEnumerator];
-    for (NSMutableDictionary* theKey in geofenceEnumerator) {
-        NSMutableDictionary *geofence = [_currentGeofenceList objectForKey:theKey];
-    
-        
-        if ([Constants shouldDisplayGeofence:geofence]) {
-            
-            NSNumber *theDistance = geofence[@"distanceFromDevice"];
-            if (theDistance.longValue < _geofenceCutoffDistanceForAlert.longValue) {
-     
-                NSString* theLine = [NSString stringWithFormat:@"%@ (%.0f feet)", geofence[@"title"], theDistance.doubleValue*3.28084];
-                
-                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:theLine
-                                                                        style:UIAlertActionStyleDefault
-                                                                      handler:^(UIAlertAction * action) {
-                                                                          [self deviceIsInGeofecnePutThemThere:geofence[@"uniqueId"] :geofence[@"title"]];
-                                                                          _showingNearbyAlertview = NO;
-                                                                          
-                                                                      }];
-                [alert addAction:defaultAction];
-            }
-        }
-    }
-    
-    if (alert.actions.count > 0) {
-
-        UIAlertAction* close = [UIAlertAction actionWithTitle:@"None"
-                                                        style:UIAlertActionStyleCancel
-                                                      handler:^(UIAlertAction * action) {
-                                                          _showingNearbyAlertview = NO;
-                                                          // if the user let the alert appear for a while, this line prevent the alert from reappearing too soon by reseting the counter.
-                                                          _dateLowAccuracyAlertWasShown = [NSDate date];
-
-                                                      }];
-        [alert addAction:close];
-        
-        if (_showingNearbyAlertview == NO) {
-
-            [Constants debug:@2 withContent:@"Showing nearish locations alert"];
-
-            _dateLowAccuracyAlertWasShown = [NSDate date];
-            _showingNearbyAlertview = YES;
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showNearishLocationsMapView" object:alert];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showNearishLocationsProgressView" object:alert];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showNearishLocationsListView" object:alert];
-
-        } else {
-            [Constants debug:@2 withContent:@"Already showing the nearby locations alert"];
-        }
-        
-    } else {
-        
-        [Constants debug:@2 withContent:@"Not enough nearby location to show alert"];
-    }
-}
-*/
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
@@ -431,7 +371,6 @@
         }
     }
 }
-
 
 
 -(void)postUserLocation:(CLLocation*)userLoc {
@@ -476,7 +415,6 @@
         }
      }];
 }
-
 
 
 -(BOOL) shouldShowLowAccuracyAlert {
@@ -625,42 +563,6 @@
     }];
 }
 
-/*
--(void) startMonitoringARegion:(NSMutableDictionary*) theObjectToMonitor {
-    
-    NSNumber *latitude = [theObjectToMonitor objectForKey:@"lat"];
-    NSNumber *longitude = [theObjectToMonitor objectForKey:@"lon"];
-    NSNumber *mapRadius = [theObjectToMonitor objectForKey:@"radius"];
-    
-    CLLocationCoordinate2D center = CLLocationCoordinate2DMake([latitude doubleValue],
-                                                               [longitude doubleValue]);
-    CLCircularRegion *region = [[CLCircularRegion alloc]initWithCenter:center
-                                                                radius:mapRadius.doubleValue
-                                                            identifier:[theObjectToMonitor objectForKey:@"uniqueId"]];
-    
-    [self.locationManager startMonitoringForRegion:region];
-    [self.locationManager performSelector:@selector(requestStateForRegion:) withObject:region afterDelay:1];
-}
-
-
-
--(void)updateRadiusAndCorr:(NSMutableDictionary*) theGeofence {
-
-    [self stopMonitoringAGeofence:theGeofence[@"uniqueId"]];
-    [self startMonitoringARegion:theGeofence];
-}
-
-
--(void) stopMonitoringAGeofence:(NSString*) uniqueId {
-    for (CLRegion *monitored in [locationManager monitoredRegions]) {
-        
-        // stop region monitoring for it
-        if ([monitored.identifier isEqualToString:uniqueId]) {
-            [locationManager stopMonitoringForRegion:monitored];
-        }
-    }
-}
-*/
 
 -(CLCircularRegion*)getTheRegionById:(NSString*) theId {
 
@@ -1077,6 +979,9 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     }
     return _colA[index];
 }
+
+
+
 
 
 @end

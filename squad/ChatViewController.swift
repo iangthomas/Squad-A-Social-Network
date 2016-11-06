@@ -158,9 +158,44 @@ final class ChatViewController: JSQMessagesViewController {
         newMessageRefHandle = messageQuery.observe(.childAdded, with: { (snapshot) -> Void in
             let messageData = snapshot.value as! Dictionary<String, String>
             
-            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0 {
-                self.addMessage(withId: id, name: name, text: text)
+            if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0, let recipientRead = messageData["recipientRead"] as String! {
+                
+                
+                
+                // the following block read unread messages
+                var updatedRecipientRead = recipientRead
+                let theMessageId = id
+
+              //  if unread
+                if recipientRead == "no" {
+                // if you are not the intended recipient
+                    if theMessageId != self.senderId {
+                        // then read the message!
+                        
+                        
+                        // only do this if the user is looking at the channel...  make this a seperate method
+                        
+                        updatedRecipientRead = "yes"
+                        
+                        let newref = self.messageRef.child(snapshot.key).child("recipientRead")
+                        
+                        newref.setValue(updatedRecipientRead) { (error, ref) in
+                            
+                            if error != nil {
+                                // add comments here
+                            } else {
+                                // add comments here
+                            }
+                        }
+                    }
+                }
+                
+                
+            
+                self.addMessage(withId: id, name: name, text: text, recipientRead: updatedRecipientRead)
                 self.finishReceivingMessage()
+                
+                
             } /*else if let id = messageData["senderId"] as String!, let photoURL = messageData["photoURL"] as String! {
                  if let mediaItem = JSQPhotoMediaItem(maskAsOutgoing: id == self.senderId) {
                  self.addPhotoMessage(withId: id, key: snapshot.key, mediaItem: mediaItem)
@@ -195,6 +230,9 @@ final class ChatViewController: JSQMessagesViewController {
         
         
     }
+    
+    
+    
     
     /*
      private func fetchImageDataAtURL(_ photoURL: String, forMediaItem mediaItem: JSQPhotoMediaItem, clearsPhotoMessageMapOnSuccessForKey key: String?) {
@@ -251,10 +289,15 @@ final class ChatViewController: JSQMessagesViewController {
         let itemRef = messageRef.childByAutoId()
         
         // 2
+        
+        let formatter = Constants.internetTimeDateFormatter()
+
         let messageItem = [
             "senderId": senderId!,
             "senderName": senderDisplayName!,
             "text": text!,
+            "date": formatter!.string(from: Date.init()),
+            "recipientRead" : "no",
             ]
         
         // 3
@@ -320,6 +363,14 @@ final class ChatViewController: JSQMessagesViewController {
             messages.append(message)
         }
     }
+    
+    
+    private func addMessage(withId id: String, name: String, text: String, recipientRead: String) {
+        if let message = JSQMessage(senderId: id, displayName: name, text: text, recipientRead: recipientRead) {
+            messages.append(message)
+        }
+    }
+    
     
     /*
     private func addPhotoMessage(withId id: String, key: String, mediaItem: JSQPhotoMediaItem) {

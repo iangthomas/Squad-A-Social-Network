@@ -20,6 +20,8 @@ class friendList : UITableViewController {
         
         self.navigationItem.title = "Friends List"
         
+        self.navigationController?.navigationBar.tintColor = UIColor.white
+        
         addPlusButton()
         
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
@@ -110,23 +112,22 @@ class friendList : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! FriendTableViewCell
         let requestItem = items[indexPath.row]
         
-        cell.textLabel?.text = requestItem.key
+        cell.title?.text = requestItem.key
         
         if let theLocation = requestItem.location as CLLocationCoordinate2D! {
 
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            
             let clCorr = CLLocation.init(latitude: theLocation.latitude, longitude: theLocation.longitude)
             
-          //  let temp = appDelegate.findNearestLargeCity(clCorr)
            // cell.detailTextLabel?.text = ("lat \(theLocation.latitude), lon \(theLocation.longitude)")
+            let theLocationString = appDelegate.findNearestLargeCity(clCorr) as String
             
-            cell.detailTextLabel?.text = appDelegate.findNearestLargeCity(clCorr)
+            cell.subtitle?.text = "Near \(theLocationString)"
         } else {
-            cell.detailTextLabel?.text = "Off Grid"
+            cell.subtitle?.text = "Off the grid"
         }
         
         return cell
