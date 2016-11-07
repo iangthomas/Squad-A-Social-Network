@@ -13,6 +13,9 @@ class friendList : UITableViewController {
 
     var items: [individualFriend] = []
     
+    
+ //   var channelKeys : NSDictionary = [:]
+
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
     override func viewDidLoad() {
@@ -24,6 +27,18 @@ class friendList : UITableViewController {
         
         addPlusButton()
         
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.displayList), name: Notification.Name("friendListReady"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.incrementUnreadMessageCell), name: Notification.Name("incrementUnreadMessageCell"), object: nil)
+    
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.updateTableViewData), name: Notification.Name("updateTableViewData"), object: nil)
+        
+       // setupUserChannels()
+        
+        /*
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
         let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
@@ -45,41 +60,115 @@ class friendList : UITableViewController {
 
             self.tableView.reloadData()
         })
+ */
     }
     
-    func getDistancesToFriends () {
-        for (index, theItem) in self.items.enumerated() {
-            var theFriend = theItem
-            
-            let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriend.key)
-            // get their unique id
-            friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
-                let result = snapshot.value as? NSDictionary
-                if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
-                    theFriend.uniqueId = uniqueFriendId
-                    
-                    let friendCoorPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("coor")
-                    friendCoorPath.observe(FIRDataEventType.value, with: { (snapshot) in
-                        if let coor = snapshot.value as? NSDictionary {
-                            
-                            self.items[index].location = CLLocationCoordinate2D(latitude: coor.object(forKey: "lat") as! CLLocationDegrees, longitude: coor.object(forKey: "lon") as! CLLocationDegrees)
-                            
-                            self.updateSpecificCellWithNewLoctaion(index)
+    
+    /*
+    func setupUserChannels () {
 
-                        } else {
-                            // no location or off grid
-                            self.items[index] .location = nil
-                            
-                            self.updateSpecificCellWithNewLoctaion(index)
-                        }
-                    })
-                }
-            })
+        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
+
+        thisUserPath.observe(.value, with: {snapshot in
+            
+            if let myChannels = snapshot.value as! NSDictionary! {
+                self.channelKeys = myChannels
+            }
+        })
+    }
+    */
+    
+    func displayList (_ theNotification: Notification) {
+        
+        
+      //  var localFriendList: [individualFriend] = []
+        
+        
+        let theList = theNotification.object as! NSDictionary
+        
+        if let temp = theList.object(forKey: "a") as? [individualFriend] {
+            
+        items = temp
+        }
+        
+        //         let temp = theList.object(forKey: "a") as? [individualFriend]
+
+        
+       // let temp:[individualFriend] = theList.object(forKey: "a") as? [individualFriend]
+
+       // temp
+        
+        
+        
+        tableView.reloadData()
+    }
+    
+    
+    
+    func updateTableViewData () {
+      //  let appDelegate = UIApplication.shared.delegate as! AppDelegate
+     //   items = appDelegate.friendList as! [individualFriend]
+
+        tableView.reloadData()
+    }
+    
+    
+
+    func incrementUnreadMessageCell (_ theNotification: Notification) {
+        
+        let theMessage = theNotification.object as! NSDictionary
+        let theFriendPin = theMessage.object(forKey: "senderName") as! String
+
+        var i = 0
+        
+        while i < items.count {
+            if items[i].key == theFriendPin {
+                items[i].unreadMessage += 1
+                
+                // update date model
+                /*
+                let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+                let usersFriendPinPath = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(theFriendPin)
+                usersFriendPinPath.observe(FIRDataEventType.value, with: { (snapshot) in
+                    if let coor = snapshot.value as? NSDictionary {
+                        
+                        
+                    }
+
+                    
+                })*/
+
+                updateSpecificCellWithNewData(i)
+                
+                break
+            }
+            i += 1
         }
     }
     
+        /*
+        let channelId = theNotification.object as! String
+
+        for channel in channelKeys {
+            let channelKey = channel.key as! String
+            if channelKey == channelId {
+                print ("incirment channel")
+                
+         
+         }
+         }
+  */
+ 
+                
+                
     
-    func updateSpecificCellWithNewLoctaion (_ index: Int) {
+    
+    
+
+    
+    
+    func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
         self.tableView.reloadRows(at: [theCellIndexPath], with: .automatic)
@@ -121,14 +210,16 @@ class friendList : UITableViewController {
 
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             let clCorr = CLLocation.init(latitude: theLocation.latitude, longitude: theLocation.longitude)
-            
-           // cell.detailTextLabel?.text = ("lat \(theLocation.latitude), lon \(theLocation.longitude)")
             let theLocationString = appDelegate.findNearestLargeCity(clCorr) as String
             
             cell.subtitle?.text = "Near \(theLocationString)"
         } else {
             cell.subtitle?.text = "Off the grid"
         }
+        
+        
+        cell.missedMessages?.text = "M \(requestItem.unreadMessage)"
+        
         
         return cell
     }
@@ -201,6 +292,7 @@ class friendList : UITableViewController {
     
     
     
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // do these folks have a channel together?
@@ -223,7 +315,7 @@ class friendList : UITableViewController {
                 let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels")
                 
                 // get all of this users channels
-                thisUserPath.observe(.value, with: {snapshot in
+                thisUserPath.observeSingleEvent(of: .value, with: {snapshot in
                     
                     if let myChannels = snapshot.value as? NSDictionary {
                     

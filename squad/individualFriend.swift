@@ -17,6 +17,8 @@ struct individualFriend {
     let ref: FIRDatabaseReference?
     var location: CLLocationCoordinate2D?
     var uniqueId: String?
+    var unreadMessage: Int
+    
     
     init(time: String, key: String = "") {
         self.time = time
@@ -25,6 +27,7 @@ struct individualFriend {
         self.ref = nil
         self.location = nil
         self.uniqueId = nil
+        self.unreadMessage = 0
     }
     
     init(snapshot: FIRDataSnapshot) {
@@ -34,14 +37,15 @@ struct individualFriend {
         ref = snapshot.ref
         location = nil
         self.uniqueId = nil
+        unreadMessage = 0
     }
     
-    /*
+    
     func toAnyObject() -> Any {
         return [
             "time": time,
             "key": key
         ]
-    }*/
+    }
     
 }

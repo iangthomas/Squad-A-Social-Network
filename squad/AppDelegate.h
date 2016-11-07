@@ -14,6 +14,8 @@
 
 @import Firebase;
 
+@class SwiftAppDelegate;
+@class individualFriend;
 
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
@@ -40,6 +42,14 @@
 @property (nonatomic, assign) BOOL geofencesSucessfulyCalledFromNet;
 
 @property (nonatomic, strong) NSString* geofenceVisitChildId;
+
+
+@property (nonatomic, strong) NSArray<individualFriend *> *friendList;
+//@property (nonatomic, strong) NSArray *friendList2;
+
+//@property (nonatomic, strong) SwiftAppDelegate *swiftAppDelegate;
+
+
 
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation;
 

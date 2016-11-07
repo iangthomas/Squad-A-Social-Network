@@ -15,7 +15,6 @@
 #import "SystemStatusViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "TutViewController.h"
-
 #import <squad-Swift.h>
 
 @interface AppDelegate ()
@@ -35,6 +34,8 @@
 @property (nonatomic, strong) NSMutableArray *colA;
 @property (nonatomic, strong) NSMutableArray *colB;
 @property (nonatomic, strong) NSMutableArray *colC;
+
+@property (nonatomic, strong) SwiftAppDelegateClass *swiftAppDelegate;
 
 @end
 
@@ -99,10 +100,12 @@
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeProfileAndGoOnDuty:) name:@"makeProfile" object:nil];
 
-    
-    
-    
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incrementFriendListBadgeIcon:) name:@"incrementFriendListBadgeIcon" object:nil];
+
+    /*
+    let notificationName = Notification.Name("unreadMessage")
+    NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.incrementUnreadMessages), name: notificationName, object: nil)
+    */
     
 //#warning this does nor work
     /*
@@ -200,16 +203,16 @@
     FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
     
         [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-            [self updateBadgeIcon:snapshot];
+            [self updateFriendRequestBadgeIcon:snapshot];
         }];
     }
 }
 
 
--(void)updateBadgeIcon:(FIRDataSnapshot*) snapshot {
+-(void)updateFriendRequestBadgeIcon:(FIRDataSnapshot*) snapshot {
 
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
-    UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:3];
+    UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:2];
     
     if (snapshot.value != [NSNull null]) {
         NSDictionary *friendRequestsDict = snapshot.value;
@@ -224,6 +227,22 @@
     }
 }
 
+-(void)incrementFriendListBadgeIcon:(NSNotification*) notification {
+
+    
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:0];
+    NSString * theString = friendRequestTabBarItem.badgeValue;
+    NSNumber * num = [f numberFromString:theString];
+    
+    num = [NSNumber numberWithDouble:num.intValue + 1];
+    
+    friendRequestTabBarItem.badgeValue = num.stringValue;
+
+}
 
 
 
