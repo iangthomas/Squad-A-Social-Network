@@ -31,7 +31,8 @@ class friendList : UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.displayList), name: Notification.Name("friendListReady"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.incrementUnreadMessageCell), name: Notification.Name("incrementUnreadMessageCell"), object: nil)
-    
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.decrementUnreadMessageCell), name: Notification.Name("decrementUnreadMessageCell"), object: nil)
+        
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.updateTableViewData), name: Notification.Name("updateTableViewData"), object: nil)
@@ -81,9 +82,7 @@ class friendList : UITableViewController {
     
     func displayList (_ theNotification: Notification) {
         
-        
-      //  var localFriendList: [individualFriend] = []
-        
+        // the following is an insane way of passing a var, redo it
         
         let theList = theNotification.object as! NSDictionary
         
@@ -92,18 +91,8 @@ class friendList : UITableViewController {
         items = temp
         }
         
-        //         let temp = theList.object(forKey: "a") as? [individualFriend]
-
-        
-       // let temp:[individualFriend] = theList.object(forKey: "a") as? [individualFriend]
-
-       // temp
-        
-        
-        
         tableView.reloadData()
     }
-    
     
     
     func updateTableViewData () {
@@ -113,6 +102,25 @@ class friendList : UITableViewController {
         tableView.reloadData()
     }
     
+    
+    // most of the following code is a duplicate, refactor it!
+    func decrementUnreadMessageCell (_ theNotification: Notification) {
+        
+        let theMessage = theNotification.object as! NSDictionary
+        let theFriendPin = theMessage.object(forKey: "senderName") as! String
+        
+        var i = 0
+        
+        while i < items.count {
+            if items[i].key == theFriendPin {
+                items[i].unreadMessage -= 1
+                updateSpecificCellWithNewData(i)
+                
+                break
+            }
+            i -= 1
+        }
+    }
     
 
     func incrementUnreadMessageCell (_ theNotification: Notification) {
@@ -125,20 +133,6 @@ class friendList : UITableViewController {
         while i < items.count {
             if items[i].key == theFriendPin {
                 items[i].unreadMessage += 1
-                
-                // update date model
-                /*
-                let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
-                let usersFriendPinPath = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(theFriendPin)
-                usersFriendPinPath.observe(FIRDataEventType.value, with: { (snapshot) in
-                    if let coor = snapshot.value as? NSDictionary {
-                        
-                        
-                    }
-
-                    
-                })*/
-
                 updateSpecificCellWithNewData(i)
                 
                 break
@@ -146,26 +140,6 @@ class friendList : UITableViewController {
             i += 1
         }
     }
-    
-        /*
-        let channelId = theNotification.object as! String
-
-        for channel in channelKeys {
-            let channelKey = channel.key as! String
-            if channelKey == channelId {
-                print ("incirment channel")
-                
-         
-         }
-         }
-  */
- 
-                
-                
-    
-    
-    
-
     
     
     func updateSpecificCellWithNewData (_ index: Int) {

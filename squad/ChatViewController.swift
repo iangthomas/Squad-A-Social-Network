@@ -173,18 +173,21 @@ final class ChatViewController: JSQMessagesViewController {
                         // then read the message!
                         
                         
-                        // only do this if the user is looking at the channel...  make this a seperate method
-                        
-                        updatedRecipientRead = "yes"
-                        
-                        let newref = self.messageRef.child(snapshot.key).child("recipientRead")
-                        
-                        newref.setValue(updatedRecipientRead) { (error, ref) in
+                        // only do this if the user is looking at the channel
+                        if self.isViewLoaded == true && (self.view.window != nil) {
+                            updatedRecipientRead = "yes"
                             
-                            if error != nil {
-                                // add comments here
-                            } else {
-                                // add comments here
+                            let newref = self.messageRef.child(snapshot.key).child("recipientRead")
+                            
+                            newref.setValue(updatedRecipientRead) { (error, ref) in
+                                
+                                if error == nil {
+                                    // add comments here
+                                    NotificationCenter.default.post(name: Notification.Name("decrementUnreadMessageCell"), object: messageData)
+                                    NotificationCenter.default.post(name: Notification.Name("decrementFriendListBadgeIcon"), object: nil)
+                                } else {
+                                    // add comments here
+                                }
                             }
                         }
                     }

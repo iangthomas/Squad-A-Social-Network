@@ -40,14 +40,17 @@
     
 	// Create the data model
 
-    _pageTitles = @[@"With Squad it's easy to connect with nearby friends", @"Check the map to find your friends", @"Once a deal has enough people, everyone can unlock", @"Just show the cashier or waiter, the Flock App to enjoy your savings", @"That's all you need to know!"];
+  //  _pageTitles = @[@"With Squad it's easy to connect with nearby friends", @"Check the map to find your friends", @"Once a deal has enough people, everyone can unlock", @"Just show the cashier or waiter, the Flock App to enjoy your savings", @"That's all you need to know!"];
+    
+    _pageTitles = @[@"With Squad it's easy to connect with nearby friends"];
     
     
   //  _pageImages = @[@"example", @"tutMapImage", @"tutDealImage", @"tutClaimImage", @"example"];
-    _pageImages = @[@"tutImage1", @"tutImage2", @"tutImage3", @"tutImage4", @"tutImage1"];
-    
+    //_pageImages = @[@"tutImage1", @"tutImage2", @"tutImage3", @"tutImage4", @"tutImage1"];
+    _pageImages = @[@"tutImage2"];
+
   //  _pageTypes = @[@"Welcome", @"Map", @"Deal", @"Claim", @"Ready"];
-    _pageTypes = @[@"Welcome", @"Map", @"Deal", @"More", @"Ready"];
+    _pageTypes = @[@"Ready"];
 
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(nextPage:) name:@"nextPage" object:nil];

@@ -79,7 +79,6 @@
     NSInteger numLaunches = [defaults integerForKey:kNumLaunchesKey];
     [[NSUserDefaults standardUserDefaults] setInteger:numLaunches+1 forKey:kNumLaunchesKey];
     
-   // [self updateNumLaunches];
     
 
     
@@ -101,6 +100,7 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeProfileAndGoOnDuty:) name:@"makeProfile" object:nil];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incrementFriendListBadgeIcon:) name:@"incrementFriendListBadgeIcon" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(decrementFriendListBadgeIcon:) name:@"decrementFriendListBadgeIcon" object:nil];
 
     /*
     let notificationName = Notification.Name("unreadMessage")
@@ -120,7 +120,6 @@
     
     [self makeAppReadyToUse];
     
-    [self setupFirebaseVars];
     
     [self setupTabBar];
     
@@ -128,13 +127,25 @@
     
     [self generateCityList];
     
-    [self setupSwiftAppDelegate];
+    if ([self docentProfileEmpty] == NO) {
+        [self methodsThatRequireAProfile];
+    }
+    
     
     [Constants debug:@1 withContent:@"Starting App Done"];
 
     return YES;
 }
 
+
+
+-(void)methodsThatRequireAProfile {
+    [self setupSwiftAppDelegate];
+    [self setupFirebaseVars];
+    
+    // [self updateNumLaunches];
+
+}
 
 -(void) setupSwiftAppDelegate {
     SwiftAppDelegateClass *swiftClass = [SwiftAppDelegateClass alloc];
@@ -197,15 +208,12 @@
 */
 
 -(void) setupFirebaseVars {
-
-    if ([self docentProfileEmpty] == NO) {
     
     FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
     
         [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
             [self updateFriendRequestBadgeIcon:snapshot];
         }];
-    }
 }
 
 
@@ -227,9 +235,9 @@
     }
 }
 
+#warning refacrtor these, most of code is duplicite
 -(void)incrementFriendListBadgeIcon:(NSNotification*) notification {
 
-    
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     
@@ -241,8 +249,29 @@
     num = [NSNumber numberWithDouble:num.intValue + 1];
     
     friendRequestTabBarItem.badgeValue = num.stringValue;
-
 }
+
+
+-(void)decrementFriendListBadgeIcon:(NSNotification*) notification {
+    
+    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+    f.numberStyle = NSNumberFormatterDecimalStyle;
+    
+    UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
+    UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:0];
+    NSString * theString = friendRequestTabBarItem.badgeValue;
+    NSNumber * num = [f numberFromString:theString];
+    
+    num = [NSNumber numberWithDouble:num.intValue - 1];
+    
+    if (num.intValue == 0) {
+        friendRequestTabBarItem.badgeValue = nil;
+    } else {
+        friendRequestTabBarItem.badgeValue = num.stringValue;
+    }
+}
+
+
 
 
 
@@ -890,6 +919,8 @@
     
     [[NSUserDefaults standardUserDefaults] setObject:theNotification.object forKey:kDocentUserId];
     [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kOnDuty];
+    
+    [self methodsThatRequireAProfile];
 }
 
 

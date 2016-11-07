@@ -39,13 +39,15 @@ import UIKit
     func getChatChannels () {
         
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let userPin = UserDefaults.standard.object(forKey: kPin) as! String
+
         let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
         
 
         // get all this user's channels
         thisUserPath.observe(.value, with: {snapshot in
             
-            if let myChannels = snapshot.value as! NSDictionary! {
+            if let myChannels = snapshot.value as? NSDictionary {
                 
                     for thisKey in myChannels {
                         
@@ -54,16 +56,20 @@ import UIKit
                         thisChannelPath.observe(FIRDataEventType.childAdded, with: { (snapshotMessage) in
                             
                             if let theMessage = snapshotMessage.value as! NSDictionary! {
+                                
+                                if theMessage.object(forKey: "senderName") as! String != userPin {
+                                
                                 if let readMessage = theMessage.object(forKey: "recipientRead"){
                                     if readMessage as! String  == "no" {
                                         
-                                      //  let tmep = thisKeyForReal
-                                        NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: thisKeyForReal)
+                                        // add obverver thet now looks for this message to be read
                                         
+                                        NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: thisKeyForReal)
                                         NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
 
                                         print ("message unread in appdelegate")
                                     }
+                                }
                                 }
                             }
                         })
@@ -91,7 +97,7 @@ import UIKit
             self.localFriendList = newItems
             
             
-            var temo:NSDictionary = [
+            let temo:NSDictionary = [
                 "a" : self.localFriendList]
             
            // var temp : NSDictionary
@@ -134,7 +140,7 @@ import UIKit
     
     
     func getDistancesToFriends () {
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+    //    let appDelegate = UIApplication.shared.delegate as! AppDelegate
         
         
        // localFriendList = appDelegate.friendList as! [individualFriend]
