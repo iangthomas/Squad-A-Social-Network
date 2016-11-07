@@ -62,7 +62,7 @@ import UIKit
                                 if let readMessage = theMessage.object(forKey: "recipientRead"){
                                     if readMessage as! String  == "no" {
                                         
-                                        // add obverver thet now looks for this message to be read
+                                        // add observer that now looks for this message to be read
                                         
                                         NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: thisKeyForReal)
                                         NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
@@ -97,15 +97,15 @@ import UIKit
             self.localFriendList = newItems
             
             
-            let temo:NSDictionary = [
+            let updatedList:NSDictionary = [
                 "a" : self.localFriendList]
-            
+            NotificationCenter.default.post(name: Notification.Name ("friendListReady"), object: updatedList)
+
            // var temp : NSDictionary
             
            // temp.update
            // let test = NSDictionary["1": self.localFriendList]
             
-            NotificationCenter.default.post(name: Notification.Name ("friendListReady"), object: temo)
             
             /*
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -163,7 +163,12 @@ import UIKit
                             
                             self.localFriendList [index].location = CLLocationCoordinate2D(latitude: coor.object(forKey: "lat") as! CLLocationDegrees, longitude: coor.object(forKey: "lon") as! CLLocationDegrees)
                             
-                            NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: index)
+                            
+                            let updatedList:NSDictionary = [
+                                "a" : self.localFriendList]
+                          //  NotificationCenter.default.post(name: Notification.Name ("friendListReady"), object: updatedList)
+
+                            NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: updatedList)
                             
                          //   self.updateSpecificCellWithNewData(index)
                             
@@ -171,7 +176,10 @@ import UIKit
                             // no location or off grid
                             self.localFriendList[index].location = nil
                             
-                            NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: index)
+                            let updatedList:NSDictionary = [
+                                "a" : self.localFriendList]
+                         
+                            NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: updatedList)
 
                            // self.updateSpecificCellWithNewData(index)
                         }

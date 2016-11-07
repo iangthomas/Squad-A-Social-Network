@@ -85,20 +85,22 @@ class friendList : UITableViewController {
         // the following is an insane way of passing a var, redo it
         
         let theList = theNotification.object as! NSDictionary
-        
         if let temp = theList.object(forKey: "a") as? [individualFriend] {
-            
-        items = temp
+            items = temp
         }
         
         tableView.reloadData()
     }
     
     
-    func updateTableViewData () {
+    func updateTableViewData (_ theNotification: Notification) {
       //  let appDelegate = UIApplication.shared.delegate as! AppDelegate
      //   items = appDelegate.friendList as! [individualFriend]
-
+        let theList = theNotification.object as! NSDictionary
+        if let temp = theList.object(forKey: "a") as? [individualFriend] {
+            items = temp
+        }
+        
         tableView.reloadData()
     }
     
@@ -110,15 +112,13 @@ class friendList : UITableViewController {
         let theFriendPin = theMessage.object(forKey: "senderName") as! String
         
         var i = 0
-        
         while i < items.count {
             if items[i].key == theFriendPin {
                 items[i].unreadMessage -= 1
                 updateSpecificCellWithNewData(i)
-                
                 break
             }
-            i -= 1
+            i += 1
         }
     }
     
@@ -129,12 +129,10 @@ class friendList : UITableViewController {
         let theFriendPin = theMessage.object(forKey: "senderName") as! String
 
         var i = 0
-        
         while i < items.count {
             if items[i].key == theFriendPin {
                 items[i].unreadMessage += 1
                 updateSpecificCellWithNewData(i)
-                
                 break
             }
             i += 1
