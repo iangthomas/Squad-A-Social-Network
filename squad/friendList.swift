@@ -30,11 +30,6 @@ class friendList : UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.displayList), name: Notification.Name("friendListReady"), object: nil)
         
-        NotificationCenter.default.addObserver(self, selector: #selector(friendList.incrementUnreadMessageCell), name: Notification.Name("incrementUnreadMessageCell"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(friendList.decrementUnreadMessageCell), name: Notification.Name("decrementUnreadMessageCell"), object: nil)
-        
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.updateTableViewData), name: Notification.Name("updateTableViewData"), object: nil)
         
        // setupUserChannels()
@@ -105,41 +100,6 @@ class friendList : UITableViewController {
     }
     
     
-    // most of the following code is a duplicate, refactor it!
-    func decrementUnreadMessageCell (_ theNotification: Notification) {
-        
-        let theMessage = theNotification.object as! NSDictionary
-        let theFriendPin = theMessage.object(forKey: "senderName") as! String
-        
-        var i = 0
-        while i < items.count {
-            if items[i].key == theFriendPin {
-                items[i].unreadMessage -= 1
-                updateSpecificCellWithNewData(i)
-                break
-            }
-            i += 1
-        }
-    }
-    
-
-    func incrementUnreadMessageCell (_ theNotification: Notification) {
-        
-        let theMessage = theNotification.object as! NSDictionary
-        let theFriendPin = theMessage.object(forKey: "senderName") as! String
-
-        var i = 0
-        while i < items.count {
-            if items[i].key == theFriendPin {
-                items[i].unreadMessage += 1
-                updateSpecificCellWithNewData(i)
-                break
-            }
-            i += 1
-        }
-    }
-    
-    
     func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
@@ -149,8 +109,9 @@ class friendList : UITableViewController {
     
     
     func addPlusButton() {
-        
-        let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
+        //         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
+
+        let addButton = UIBarButtonItem(title: "Add Friend", style: .plain, target: self, action: #selector(addNewFriend))
         addButton.tintColor = UIColor.white
         self.navigationItem.rightBarButtonItem = addButton
     }
@@ -167,6 +128,7 @@ class friendList : UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        //NotificationCenter.default.post(name: Notification.Name("pleaseSendUpdatedModel"), object: nil)
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

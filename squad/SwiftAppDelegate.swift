@@ -12,11 +12,18 @@ import UIKit
     
     var localFriendList: [individualFriend] = []
     var listOfUnreadMessagesAddedToNotification: Dictionary<String, String> = [:]
-    
+    var friendListReady = false
     
     func startObservingChatChannels() {
         
         listOfUnreadMessagesAddedToNotification = [:]
+        
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.incrementUnreadMessageCell), name: Notification.Name("incrementUnreadMessageCell"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.decrementUnreadMessageCell), name: Notification.Name("decrementUnreadMessageCell"), object: nil)
+        
+        
+     //   NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.pleaseSendUpdatedModel), name: Notification.Name ("pleaseSendUpdatedModel"), object: nil)
         
         getFriends()
     }
@@ -37,8 +44,8 @@ import UIKit
                 
                     for thisKey in myChannels {
                         
-                        let thisKeyForReal = thisKey.key as! String
-                        let thisChannelPath = FIRDatabase.database().reference().child("channels").child(thisKeyForReal).child("messages")
+                        let thisChannelKey = thisKey.key as! String
+                        let thisChannelPath = FIRDatabase.database().reference().child("channels").child(thisChannelKey).child("messages")
                         thisChannelPath.observe(FIRDataEventType.childAdded, with: { (snapshotMessage) in
                             
                             if let theMessage = snapshotMessage.value as! NSDictionary! {
@@ -50,8 +57,8 @@ import UIKit
                                         
                                         // has this message already been added to all the notification stuff?
                                     
-                                        if self.alreadyAddedToUnreadMessages(thisKeyForReal) {
-                                           self.addNotificaitonsForANewUnreadMessage(message: theMessage, withkey: thisKeyForReal)
+                                        if self.alreadyAddedToUnreadMessages(snapshotMessage.key) {
+                                           self.addNotificaitonsForANewUnreadMessage(message: theMessage, withkey: snapshotMessage.key)
                                         }
                                     }
                                 }
@@ -80,7 +87,63 @@ import UIKit
         NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: theKey)
         NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
         
-        print ("message unread in appdelegate")
+      //  print ("message unread in appdelegate")
+    }
+    
+    
+    
+    // most of the following code is a duplicate, refactor it!
+    // also it is insane, fix that!!!!!
+    func decrementUnreadMessageCell (_ theNotification: Notification) {
+        
+        let theMessage = theNotification.object as! NSDictionary
+        let theFriendPin = theMessage.object(forKey: "senderName") as! String
+        
+        var i = 0
+        while i < localFriendList.count {
+            if localFriendList[i].key == theFriendPin {
+                if localFriendList[i].unreadMessage > 0 {
+                    localFriendList[i].unreadMessage -= 1
+                    let updatedList:NSDictionary = [
+                        "a" : self.localFriendList]
+                    NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
+                    break
+                }
+             //   updateSpecificCellWithNewData(i)
+                // break
+            }
+            i += 1
+        }
+    }
+    
+    
+    func incrementUnreadMessageCell (_ theNotification: Notification) {
+        
+        let theMessage = theNotification.object as! NSDictionary
+        let theFriendPin = theMessage.object(forKey: "senderName") as! String
+        
+        var i = 0
+        while i < localFriendList.count {
+            if localFriendList[i].key == theFriendPin {
+                localFriendList[i].unreadMessage += 1
+                let updatedList:NSDictionary = [
+                    "a" : self.localFriendList]
+                NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
+
+                //updateSpecificCellWithNewData(i)
+                break
+            }
+            i += 1
+        }
+    }
+    
+    func pleaseSendUpdatedModel (_ notification:Notification) {
+        if friendListReady == true {
+            let updatedList:NSDictionary = [
+                "a" : self.localFriendList]
+            NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
+        }
+        // else, wait, this is the inital app load and it will automatically send the friend list when it is ready to show
     }
     
     

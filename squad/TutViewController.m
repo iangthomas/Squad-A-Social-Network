@@ -42,7 +42,7 @@
 
   //  _pageTitles = @[@"With Squad it's easy to connect with nearby friends", @"Check the map to find your friends", @"Once a deal has enough people, everyone can unlock", @"Just show the cashier or waiter, the Flock App to enjoy your savings", @"That's all you need to know!"];
     
-    _pageTitles = @[@"With Squad it's easy to connect with nearby friends"];
+    _pageTitles = @[@"With Squad it's easy to stay connected to friends near and far"];
     
     
   //  _pageImages = @[@"example", @"tutMapImage", @"tutDealImage", @"tutClaimImage", @"example"];

@@ -229,9 +229,9 @@
             int realCount = 0;
             
             for (int i = 0; i < friendRequestsDict.count; i++) {
-                if (friendRequestsDict[i] != [NSNull null]) {
+              //  if (friendRequestsDict[i] != [NSNull null]) {
                     realCount ++;
-                }
+              //  }
             }
             
             if (realCount > 0) {
