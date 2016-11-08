@@ -9,8 +9,9 @@
 #import "SystemStatusViewController.h"
 #import "Constants.h"
 #include "Reachability.h"
-
 #import <CoreLocation/CoreLocation.h>
+#import <OneSignal/OneSignal.h>
+
 
 @import Firebase;
 //import FirebaseAuth
@@ -935,6 +936,9 @@
                                             // now add the user profile itself to the database
                                             
                                             FIRDatabaseReference *uniqueIdRef = [usersRef child:userProfile[@"uniqueFirebaseId"]];
+                                            
+                                            FIRDatabaseReference *pushRef = [uniqueIdRef child:@"pushId"];
+
                                             [uniqueIdRef setValue:userProfile withCompletionBlock:
                                              ^(NSError *error, FIRDatabaseReference *ref) {
                                                  
@@ -946,6 +950,29 @@
                                                  } else {
                                                      [Constants debug:@2 withContent:@"Successful Firebase e-mail user added to database."];
                                                      [[NSNotificationCenter defaultCenter] postNotificationName:@"makeProfile" object:userProfile[@"uniqueFirebaseId"]];
+                                                     
+                                                     
+                                                     [OneSignal IdsAvailable:^(NSString* userId, NSString* pushToken) {
+                                                         NSLog(@"UserId:%@", userId);
+                                                         if (pushToken != nil)
+                                                             NSLog(@"pushToken:%@", pushToken);
+                                                         
+                                                         
+                                                         NSMutableDictionary *userPushId = [[NSMutableDictionary alloc] init];
+                                                         userPushId[@"pushToken"] = pushToken;
+                                                         userPushId[@"userId"] = userId;
+                                                         
+                                                         [pushRef setValue:userPushId withCompletionBlock:
+                                                          ^(NSError *error, FIRDatabaseReference *ref) {
+                                                              if (error) {
+                                                                  [Constants debug:@3 withContent:@"ERROR: push notificaiton registration."];
+                                                                  [Constants makeErrorReportWithDescription:error.localizedDescription];
+                                                              } else {
+                                                                  [Constants debug:@2 withContent:@"Successful push notificaiton registration."];
+                                                              }
+                                                          }];
+                                                     }];
+                                                     
                                                      
                                                      [self hideAllLoginOptions];
                                                      [self hideEmailBox];

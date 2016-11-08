@@ -44,6 +44,7 @@ PODS:
   - JSQMessagesViewController (7.3.4):
     - JSQSystemSoundPlayer (~> 2.0.1)
   - JSQSystemSoundPlayer (2.0.1)
+  - OneSignal (2.2.1)
 
 DEPENDENCIES:
   - Crashlytics
@@ -52,6 +53,7 @@ DEPENDENCIES:
   - Firebase/Core
   - Firebase/Database
   - JSQMessagesViewController
+  - OneSignal
 
 SPEC CHECKSUMS:
   Crashlytics: 2b6dbe138a42395577cfa73dfa1aa7248cadf39e
@@ -68,5 +70,6 @@ SPEC CHECKSUMS:
   GTMSessionFetcher: a1f8ed39e4fe21c68957daed472c7afbcdf29166
   JSQMessagesViewController: 39fed975e3c9f8eba7292071e29eeb541d105e66
   JSQSystemSoundPlayer: c5850e77a4363ffd374cd851154b9af93264ed8d
+  OneSignal: 4fdee33a5c3108c92747be1be8b9b7dfe13f86c5
 
 COCOAPODS: 0.39.0

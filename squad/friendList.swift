@@ -213,7 +213,18 @@ class friendList : UITableViewController {
                                             // the channel has been added to both the users.
                                             // now lets make a channel object to send to the next viewcontroller
                                             
-                                            self.pushToChannel(self.channelRef.child(newChannelPathId.key))
+                                            
+                                            // et their push notificaiotn id first!
+                                            let friendPushPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("pushId")
+                                            friendPushPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                                                if let friendPushInfoDictionary = snapshot.value as? NSDictionary {
+                                                    
+                                                    if let friendPushIdString = friendPushInfoDictionary["userId"] as? String {
+
+                                                            self.pushToChannel(self.channelRef.child(newChannelPathId.key), withPushId: friendPushIdString)
+                                                    }
+                                                }
+                                            })
                                             
                                             // add comments here
                                         } else {
@@ -255,7 +266,7 @@ class friendList : UITableViewController {
             
             let result = snapshot.value as? NSDictionary
             if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
-                let friendUserPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels")
+                let friendChannelPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("channels")
                 
                 // get all of this users channels
                 thisUserPath.observeSingleEvent(of: .value, with: {snapshot in
@@ -263,7 +274,7 @@ class friendList : UITableViewController {
                     if let myChannels = snapshot.value as? NSDictionary {
                     
                     // all of the friend channels
-                    friendUserPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                    friendChannelPath.observeSingleEvent(of: .value, with: { (snapshot) in
                         if let friendsChannels = snapshot.value as? NSDictionary {
                         
                         let myKeys = myChannels.allKeys
@@ -276,6 +287,7 @@ class friendList : UITableViewController {
                                 break
                             }
                         }
+
                         
                         // now decide
                             if theKeyString == "no-match" {
@@ -285,7 +297,20 @@ class friendList : UITableViewController {
                             } else {
                             // yes there was a matched channel -> show it
                                 
-                                self.pushToChannel(self.channelRef.child(theKeyString))
+                                
+                                // et their push notificaiotn id first!
+                                let friendPushPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("pushId")
+                                friendPushPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                                    if let friendPushInfoDictionary = snapshot.value as? NSDictionary {
+                                        
+                                        if let friendPushIdString = friendPushInfoDictionary["userId"] as? String {
+                                        
+                                            self.pushToChannel(self.channelRef.child(theKeyString), withPushId: friendPushIdString)
+                                        }
+                                    }
+                                })
+                                
+                                
  
                             }
                         } else {
@@ -307,14 +332,19 @@ class friendList : UITableViewController {
         })
     }
     
-    func pushToChannel (_ theRef: FIRDatabaseReference) {
+    func pushToChannel (_ theRef: FIRDatabaseReference, withPushId thePushId: String) {
         
         theRef.observeSingleEvent(of: .value, with: { (snapshot) in
             let channelData = snapshot.value as! Dictionary<String, AnyObject>
             let id = snapshot.key
             if let name = channelData["name"] as! String!, name.characters.count > 0 {
                 
-                self.performSegue(withIdentifier: "ShowChannel", sender: (Channel(id: id, name: name)))
+                var theDictionary: Dictionary<String, Any> = [:]
+
+                theDictionary["channel"] = (Channel(id: id, name: name))
+                theDictionary["pushNotifId"] = thePushId
+                
+                self.performSegue(withIdentifier: "ShowChannel", sender: theDictionary)
                 
             }
         })
@@ -323,11 +353,25 @@ class friendList : UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         super.prepare(for: segue, sender: sender)
         
-        if let channel = sender as? Channel {
-            let chatVc = segue.destination as! ChatViewController
-            chatVc.senderDisplayName = UserDefaults.standard.object(forKey: kPin) as! String
-            chatVc.channel = channel
-            chatVc.channelRef = channelRef.child(channel.id)
+        if segue.identifier == "ShowChannel" {
+            
+            if let theDictionary = sender as? Dictionary<String, Any> {
+            
+                // get the channel
+                if let channel = theDictionary["channel"] as? Channel {
+                    
+                    // get the push id
+                    if let pushId = theDictionary["pushNotifId"] as? String {
+                    
+                        let chatVc = segue.destination as! ChatViewController
+                        chatVc.senderDisplayName = UserDefaults.standard.object(forKey: kPin) as! String
+                        chatVc.channel = channel
+                        chatVc.channelRef = channelRef.child(channel.id)
+                        chatVc.thePushIdString = pushId
+                    }
+                }
+            }
         }
     }
+    
 }

@@ -16,6 +16,8 @@
 #import <AudioToolbox/AudioToolbox.h>
 #import "TutViewController.h"
 #import <squad-Swift.h>
+#import <OneSignal/OneSignal.h>
+
 
 @interface AppDelegate ()
 @property (nonatomic, assign) BOOL sendCheckInTimes;
@@ -79,6 +81,9 @@
     NSInteger numLaunches = [defaults integerForKey:kNumLaunchesKey];
     [[NSUserDefaults standardUserDefaults] setInteger:numLaunches+1 forKey:kNumLaunchesKey];
     
+    [[Fabric sharedSDK] setDebug: YES];
+    [Fabric with:@[CrashlyticsKit]];
+
     
 
     
@@ -91,7 +96,49 @@
     
   //  }
     
+ //   [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd"];
+    //       OneSignal.initWithLaunchOptions(launchOptions, appId: "5eb5a37e-b458-11e3-ac11-000c2940e62c")
 
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
+
+    
+    [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd" handleNotificationReceived:^(OSNotification *notification) {
+     //   NSLog(@"Received Notification - %@", notification.payload.notificationID);
+    } handleNotificationAction:^(OSNotificationOpenedResult *result) {
+        
+        // This block gets called when the user reacts to a notification received
+        OSNotificationPayload* payload = result.notification.payload;
+        
+    #warning make this pop the user drienctly into the relovent channel
+        
+        /*
+        NSString* messageTitle = @"OneSignal Example";
+        NSString* fullMessage = [payload.body copy];
+        
+        if (payload.additionalData) {
+            
+            if(payload.title)
+                messageTitle = payload.title;
+            
+            NSDictionary* additionalData = payload.additionalData;
+            
+            if (additionalData[@"actionSelected"])
+                fullMessage = [fullMessage stringByAppendingString:[NSString stringWithFormat:@"\nPressed ButtonId:%@", additionalData[@"actionSelected"]]];
+        }
+        
+        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:messageTitle
+                                                            message:fullMessage
+                                                           delegate:self
+                                                  cancelButtonTitle:@"Close"
+                                                  otherButtonTitles:nil, nil];
+        [alertView show];
+         */
+        
+    } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @YES}];
+#warning change the above to @NO, and build in the rpompter
+   // [OneSignal registerForPushNotifications];
+
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCurrentLocation:) name:@"getCurrentLocation" object:nil];
     
@@ -781,5 +828,25 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     return _colA[index];
 }
 
+
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
+    // NSLog(@"remote notification: %@",[userInfo description]);
+    
+    NSInteger temp = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: temp += 1];
+
+    /*
+    if (userInfo) {
+        NSLog(@"%@",userInfo);
+        
+        if ([userInfo objectForKey:@"aps"]) {
+            if([[userInfo objectForKey:@"aps"] objectForKey:@"badgecount"]) {
+                [UIApplication sharedApplication].applicationIconBadgeNumber = [[[userInfo objectForKey:@"aps"] objectForKey: @"badgecount"] intValue];
+            }
+        }
+    }
+     */
+}
 
 @end

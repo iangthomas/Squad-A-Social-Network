@@ -24,6 +24,8 @@ import UIKit
 //import Photos
 //import Firebase
 import JSQMessagesViewController
+import OneSignal
+
 
 final class ChatViewController: JSQMessagesViewController {
     
@@ -31,6 +33,9 @@ final class ChatViewController: JSQMessagesViewController {
     private let imageURLNotSetKey = "NOTSET"
     
     var channelRef: FIRDatabaseReference?
+    
+    var thePushIdString: String?
+    
     
     private lazy var messageRef: FIRDatabaseReference = self.channelRef!.child("messages")
     // fileprivate lazy var storageRef: FIRStorageReference = FIRStorage.storage().reference(forURL: "gs://chatchat-rw-cf107.appspot.com")
@@ -190,6 +195,19 @@ final class ChatViewController: JSQMessagesViewController {
                                 }
                             }
                         }
+                    } else {
+                        
+                        // then I send the message.
+                        // I'll also post a push notificaiont to that effect
+                        
+                        // get the folks that are poart of the converstion
+                        // and send them the message
+                        
+                        let senderIdString = "Message From: \(name)"
+                        
+                        
+                        OneSignal.postNotification(["contents": ["en": text], "headings": ["en": senderIdString], "include_player_ids": [self.thePushIdString], "content_available" : true])
+
                     }
                 }
                 

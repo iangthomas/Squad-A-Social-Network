@@ -47,7 +47,7 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
-        textField.resignFirstResponder()
+     //   textField.resignFirstResponder()
         return true
     }
     
