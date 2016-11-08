@@ -14,6 +14,7 @@ class FriendTableViewCell: UITableViewCell {
     @IBOutlet weak var subtitle: UILabel!
     
     @IBOutlet weak var missedMessages: UILabel!
+    @IBOutlet weak var dotImage: UIImageView!
 
 
     override func awakeFromNib() {

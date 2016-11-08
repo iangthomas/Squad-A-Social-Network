@@ -143,6 +143,7 @@ class friendList : UITableViewController {
     func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
+        
         self.tableView.reloadRows(at: [theCellIndexPath], with: .automatic)
     }
     
@@ -176,7 +177,7 @@ class friendList : UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! FriendTableViewCell
         let requestItem = items[indexPath.row]
         
-        cell.title?.text = requestItem.key
+        cell.title?.text = "Pin: \(requestItem.key)"
         
         if let theLocation = requestItem.location as CLLocationCoordinate2D! {
 
@@ -189,8 +190,16 @@ class friendList : UITableViewController {
             cell.subtitle?.text = "Off the grid"
         }
         
+        cell.dotImage.image = UIImage(named: "greenMessageDot")
         
-        cell.missedMessages?.text = "M \(requestItem.unreadMessage)"
+        if requestItem.unreadMessage > 0 {
+            cell.missedMessages?.text = "\(requestItem.unreadMessage)"
+            cell.dotImage.isHidden = false
+            
+        } else {
+            cell.missedMessages?.text = ""
+            cell.dotImage.isHidden = true
+        }
         
         
         return cell

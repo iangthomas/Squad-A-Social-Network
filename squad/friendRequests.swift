@@ -12,10 +12,7 @@ import UIKit
 
 class friendRequests: UITableViewController {
     
-    
     var items: [individualFriendRequest] = []
-
-
   
     override func viewDidLoad() {
         
@@ -56,15 +53,27 @@ class friendRequests: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ItemCell", for: indexPath)
         let requestItem = items[indexPath.row]
         
-        cell.textLabel?.text = requestItem.requestersPin
-        cell.detailTextLabel?.text = requestItem.time
+        cell.textLabel?.text = "From Pin: \(requestItem.requestersPin)"
         
-       // toggleCellCheckbox(cell, isCompleted: groceryItem.completed)
+        let formatter = Constants.internetTimeDateFormatter()
+        let date = formatter?.date(from: requestItem.time)
+        
+        if let theRealDate = date as Date! {
+            
+            let letNewFormater = DateFormatter()
+            letNewFormater.dateStyle = .medium
+            letNewFormater.timeStyle = .short
+
+            let dateString = letNewFormater.string(from: theRealDate)
+            cell.detailTextLabel?.text = "Date Sent: \(dateString)"
+            
+        } else {
+            cell.detailTextLabel?.text = ""
+        }
         
         return cell
     }
 
-    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let cell = tableView.cellForRow(at: indexPath) else { return }
@@ -183,7 +192,6 @@ class friendRequests: UITableViewController {
         ]
         return dictionary
     }
-    
     
     
   
