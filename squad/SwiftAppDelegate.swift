@@ -56,7 +56,6 @@ import UIKit
                                     if readMessage as! String  == "no" {
                                         
                                         // has this message already been added to all the notification stuff?
-                                    
                                         if self.alreadyAddedToUnreadMessages(snapshotMessage.key) {
                                            self.addNotificaitonsForANewUnreadMessage(message: theMessage, withkey: snapshotMessage.key)
                                         }
@@ -82,14 +81,12 @@ import UIKit
     
     
     func addNotificaitonsForANewUnreadMessage(message theMessage: NSDictionary, withkey theKey: String) {
+        
         self.listOfUnreadMessagesAddedToNotification[theKey] = theKey
         
         NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: theKey)
         NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
-        
-      //  print ("message unread in appdelegate")
     }
-    
     
     
     // most of the following code is a duplicate, refactor it!
@@ -110,7 +107,6 @@ import UIKit
                     break
                 }
              //   updateSpecificCellWithNewData(i)
-                // break
             }
             i += 1
         }
