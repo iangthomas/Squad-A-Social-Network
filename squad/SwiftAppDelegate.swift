@@ -11,30 +11,16 @@ import UIKit
 @objc class SwiftAppDelegateClass: NSObject {
     
     var localFriendList: [individualFriend] = []
-
+    var listOfUnreadMessagesAddedToNotification: Dictionary<String, String> = [:]
+    
     
     func startObservingChatChannels() {
         
+        listOfUnreadMessagesAddedToNotification = [:]
+        
         getFriends()
-        
-        
-        
-        // incriment the
-        
-        /*
-        let notificationName = Notification.Name("unreadMessage")
-        NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.incrementUnreadMessages), name: notificationName, object: nil)
-*/
     }
     
-    
-    
-    
-    func incrementUnreadMessages (_ notification: Notification){
-        
-        
-    
-    }
     
     func getChatChannels () {
         
@@ -62,12 +48,11 @@ import UIKit
                                 if let readMessage = theMessage.object(forKey: "recipientRead"){
                                     if readMessage as! String  == "no" {
                                         
-                                        // add observer that now looks for this message to be read
-                                        
-                                        NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: thisKeyForReal)
-                                        NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
-
-                                        print ("message unread in appdelegate")
+                                        // has this message already been added to all the notification stuff?
+                                    
+                                        if self.alreadyAddedToUnreadMessages(thisKeyForReal) {
+                                           self.addNotificaitonsForANewUnreadMessage(message: theMessage, withkey: thisKeyForReal)
+                                        }
                                     }
                                 }
                                 }
@@ -77,6 +62,28 @@ import UIKit
                 }
         })
     }
+    
+    
+    func alreadyAddedToUnreadMessages (_ theKey: String) -> Bool {
+        if self.listOfUnreadMessagesAddedToNotification.count > 0 {
+            if self.listOfUnreadMessagesAddedToNotification[theKey] != nil {
+                return false
+            }
+        }
+        return true
+    }
+    
+    
+    func addNotificaitonsForANewUnreadMessage(message theMessage: NSDictionary, withkey theKey: String) {
+        self.listOfUnreadMessagesAddedToNotification[theKey] = theKey
+        
+        NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: theKey)
+        NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
+        
+        print ("message unread in appdelegate")
+    }
+    
+    
     
     func getFriends () {
         

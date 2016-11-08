@@ -223,10 +223,24 @@
     UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:2];
     
     if (snapshot.value != [NSNull null]) {
-        NSDictionary *friendRequestsDict = snapshot.value;
+        NSArray *friendRequestsDict = snapshot.value;
         
         if (friendRequestsDict.count > 0) {
-            friendRequestTabBarItem.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)friendRequestsDict.count];
+            int realCount = 0;
+            
+            for (int i = 0; i < friendRequestsDict.count; i++) {
+                if (friendRequestsDict[i] != [NSNull null]) {
+                    realCount ++;
+                }
+            }
+            
+            if (realCount > 0) {
+                friendRequestTabBarItem.badgeValue = [NSString stringWithFormat:@"%lu", (unsigned long)realCount];
+            } else {
+                friendRequestTabBarItem.badgeValue = nil;
+            }
+
+            
         } else if (friendRequestsDict.count == 0) {
             friendRequestTabBarItem.badgeValue = nil;
         }
@@ -270,10 +284,6 @@
         friendRequestTabBarItem.badgeValue = num.stringValue;
     }
 }
-
-
-
-
 
 
 // if the user is on duty then force them off duty
@@ -403,19 +413,16 @@
             _currentLocation = [locations objectAtIndex:0];
 
             
-            // we now only show the map view first, reguardless of the users possition
-            //[self decideWhatTabToShow:_currentLocation];
-            
         } else {
             
             _currentLocation = [locations objectAtIndex:0];
-        
+        /*
             if ([self isAccuracyUnacceptablyLow:_currentLocation]) {
                 [self showLowAccuracyAlert];
                 
-            } else {
+            } else { */
                 [self postUserLocation:_currentLocation];
-            }
+         //   }
         }
     }
 }
@@ -469,13 +476,7 @@
     if (_showingNearbyAlertview == YES) {
         return NO;
     } else {
-        
-        /*
-        if ([self isDeviceInGeofence]) {
-            return NO;
-            
-        } else {
-         */
+
         if (_dateLowAccuracyAlertWasShown == nil) {
             return YES;
             
@@ -495,65 +496,6 @@
 }
 
 
-
-
-
--(void) showLowAccuracyAlert {
-    [Constants debug:@1 withContent:@"Showing Very Poor Accuracy Alert View"];
-
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Poor Accuracy"
-                                                                   message:@"Your location could not be determined with sufficient accuracy. Please re-launch the App and try again."
-                                                            preferredStyle:UIAlertControllerStyleAlert];
-    
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {}];
-    
-    [alert addAction:defaultAction];
-    
-    [self.window.rootViewController presentViewController:alert animated:YES completion:nil];
-    
-    [Constants debug:@3 withContent:@"horizontal accuracy too low!"];
-}
-
-
--(BOOL) isAccuracyUnacceptablyLow:(CLLocation*)theLocation {
-    
-    if (_currentLocation.horizontalAccuracy > 100000 ||
-        theLocation.verticalAccuracy > 100000) {
-        return YES;
-        
-    } else {
-        return NO;
-    }
-}
-
-
--(BOOL) isAccuracyLowish:(CLLocation*)theLocation {
-    
-    // these make all the comparisons in "long format"
-    NSNumber * horizAcc = [NSNumber numberWithDouble:theLocation.horizontalAccuracy];
-    NSNumber * verticAcc = [NSNumber numberWithDouble:theLocation.verticalAccuracy];
-
-    [Constants debug:@1 withContent:[NSString stringWithFormat:@"Current Horizontal Accuracy: %ld, with Threshold: %ld", horizAcc.longValue, _lowishAccuracyThreshold.longValue]];
-    
-    if (horizAcc.longValue > _lowishAccuracyThreshold.longValue ||
-        verticAcc.longValue > _lowishAccuracyThreshold.longValue) {
-        return YES;
-    } else {
-        return NO;
-    }
-}
-
-
--(BOOL) isGeofenceNew:(NSString*)theGeofenceUniqueId {
-   
-    if ([_currentGeofenceList objectForKey:theGeofenceUniqueId] == NULL) {
-        // then the geofence is new
-        return YES;
-    } else {
-        return NO;
-    }
-}
 
 -(BOOL) NSNumberCompare:(NSNumber*) one :(NSNumber*) two {
 
@@ -612,179 +554,6 @@
 }
 
 
--(CLCircularRegion*)getTheRegionById:(NSString*) theId {
-
-    NSSet *setOfRegions = [self.locationManager monitoredRegions];
-    
-    for (CLCircularRegion *theRegion in setOfRegions) {
-        
-        if([theId isEqualToString:theRegion.identifier]) {
-            return theRegion;
-        }
-    }
-    return nil;
-}
-
-
--(NSDictionary*) getGeofenceById:(NSString*) theId {
-    
-    NSEnumerator *geofenceEnumerator = [_currentGeofenceList keyEnumerator];
-    for (NSString *theKey in geofenceEnumerator) {
-        NSMutableDictionary *theGeofence = [_currentGeofenceList objectForKey:theKey];
-     
-        if([theId isEqualToString:theGeofence[@"uniqueId"]]) {
-            return theGeofence;
-        }
-    }
-    return nil;
-}
-
-
-/*
--(void) tellInternetDocentIsThereFirebase:(NSString*) uniqueId wasAutomatic:(BOOL) automatic {
-    
-    [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: Calling the Internet with an updated location, the person is in a new geofence, in mode: %@", automatic ? @"YES" : @"NO" ]];
-    
-    
-    Firebase *geofecneRef = [[Constants firebasePath] childByAppendingPath: @"geofences"];
-    Firebase *uniqueIdRef = [geofecneRef childByAppendingPath:uniqueId];
-    Firebase *peoplePresent = [uniqueIdRef childByAppendingPath:@"peoplePresent"];
-    Firebase *thePerson = [peoplePresent childByAppendingPath: [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
-    
-    
-    [thePerson setValue:@YES  withCompletionBlock:^(NSError *error, Firebase *ref) {
-        if (error) {
-            [Constants debug:@3 withContent:@"ERROR: Firebase telling the internet that the user is there."];
-            [Constants makeErrorReportWithDescription:error.localizedDescription];
-        } else {
-            [Constants debug:@2 withContent:@"Successfully added user to the firebase geofence."];
-
-            _withinAGeofence = YES;
-            
-            if ([[NSUserDefaults standardUserDefaults] boolForKey:kVibration_enabled]) {
-                AudioServicesPlayAlertSound(kSystemSoundID_Vibrate);
-            }
-            
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showSlideUpView" object:uniqueId];
-    
-            [self postInitialFirebaseAnalyticsWithAutomatic:automatic];
-            
-            if (uniqueId != nil) {
-                [self postAnswersAnalytics:uniqueId wasAutomatic:automatic];
-            }
-        }
-    }];
-}
-*/
-
-/*
--(void) postInitialFirebaseAnalyticsWithAutomatic:(BOOL)automatic {
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kauto_anonymous_stats]) {
-        
-
-        [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: posting initial firebase analytics, in mode: %@", automatic ? @"YES" : @"NO"]];
-        
-        Firebase *geofenceVisitDirectory = [[Constants firebasePath] childByAppendingPath:@"geofenceVisit"];
-        
-        Firebase *postDirectory = [geofenceVisitDirectory childByAutoId];
-        
-        NSMutableDictionary *geofenceVisit = [[NSMutableDictionary alloc] init];
-        
-        Firebase *geofenceDirectory = [Constants firebasePathGeofences];
-        Firebase *theGeofence = [geofenceDirectory childByAppendingPath:[[NSUserDefaults standardUserDefaults] objectForKey:kidOfGenfenceDeviceIsIn]];
-        Firebase *geofenceTitle = [theGeofence childByAppendingPath:@"title"];
-
-        [geofenceTitle observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *title) {
-            geofenceVisit[@"geofenceTitle"] = title.value;
-            
-            
-            Firebase *usersDirectory = [[Constants firebasePath] childByAppendingPath:@"users"];
-            Firebase *theUserPath = [usersDirectory childByAppendingPath:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
-            Firebase *personName = [theUserPath childByAppendingPath:@"name"];
-            
-#warning this above line is straenge, does it work??
-            
-            [personName observeSingleEventOfType:FEventTypeValue withBlock:^(FDataSnapshot *name) {
-            
-                geofenceVisit[@"personName"] = name.value;
-                                
-                geofenceVisit[@"checkInTime"] = [[Constants internetTimeDateFormatter] stringFromDate:[NSDate date]];
-                
-                UIDevice *myDevice = [UIDevice currentDevice];
-                [[UIDevice currentDevice] setBatteryMonitoringEnabled:YES];
-                //double batLeft = (float)[myDevice batteryLevel];
-                NSNumber *batteryLevel = [NSNumber numberWithFloat: [myDevice batteryLevel]];
-                geofenceVisit[@"batteryLevelUponCheckIn"] = batteryLevel;
-                
-                
-                geofenceVisit[@"App_Version"] = [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"];
-                geofenceVisit[@"Build_Number"] = [[[NSBundle mainBundle] infoDictionary] valueForKey:@"CFBuildNumber"];
-                geofenceVisit[@"Device_Type"] = [myDevice model];
-                geofenceVisit[@"System_Version"] = [myDevice systemVersion];
-                geofenceVisit[@"Country"] = [[NSLocale currentLocale] localeIdentifier];
-                geofenceVisit[@"Num_Launches"] = [NSString stringWithFormat:@"%ld", (long)[[NSUserDefaults standardUserDefaults] integerForKey:kNumLaunchesKey]];
-                geofenceVisit[@"DeviceName"] = [Constants platform];
-                
-                
-            #if DEBUG == 1
-                geofenceVisit[@"is_DeveloperViaDebug"] = @YES;
-            #else
-                geofenceVisit[@"is_DeveloperViaDebug"] = @NO;
-            #endif
-                
-                
-                UIApplicationState state = [[UIApplication sharedApplication] applicationState];
-                if (state == UIApplicationStateBackground) {
-                    geofenceVisit[@"UIApplicationStateUponEntrance"] = @"UIApplicationStateBackground";
-                } else if (state == UIApplicationStateInactive) {
-                    geofenceVisit[@"UIApplicationStateUponEntrance"] = @"UIApplicationStateInactive";
-                } else if (state == UIApplicationStateActive) {
-                    geofenceVisit[@"UIApplicationStateUponEntrance"] = @"UIApplicationStateActive";
-                }
-                
-                
-                geofenceVisit[@"idOfGenfenceDeviceIsIn"] = [[NSUserDefaults standardUserDefaults] objectForKey:kidOfGenfenceDeviceIsIn];
-                
-                if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-                    geofenceVisit[@"onDuty"] = @YES;
-                } else {
-                    geofenceVisit[@"onDuty"] = @NO;
-                }
-                
-                geofenceVisit[@"personUserId"] = [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId];
-                
-                geofenceVisit[@"appIDNumber"] = [[NSUserDefaults standardUserDefaults] objectForKey:kAppIDNumber];
-                
-
-                
-                if (automatic) {
-                    geofenceVisit[@"wasAutomatic"] = @YES;
-                } else {
-                    geofenceVisit[@"wasAutomatic"] = @NO;
-                }
-                
-                
-                geofenceVisit[@"inProgress"] = @YES;
-                
-                
-                [postDirectory setValue:geofenceVisit  withCompletionBlock:^(NSError *error, Firebase *ref) {
-                    if (error) {
-                        [Constants debug:@3 withContent:@"ERROR: Firebase posting of initial visit analytics."];
-                        [Constants makeErrorReportWithDescription:error.localizedDescription];
-                    } else {
-                        [Constants debug:@3 withContent:@"Successfully firebase posted initial visit analytics."];
-
-                        _geofenceVisitChildId = postDirectory.key;
-                    }
-                }];
-            }];
-        }];
-    }
-}
-*/
-
-
 - (void) makeAppReadyToUse {
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
@@ -814,8 +583,6 @@
 }
 
 
-
-
 -(void) atemptToDisplayInternetAlert {
 
     if (self.window.rootViewController.isViewLoaded && self.window.rootViewController.view.window) {
@@ -833,16 +600,6 @@
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No Internet"
                                                                    message:@"Please connect to the internet."
                                                             preferredStyle:UIAlertControllerStyleAlert];
-    /*
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                          handler:^(UIAlertAction * action) {
-                                                          
-                                                              
-                                                          
-                                                          }];
-    
-     */
-    
     
     UIAlertAction* tryAgainAction = [UIAlertAction actionWithTitle:@"Try Again" style:UIAlertActionStyleDefault
                                                            handler:^(UIAlertAction * action) {
@@ -861,13 +618,7 @@
 
 -(void) initialSetup {
     
-  //  [self updateGeofencesFirebase];
-
-//#warning remove me from shipping verison
-  //  [NSTimer scheduledTimerWithTimeInterval:5.0 target:self selector:@selector(countParseCalls) userInfo:nil repeats:YES];
-    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggelDocentStuff:) name:@"onDutySwitchChanged" object:nil];
-
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
         [Constants debug:@2 withContent:@"Device is on Duty"];
@@ -1029,9 +780,6 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
     }
     return _colA[index];
 }
-
-
-
 
 
 @end
