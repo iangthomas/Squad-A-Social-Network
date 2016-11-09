@@ -24,6 +24,8 @@
         
     _pinLabel.text = [[NSUserDefaults standardUserDefaults] stringForKey:kPin];
     
+    _appVersion.text = [NSString stringWithFormat:@"App Version: %@", [[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"]];
+    
     [self setInitialSwitchPositionAndUi];
 }
 

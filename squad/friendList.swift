@@ -298,7 +298,7 @@ class friendList : UITableViewController {
                             // yes there was a matched channel -> show it
                                 
                                 
-                                // et their push notificaiotn id first!
+                                // get their push notificaiotn id first!
                                 let friendPushPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("pushId")
                                 friendPushPath.observeSingleEvent(of: .value, with: { (snapshot) in
                                     if let friendPushInfoDictionary = snapshot.value as? NSDictionary {

@@ -13,7 +13,6 @@
 @interface SystemStatusViewController : UIViewController
 
 @property (nonatomic) CBCentralManager *myCentralManager;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *onDutySegmented;
 @property (nonatomic, assign) BOOL showHiddenStuff;
 
 @end

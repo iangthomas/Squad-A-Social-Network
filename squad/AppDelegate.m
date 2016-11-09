@@ -134,9 +134,8 @@
         [alertView show];
          */
         
-    } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @YES}];
-#warning change the above to @NO, and build in the rpompter
-   // [OneSignal registerForPushNotifications];
+    } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @NO}];
+   
 
     
     

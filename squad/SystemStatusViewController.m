@@ -82,7 +82,8 @@
     
     _LocationImageButton.tintColor = [UIColor whiteColor];
     _SocialImageButton.tintColor = [UIColor whiteColor];
-    
+    _NotificationsImageButton.tintColor = [UIColor whiteColor];
+
     
     [self updateGetStartedButton:nil];
 
@@ -106,15 +107,6 @@
     
     if (_showHiddenStuff) {
         
-      
-#if DEBUG == 1
-        _onDutySegmented.hidden = NO;
-        [self setInitialSwitchPositionAndUi];
-        _GetStartedImageButton.hidden = YES;
-#else
-        _onDutySegmented.hidden = YES;
-#endif
-        
         UIImage *image = [[UIImage imageNamed:@"close"] imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
         UIBarButtonItem *button = [[UIBarButtonItem alloc] initWithImage:image style:UIBarButtonItemStylePlain target:self action:@selector(closeTutorialView:)];
         
@@ -124,11 +116,7 @@
         [self.navigationController.navigationBar
          setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
         
-        
-        
-
     } else {
-        _onDutySegmented.hidden = YES;
         self.navigationItem.leftBarButtonItem = nil;
     }
 }
@@ -332,22 +320,27 @@
     }
 }
 
-/*
+
 - (IBAction)enableNotifications:(id)sender {
     
     UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
     if (grantedSettings.types == UIUserNotificationTypeNone) {
         
+        [OneSignal registerForPushNotifications];
+        
+        /*
         if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
         {
             // iOS 8 Notifications
             [[UIApplication sharedApplication] registerUserNotificationSettings:[UIUserNotificationSettings settingsForTypes:(UIUserNotificationTypeSound | UIUserNotificationTypeAlert | UIUserNotificationTypeBadge) categories:nil]];
             [[UIApplication sharedApplication] registerForRemoteNotifications];
         }
-        
-        [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(checkUserEnabledNotifications) userInfo:nil repeats:NO];
-        
+        */
         [self checkUserEnabledNotifications];
+
+        
+     //   [NSTimer scheduledTimerWithTimeInterval:0.1 target:self selector:@selector(checkUserEnabledNotifications) userInfo:nil repeats:NO];
+        
         
     } else {
         
@@ -379,7 +372,7 @@
         [self setButton:_NotificationsImageButton toColor:@"Green"];
     }
 }
-*/
+
 
 - (IBAction)getStarted:(id)sender {
     
@@ -431,7 +424,7 @@
         //_loginWithFacebook.hidden = NO;
         
         _loginWithEmailButton.alpha = 0.0;
-        _loginWithFacebook.alpha = 0.0;
+     //   _loginWithFacebook.alpha = 0.0;
 
         
         [UIView animateWithDuration:0.70f
@@ -439,7 +432,7 @@
                             options:UIViewAnimationOptionCurveEaseOut
                          animations:^{
                              _loginWithEmailButton.alpha = 1.0;
-                             _loginWithFacebook.alpha = 1.0;
+                           //  _loginWithFacebook.alpha = 1.0;
                          }
                          completion:^(BOOL finished){
                          }];
@@ -670,56 +663,6 @@
 }
 
 
--(void) setInitialSwitchPositionAndUi {
-    
-    // segment 0 is off duty
-    // segment 1 is on duty
-    
-    [[UISegmentedControl appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                             [UIColor blackColor], NSForegroundColorAttributeName,
-                                                             [UIFont fontWithName:@"HelveticaNeue" size:17.0], NSFontAttributeName, nil] forState:UIControlStateNormal];
-    
-    [[UISegmentedControl appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                                             [UIColor whiteColor] ,NSForegroundColorAttributeName,
-                                                             [UIFont fontWithName:@"HelveticaNeue" size:17.0], NSFontAttributeName, nil] forState:UIControlStateSelected];
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-        [_onDutySegmented setSelectedSegmentIndex:1];
-        [Constants debug:@1 withContent:@"Switch indicates Docent is ON Duty"];
-    } else {
-        [_onDutySegmented setSelectedSegmentIndex:0];
-        [Constants debug:@1 withContent:@"Switch indicates Docent is OFF Duty"];
-    }
-    
-    [_onDutySegmented addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
-}
-
-
--(void)switchChanged:(UISegmentedControl*)theControl {
-    
-    if (theControl.selectedSegmentIndex == 0) {
-        
-        if ([self connectedToInternet]) {
-            [Constants debug:@1 withContent:@"Docent switched to OFF Duty"];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOnDuty];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
-            
-        } else {
-            [theControl setSelectedSegmentIndex:1];
-        }
-        
-    } else {
-        if ([self connectedToInternet]) {
-            [Constants debug:@1 withContent:@"Docent switched to ON Duty"];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kOnDuty];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
-        } else {
-            [theControl setSelectedSegmentIndex:0];
-        }
-    }
-}
-
-
 -(BOOL) connectedToInternet {
     
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
@@ -785,16 +728,6 @@
 }
 
 
--(void) updateSwitchToOffDuty:(NSNotification*) notification {
-    
-    [_onDutySegmented setSelectedSegmentIndex:0];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOnDuty];
-    [Constants debug:@2 withContent:@"Docent was taken OFF Duty because of switching users"];
-    
-    //[self stopAnimateLoading];
-}
-
-
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
     [self emailSignup];
@@ -807,6 +740,7 @@
     
     [self hideEmailBox];
     [self showSocialButton];
+    
     
     
     //
@@ -931,8 +865,6 @@
                                             
                                             
                                             
-                                            
-                                            
                                             // now add the user profile itself to the database
                                             
                                             FIRDatabaseReference *uniqueIdRef = [usersRef child:userProfile[@"uniqueFirebaseId"]];
@@ -984,33 +916,24 @@
                                                  }
                                              }];
                                         }
-                                        
                                     }];
-                                    
-
                                 }
-                                
     }];
-    
- //   FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
-
 }
 
 
 -(NSString*) generateUniqueId {
     
     NSString *dateString = [[Constants internetTimeDateFormatter] stringFromDate: [NSDate date]];
-    
     NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%10000000)+1];
-    
     return [NSString stringWithFormat:@"%@ - %i", dateString, randNumber.intValue];
 }
 
 
+#warning make this prevent pins form being resued
 -(NSString*) generatePin {
     
     NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%100)+1];
-    
     return [NSString stringWithFormat:@"%i", randNumber.intValue];
 }
 
