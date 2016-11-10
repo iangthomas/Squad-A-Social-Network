@@ -83,7 +83,6 @@ import UIKit
     func addNotificaitonsForANewUnreadMessage(message theMessage: NSDictionary, withkey theKey: String) {
         
         self.listOfUnreadMessagesAddedToNotification[theKey] = theKey
-        
         NotificationCenter.default.post(name: NSNotification.Name("incrementFriendListBadgeIcon"), object: theKey)
         NotificationCenter.default.post(name: NSNotification.Name("incrementUnreadMessageCell"), object: theMessage)
     }

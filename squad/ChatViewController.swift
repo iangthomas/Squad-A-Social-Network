@@ -33,6 +33,8 @@ final class ChatViewController: JSQMessagesViewController {
     private let imageURLNotSetKey = "NOTSET"
     
     var channelRef: FIRDatabaseReference?
+    var listOfMessagesAlreadySentNotificationsFor: Dictionary<String, String> = [:]
+
     
     var thePushIdString: String?
     
@@ -72,7 +74,8 @@ final class ChatViewController: JSQMessagesViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-       // self.navigationController?.hidesBottomBarWhenPushed = true
+        
+        listOfMessagesAlreadySentNotificationsFor = [:]
         
         self.senderId = FIRAuth.auth()?.currentUser?.uid
         observeMessages()
@@ -151,6 +154,17 @@ final class ChatViewController: JSQMessagesViewController {
         }
     }
     
+    
+    func hasAlreadySentANotificationForThisMessage (_ theKey: String) -> Bool {
+        if self.listOfMessagesAlreadySentNotificationsFor.count > 0 {
+            if self.listOfMessagesAlreadySentNotificationsFor[theKey] != nil {
+                return false
+            }
+        }
+        return true
+    }
+    
+    
     // MARK: Firebase related methods
     
     private func observeMessages() {
@@ -164,8 +178,6 @@ final class ChatViewController: JSQMessagesViewController {
             let messageData = snapshot.value as! Dictionary<String, String>
             
             if let id = messageData["senderId"] as String!, let name = messageData["senderName"] as String!, let text = messageData["text"] as String!, text.characters.count > 0, let recipientRead = messageData["recipientRead"] as String! {
-                
-                
                 
                 // the following block read unread messages
                 var updatedRecipientRead = recipientRead
@@ -203,10 +215,17 @@ final class ChatViewController: JSQMessagesViewController {
                         // get the folks that are poart of the converstion
                         // and send them the message
                         
-                        let senderIdString = "Message From: \(name)"
                         
-                        
-                        OneSignal.postNotification(["contents": ["en": text], "headings": ["en": senderIdString], "include_player_ids": [self.thePushIdString], "content_available" : true])
+                        // the snapshot.key id is unique
+                        if self.hasAlreadySentANotificationForThisMessage(snapshot.key) {
+                            
+                            // add it
+                            self.listOfMessagesAlreadySentNotificationsFor[snapshot.key] = snapshot.key
+
+                            // and send it
+                            let senderIdString = "Message From: \(name)"
+                            OneSignal.postNotification(["contents": ["en": text], "headings": ["en": senderIdString], "include_player_ids": [self.thePushIdString], "content_available" : true])
+                        }
 
                     }
                 }
@@ -248,8 +267,6 @@ final class ChatViewController: JSQMessagesViewController {
          }
          })
          */
-        
-        
     }
     
     
