@@ -9,6 +9,7 @@
 #import "ProfileViewController.h"
 #import "Constants.h"
 #import "Reachability.h"
+#import "AppDelegate.h"
 
 @interface ProfileViewController ()
 
@@ -28,8 +29,28 @@
     NSDictionary* infoDict = [[NSBundle mainBundle] infoDictionary];
     _appVersion.text = [NSString stringWithFormat:@"App Version: %@\nBuild #: %@ \n Build Date: %@", [infoDict objectForKey:@"CFBundleShortVersionString"], [infoDict objectForKey:@"CFBuildNumber"], [infoDict objectForKey:@"CFBuildDate"]];
     
+    AppDelegate *theAppDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
+    
+    
+    // does this inititaly, then delegate notifications take it from here
+    _userLocation.text = [NSString stringWithFormat:@"You're Near: %@", [theAppDelegate findNearestLargeCity:theAppDelegate.currentLocation]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUserLocationText:) name:@"currentLocationUpdated" object:nil];
+    
+    
     [self setInitialSwitchPositionAndUi];
 }
+
+
+-(void) updateUserLocationText:(NSNotification*) theNotification {
+    
+    if ([theNotification.object isEqualToString:@"Off Grid"]) {
+        _userLocation.text = @"Off Grid";
+    } else {
+        _userLocation.text = [NSString stringWithFormat:@"You're Near: %@", theNotification.object];
+    }
+}
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
@@ -63,6 +84,7 @@
     if (theControl.selectedSegmentIndex == 0) {
         
         if ([self connectedToInternet]) {
+            _userLocation.text = @"Loading...";
             [Constants debug:@1 withContent:@"Docent switched to OFF Duty"];
             [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOnDuty];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
@@ -73,6 +95,7 @@
         
     } else {
         if ([self connectedToInternet]) {
+            _userLocation.text = @"Loading...";
             [Constants debug:@1 withContent:@"Docent switched to ON Duty"];
             [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kOnDuty];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];

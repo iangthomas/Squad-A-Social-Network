@@ -12,5 +12,6 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *onOffGrid;
 @property (weak, nonatomic) IBOutlet UILabel *pinLabel;
 @property (weak, nonatomic) IBOutlet UILabel *appVersion;
+@property (weak, nonatomic) IBOutlet UILabel *userLocation;
 
 @end

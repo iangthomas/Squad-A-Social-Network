@@ -214,7 +214,6 @@
         [Constants debug:@1 withContent:@"Trying to find user locaiton, waiting another second to try again"];
         [NSTimer scheduledTimerWithTimeInterval:0.7 target:self selector:@selector(zoomMap:) userInfo:nil repeats:NO];
     }
-    
 }
 
 

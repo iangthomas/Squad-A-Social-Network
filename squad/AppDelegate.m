@@ -505,6 +505,8 @@
                              @"Time": [[Constants internetTimeDateFormatter] stringFromDate:[NSDate date]]
                              };
     
+    CLLocation* thefuzzyLocation = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
+    
     [coorRef setValue: locDic withCompletionBlock: ^(NSError *error, FIRDatabaseReference *ref) {
         if (error) {
             [Constants debug:@3 withContent:@"ERROR: Firebase telling the internet that the user is there."];
@@ -516,6 +518,8 @@
            // [self postInitialFirebaseAnalyticsWithAutomatic:automatic];
         }
      }];
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"currentLocationUpdated" object:[self findNearestLargeCity:thefuzzyLocation]];
 }
 
 
@@ -543,7 +547,6 @@
 }
 
 
-
 -(BOOL) NSNumberCompare:(NSNumber*) one :(NSNumber*) two {
 
     if ([one compare:two] == NSOrderedSame) {
@@ -569,6 +572,7 @@
     } else {
         [self disableDocentStuff];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"hideTheUserLocation" object:nil];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"currentLocationUpdated" object:@"Off Grid"];
     }
 }
 
@@ -805,29 +809,34 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation {
     
-    int index = 0;
-    double lowestDistanceSoFar = DBL_MAX;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
     
-    NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
-    f.numberStyle = NSNumberFormatterDecimalStyle;
-    
-    for (int i = 0; i < _colA.count; i++) {
+        int index = 0;
+        double lowestDistanceSoFar = DBL_MAX;
         
-        NSNumber * lat = [f numberFromString:_colB[i]];
-        NSNumber * lon = [f numberFromString:_colC[i]];
+        NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
+        f.numberStyle = NSNumberFormatterDecimalStyle;
+        
+        for (int i = 0; i < _colA.count; i++) {
+            
+            NSNumber * lat = [f numberFromString:_colB[i]];
+            NSNumber * lon = [f numberFromString:_colC[i]];
 
-        CLLocation* possibleCity = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
-        
-        NSNumber* theCurrentDistance = [NSNumber numberWithDouble:[theGoalLocation distanceFromLocation:possibleCity]];
-        
-        if (theCurrentDistance.doubleValue < lowestDistanceSoFar) {
-            lowestDistanceSoFar = theCurrentDistance.doubleValue;
-            index = i;
+            CLLocation* possibleCity = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
+            
+            NSNumber* theCurrentDistance = [NSNumber numberWithDouble:[theGoalLocation distanceFromLocation:possibleCity]];
+            
+            if (theCurrentDistance.doubleValue < lowestDistanceSoFar) {
+                lowestDistanceSoFar = theCurrentDistance.doubleValue;
+                index = i;
+            }
         }
+        return _colA[index];
+        
+    } else {
+        return @"Off Grid";
     }
-    return _colA[index];
 }
-
 
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {

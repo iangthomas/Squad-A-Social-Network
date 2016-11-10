@@ -147,7 +147,7 @@ class friendList : UITableViewController {
             
             cell.subtitle?.text = "Near \(theLocationString)"
         } else {
-            cell.subtitle?.text = "Off the grid"
+            cell.subtitle?.text = "Off Grid"
         }
         
         cell.dotImage.image = UIImage(named: "greenMessageDot")
