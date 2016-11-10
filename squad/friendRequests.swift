@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import OneSignal
 //import Firebase
 
 
@@ -17,6 +18,8 @@ class friendRequests: UITableViewController {
     override func viewDidLoad() {
         
         super.viewDidLoad()
+        
+        addPlusButton()
       
         let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
@@ -109,11 +112,33 @@ class friendRequests: UITableViewController {
                             // add me to their list
                             let myPin = UserDefaults.standard.object(forKey: kPin) as! String
 
-                            let friends = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("friends").child(myPin)
-                            friends.setValue(self.dictionaryWithOnlyTime()) { (error, ref) in
+                            let friendspath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("friends").child(myPin)
+                            friendspath.setValue(self.dictionaryWithOnlyTime()) { (error, ref) in
                                 
                                 if error == nil {
                                     //success
+                                    
+                                    
+                                    
+                                    
+                                    // send the push notificaiotn!
+                                    let friendPushPath = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("pushId")
+                                    friendPushPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                                        if let friendPushInfoDictionary = snapshot.value as? NSDictionary {
+                                            
+                                            if let friendPushIdString = friendPushInfoDictionary["userId"] as? String {
+                                                
+                                                let title = "Friend Request Accepted"
+                                                let senderPin = "From Pin: \(myPin)"
+                                                
+                                                OneSignal.postNotification(["contents": ["en": senderPin], "headings": ["en": title], "include_player_ids": [friendPushIdString], "content_available" : true])
+                                            }
+                                        }
+                                    })
+                                    
+                                    
+                                    
+                                    
                                     
                                     self.removeFriendRequest(request: requestItem)
                                 } else {
@@ -194,6 +219,15 @@ class friendRequests: UITableViewController {
     }
     
     
-  
+    func addPlusButton() {
+        //         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
+        let addButton = UIBarButtonItem(title: "Add Friend", style: .plain, target: self, action: #selector(addNewFriend))
+        addButton.tintColor = UIColor.white
+        self.navigationItem.rightBarButtonItem = addButton
+    }
+    
+    func addNewFriend() {
+        self.performSegue(withIdentifier: "addNewFriend", sender: self)
+    }
     
 }

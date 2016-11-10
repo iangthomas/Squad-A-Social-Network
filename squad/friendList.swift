@@ -103,14 +103,12 @@ class friendList : UITableViewController {
     func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
-        
         self.tableView.reloadRows(at: [theCellIndexPath], with: .automatic)
     }
     
     
     func addPlusButton() {
-        //         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
-
+    //         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
         let addButton = UIBarButtonItem(title: "Add Friend", style: .plain, target: self, action: #selector(addNewFriend))
         addButton.tintColor = UIColor.white
         self.navigationItem.rightBarButtonItem = addButton
