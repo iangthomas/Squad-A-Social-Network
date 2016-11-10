@@ -223,7 +223,6 @@
     [self zoomMapNonNotif];
 }
 
-#warning rename me to a new method
 
 -(void) setupMapGeofences {
     
@@ -240,14 +239,12 @@
         }
         case ReachableViaWWAN:        {
             [Constants debug:@1 withContent:@"There IS internet via WAN (cell) connection"];
-#warning change me to a new method
 
             //[self callForGeofecnes];
             break;
         }
         case ReachableViaWiFi:        {
             [Constants debug:@1 withContent:@"There IS internet via Wifi connection"];
-#warning change me to a new method
             //[self callForGeofecnes];
             break;
         }

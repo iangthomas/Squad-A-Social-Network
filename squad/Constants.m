@@ -60,7 +60,6 @@ static NSString* idInfo;
     return platform;
 }
 
-#warning update for firebase update
 
 +(void)makeErrorReportWithDescription:(NSString*) theDescription {
 

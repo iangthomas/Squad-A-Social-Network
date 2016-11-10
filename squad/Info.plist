@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CFBuildDate</key>
-	<string>Wed Nov  9 13:23:48 PST 2016</string>
+	<string>Wed Nov  9 16:25:21 PST 2016</string>
 	<key>CFBuildNumber</key>
-	<string>673</string>
+	<string>689</string>
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
@@ -21,7 +21,7 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>0.2</string>
+	<string>0.3</string>
 	<key>CFBundleVersion</key>
 	<string>1</string>
 	<key>Fabric</key>

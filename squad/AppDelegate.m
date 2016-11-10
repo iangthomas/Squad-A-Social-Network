@@ -107,11 +107,12 @@
     } handleNotificationAction:^(OSNotificationOpenedResult *result) {
         
         // This block gets called when the user reacts to a notification received
+       /*
         OSNotificationPayload* payload = result.notification.payload;
         
     #warning make this pop the user drienctly into the relovent channel
         
-        /*
+        
         NSString* messageTitle = @"OneSignal Example";
         NSString* fullMessage = [payload.body copy];
         
@@ -832,8 +833,10 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo  {
     // NSLog(@"remote notification: %@",[userInfo description]);
     
-    NSInteger temp = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-    [[UIApplication sharedApplication] setApplicationIconBadgeNumber: temp += 1];
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+        NSInteger temp = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber: temp += 1];
+    }
 
     /*
     if (userInfo) {

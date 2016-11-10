@@ -37,8 +37,11 @@
 @property (weak, nonatomic) IBOutlet UIButton *loginWithEmailButton;
 @property (weak, nonatomic) IBOutlet UIButton *loginWithFacebook;
 @property (weak, nonatomic) IBOutlet UIActivityIndicatorView * activityView;
-@property (strong, nonatomic) IBOutlet UITextField *emailTextBox;
+@property (weak, nonatomic) IBOutlet UITextField *emailTextBox;
 @property (weak, nonatomic) IBOutlet UIButton *SocialTextButton;
+
+@property (assign, nonatomic) bool isPinReady;
+@property (weak, nonatomic) NSString* theUniquePin;
 
 @end
 
@@ -60,6 +63,9 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    _isPinReady = NO;
+    
+    [self generateAPin];
     
     // this makes it blank
     UIBarButtonItem *barButton = [[UIBarButtonItem alloc] init];
@@ -119,6 +125,23 @@
     } else {
         self.navigationItem.leftBarButtonItem = nil;
     }
+}
+
+- (void) generateAPin {
+    
+    NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%90)+10];
+    FIRDatabaseReference *potentialPinRef = [[[[FIRDatabase database] reference] child:@"pins"] child: randNumber.stringValue];
+    
+    [potentialPinRef observeSingleEventOfType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        // if it is successful then that pin in taken.
+        if (snapshot.exists) {
+            [self generateAPin];
+        } else {
+            // else, the pin is free
+            _isPinReady = YES;
+            _theUniquePin = randNumber.stringValue;
+        }
+    }];
 }
 
 
@@ -402,7 +425,7 @@
     if ([self docentProfileEmpty]) {
         
         if (emailTextBox.hidden == NO) { // if the user is entering an email address, have the button act like a contine button
-            [self emailSignup];
+            [self prepForEmailSignup];
             
         } else {
             [self showAllLoginOptions];
@@ -730,18 +753,29 @@
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
     
-    [self emailSignup];
+    [self prepForEmailSignup];
     return YES;
 }
 
 
-- (void)emailSignup {
-    
+-(void) prepForEmailSignup {
     
     [self hideEmailBox];
     [self showSocialButton];
     
-    
+    [self holdForPin];
+}
+
+-(void) holdForPin {
+    if (_isPinReady == YES) {
+        [self emailSignup];
+    } else {
+        [NSTimer scheduledTimerWithTimeInterval:0.5 target:self selector:@selector(holdForPin) userInfo:nil repeats:NO];
+    }
+}
+
+
+- (void)emailSignup {
     
     //
     // firebase sign up
@@ -775,7 +809,8 @@
     
     userProfile[@"e-mail"] = emailTextBox.text;
     
-    userProfile[@"pin"] = [self generatePin];
+    userProfile[@"pin"] = _theUniquePin;
+    
     [[NSUserDefaults standardUserDefaults] setObject:userProfile[@"pin"] forKey:kPin];
 
     
@@ -928,14 +963,5 @@
     NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%10000000)+1];
     return [NSString stringWithFormat:@"%@ - %i", dateString, randNumber.intValue];
 }
-
-
-#warning make this prevent pins form being resued
--(NSString*) generatePin {
-    
-    NSNumber * randNumber = [NSNumber numberWithFloat: (arc4random()%100)+1];
-    return [NSString stringWithFormat:@"%i", randNumber.intValue];
-}
-
 
 @end
