@@ -91,6 +91,9 @@
   //  if ([defaults boolForKey:kauto_crash_reporting]) {
         [Fabric with:@[[Crashlytics class]]];
     
+    [self postUpdatedAppVersion];
+    
+    
  //   [[Fabric sharedSDK] setDebug: YES];
 
     
@@ -858,6 +861,22 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
         }
     }
      */
+}
+
+-(void) postUpdatedAppVersion {
+    if ([self docentProfileEmpty] == NO) {
+        
+        FIRDatabaseReference *updateAppVersionPath= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"App_Version"];
+        
+        [updateAppVersionPath setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
+            
+            if (error) {
+                [Constants debug:@2 withContent:@"ERROR updated app verison on firebase."];
+            } else {
+                [Constants debug:@2 withContent:@"Successfully updated app verison on firebase."];
+            }
+        }];
+    }
 }
 
 @end
