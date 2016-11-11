@@ -11,9 +11,7 @@ import OneSignal
 
 class addNewFriend: UIViewController, UITextFieldDelegate {
     
-    
     //  add constasnt commenting to the different possible outcomes
-    
     
     
     @IBOutlet weak var textField: UITextField!

@@ -28,31 +28,18 @@
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
 @property (strong, nonatomic) CLLocation *currentLocation;
-//@property (nonatomic, strong) NSMutableDictionary *currentGeofenceList;
 @property (nonatomic) NSDate* userLocaitonLastUpdated;
-
-//@property (nonatomic, assign) BOOL withinAGeofence;
-//@property (nonatomic, strong) NSString* idOfGenfenceDeviceIsIn;
-
-//@property (nonatomic, assign) BOOL isDeveloperManual;
-
 @property (nonatomic, assign) UIBackgroundTaskIdentifier backgroundTaskFirebase;
 
 
-//@property (nonatomic, assign) BOOL geofencesSucessfulyCalledFromNet;
-
-//@property (nonatomic, strong) NSString* geofenceVisitChildId;
-
-
 @property (nonatomic, strong) NSArray<individualFriend *> *friendList;
-//@property (nonatomic, strong) NSArray *friendList2;
 
 //@property (nonatomic, strong) SwiftAppDelegate *swiftAppDelegate;
 
 
-
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation;
-
+-(NSString*) nicknameForPin:(NSString*) thePin;
+-(void) addNewFriendNicknameWithNickname:(NSString*) theNickname withPin :(NSString*) thePin;
+-(void) saveFriendListDatabase;
 
 @end
-

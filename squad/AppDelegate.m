@@ -33,11 +33,10 @@
 @property (nonatomic, strong) NSMutableArray *colB;
 @property (nonatomic, strong) NSMutableArray *colC;
 @property (nonatomic, strong) NSMutableArray *colD;
-
-
 @property (nonatomic, strong) NSMutableArray *countryCode;
 @property (nonatomic, strong) NSMutableArray *countryFullName;
 
+@property (nonatomic, strong) NSMutableDictionary *friendNicknames;
 
 @property (nonatomic, strong) SwiftAppDelegateClass *swiftAppDelegate;
 
@@ -875,5 +874,112 @@
         }];
     }
 }
+
+
+-(NSString*) nicknameForPin:(NSString*) thePin {
+
+    if (_friendNicknames == NULL) {
+    // is the array uninitalized and loaded?
+        _friendNicknames = [[NSMutableDictionary alloc] init];
+        
+        // load the database
+        _friendNicknames = [self loadFriendListDatabase];
+    }
+    return [self searchTheArrayForThePin:thePin];
+}
+
+
+- (NSString*) searchTheArrayForThePin:(NSString*) thePin {
+    
+    if ( [_friendNicknames count] > 0 ) {
+        
+        NSArray *allTheKeys = [_friendNicknames allKeys];
+        
+        if (allTheKeys.count > 0) {
+            
+            for (int i = 0; i < allTheKeys.count; i++) {
+                
+                if ([allTheKeys[i] isEqualToString: thePin]) {
+                    NSArray* allTheValues = [_friendNicknames allValues];
+                    
+                    return allTheValues[i];
+                }
+            }
+        }
+    }
+    return @"";
+}
+
+
+-(void) addNewFriendNicknameWithNickname:(NSString*) theNickname withPin :(NSString*) thePin {
+    
+    [_friendNicknames setObject:theNickname forKey:thePin];
+}
+
+
+//-(void) saveFriendListDatabase:(NSDictionary*) theFriendListDict {
+
+
+-(void) saveFriendListDatabase {
+    
+    [Constants debug:@2 withContent:@"Saving local content"];
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"fList.dasq"];
+    
+    BOOL success = [NSKeyedArchiver archiveRootObject:_friendNicknames toFile:filePath];
+    if(success == NO) {
+        [Constants debug:@3 withContent:[NSString stringWithFormat:@"did not write file to %@", filePath]];
+    } else {
+        [Constants debug:@2 withContent:@"ListDict Saved"];
+    }
+}
+
+
+-(NSMutableDictionary*) loadFriendListDatabase {
+    
+    NSArray *paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    NSString *documentsDirectory = [paths objectAtIndex:0];
+    NSString *filePath = [documentsDirectory stringByAppendingPathComponent:@"fList.dasq"];
+    [Constants debug:@1 withContent:[NSString stringWithFormat:@"Filepath: %@", filePath]];
+    
+    /*
+     //----- LIST ALL FILES -----
+     CLS_LOG(@"LISTING ALL FILES FOUND");
+     
+     int Count;
+     NSArray *directoryContent = [[NSFileManager defaultManager] contentsOfDirectoryAtPath:documentsDirectory error:NULL];
+     for (Count = 0; Count < (int)[directoryContent count]; Count++)
+     {
+     CLS_LOG(@"File %d: %@", (Count + 1), [directoryContent objectAtIndex:Count]);
+     }
+     */
+    
+    
+    
+    if ([[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
+        // if the file exists, then load it
+        
+        [Constants debug:@1 withContent:[NSString stringWithFormat:@"Filepath: %@", filePath]];
+        [Constants debug:@1 withContent:[NSString stringWithFormat:@"file exists at the path!"]];
+        
+        NSMutableDictionary* fListDict = [NSMutableDictionary alloc];
+        
+        fListDict = [NSKeyedUnarchiver unarchiveObjectWithFile:filePath];
+        NSAssert(fListDict, @"unarchiveObjectWithFile failed");
+        
+        return fListDict;
+        
+    } else {
+        
+        [Constants debug:@1 withContent:@"file path does not exist, nothing to load"];
+        
+        NSMutableDictionary* empty = [[NSMutableDictionary alloc] init];
+
+        return empty;
+    }
+}
+
 
 @end

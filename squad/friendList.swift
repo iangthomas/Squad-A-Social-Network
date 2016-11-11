@@ -14,8 +14,6 @@ class friendList : UITableViewController {
     var items: [individualFriend] = []
     
     
- //   var channelKeys : NSDictionary = [:]
-
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
     override func viewDidLoad() {
@@ -26,11 +24,19 @@ class friendList : UITableViewController {
         self.navigationController?.navigationBar.tintColor = UIColor.white
         
         addPlusButton()
+        self.navigationItem.leftBarButtonItem = self.editButtonItem
         
+        self.tableView.allowsSelectionDuringEditing = true
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.displayList), name: Notification.Name("friendListReady"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.updateTableViewData), name: Notification.Name("updateTableViewData"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.refreshAllCells), name: Notification.Name("refreshAllFriendListCells"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(friendList.endFriendListEditing), name: Notification.Name("endFriendListEditing"), object: nil)
+        
+        
         
        // setupUserChannels()
         
@@ -89,8 +95,6 @@ class friendList : UITableViewController {
     
     
     func updateTableViewData (_ theNotification: Notification) {
-      //  let appDelegate = UIApplication.shared.delegate as! AppDelegate
-     //   items = appDelegate.friendList as! [individualFriend]
         let theList = theNotification.object as! NSDictionary
         if let temp = theList.object(forKey: "a") as? [individualFriend] {
             items = temp
@@ -100,6 +104,10 @@ class friendList : UITableViewController {
     }
     
     
+    func refreshAllCells(_ theNotification: Notification) {
+        tableView.reloadData()
+    }
+    
     func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
@@ -108,7 +116,7 @@ class friendList : UITableViewController {
     
     
     func addPlusButton() {
-    //         let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
+    //  let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
         let addButton = UIBarButtonItem(title: "Add Friend", style: .plain, target: self, action: #selector(addNewFriend))
         addButton.tintColor = UIColor.white
         self.navigationItem.rightBarButtonItem = addButton
@@ -133,11 +141,32 @@ class friendList : UITableViewController {
         return items.count
     }
     
+    
+    func endFriendListEditing (_ Notification: Notification) {
+        super.tableView.setEditing(false, animated: true)
+        self.setEditing(false, animated: true)
+        self.tableView.setEditing(false, animated: true)
+    }
+    
+    
+    func addNickname(_ thePin: String) -> String {
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        
+        let nickname = appDelegate.nickname(forPin: thePin) as String
+        
+        if nickname.isEmpty {
+            return "Pin: \(thePin)"
+        } else {
+            return "\(nickname), Pin: \(thePin)"
+        }
+    }
+    
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! FriendTableViewCell
         let requestItem = items[indexPath.row]
         
-        cell.title?.text = "Pin: \(requestItem.key)"
+        cell.title?.text = addNickname(requestItem.key)
         
         if let theLocation = requestItem.location as CLLocationCoordinate2D! {
 
@@ -242,11 +271,15 @@ class friendList : UITableViewController {
     }
     
     
-    
-    
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
+        if tableView.isEditing {
+            // edit the persons name
+            self.performSegue(withIdentifier: "editFriend", sender: indexPath)
+
+        } else {
+        
+        
         // do these folks have a channel together?
         var theKeyString = "no-match"
         var madeNewChannel = false
@@ -328,7 +361,10 @@ class friendList : UITableViewController {
                 })
             }
         })
+        }
     }
+    
+    
     
     func pushToChannel (_ theRef: FIRDatabaseReference, withPushId thePushId: String) {
         
@@ -368,6 +404,22 @@ class friendList : UITableViewController {
                         chatVc.thePushIdString = pushId
                     }
                 }
+            }
+        } else if (segue.identifier == "editFriend") {
+        
+            if let theIndexPath = sender as? IndexPath {
+            // send the database of friends so we can save it
+                // send the pin number 
+                
+              //  if let theFriendPin = items[theIndexPath.row] as? individualFriend {
+                let destinationNavigationController = segue.destination as! UINavigationController
+                let targetController = destinationNavigationController.topViewController as! editFriendViewController
+                
+                 //   let friendEditVC = segue.destination as! editFriendViewController
+                    targetController.friendList = items
+                    targetController.friendPin = items[theIndexPath.row].key
+                    
+               // }
             }
         }
     }
