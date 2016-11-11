@@ -10,8 +10,6 @@
 #import "Constants.h"
 #import <Fabric/Fabric.h>
 #import <Crashlytics/Crashlytics.h>
-//#import <FBSDKCoreKit/FBSDKCoreKit.h>
-//#import <FBSDKLoginKit/FBSDKLoginKit.h>
 #import "SystemStatusViewController.h"
 #import <AudioToolbox/AudioToolbox.h>
 #import "TutViewController.h"
@@ -21,7 +19,6 @@
 
 @interface AppDelegate ()
 @property (nonatomic, assign) BOOL sendCheckInTimes;
-//@property (nonatomic, assign) BOOL hasRunDoubleCheck;
 
 @property (nonatomic, assign) BOOL deviceIsInGeofenceViaManual;
 @property (nonatomic, assign) BOOL showingNearbyAlertview;
@@ -29,13 +26,18 @@
 
 @property (nonatomic, strong) NSNumber *lowishAccuracyThreshold;
 @property (nonatomic, strong) NSNumber *geofenceCutoffDistanceForAlert;
-//@property (nonatomic, strong) NSNumber *maxDistanceFromGeofence;
 
 @property (nonatomic, strong) NSDate *dateLowAccuracyAlertWasShown;
 
 @property (nonatomic, strong) NSMutableArray *colA;
 @property (nonatomic, strong) NSMutableArray *colB;
 @property (nonatomic, strong) NSMutableArray *colC;
+@property (nonatomic, strong) NSMutableArray *colD;
+
+
+@property (nonatomic, strong) NSMutableArray *countryCode;
+@property (nonatomic, strong) NSMutableArray *countryFullName;
+
 
 @property (nonatomic, strong) SwiftAppDelegateClass *swiftAppDelegate;
 
@@ -50,7 +52,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
     
     [Constants debug:@1 withContent:@"Starting App"];
-
+    
     [FIRApp configure];
     
     _sendCheckInTimes = NO;
@@ -58,7 +60,7 @@
     
     _deviceIsInGeofenceViaManual = NO;
     _showingNearbyAlertview = NO;
-
+    
     
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithObjectsAndKeys:
@@ -83,99 +85,94 @@
     
     [[Fabric sharedSDK] setDebug: YES];
     [Fabric with:@[CrashlyticsKit]];
-
     
-
+    
+    
     
 #warning for the beta this has been disabled
-  //  if ([defaults boolForKey:kauto_crash_reporting]) {
-        [Fabric with:@[[Crashlytics class]]];
+    //  if ([defaults boolForKey:kauto_crash_reporting]) {
+    [Fabric with:@[[Crashlytics class]]];
     
     [self postUpdatedAppVersion];
     
     
- //   [[Fabric sharedSDK] setDebug: YES];
-
+    //   [[Fabric sharedSDK] setDebug: YES];
     
-  //  }
     
- //   [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd"];
+    //  }
+    
+    //   [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd"];
     //       OneSignal.initWithLaunchOptions(launchOptions, appId: "5eb5a37e-b458-11e3-ac11-000c2940e62c")
-
+    
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
-
+    
     
     [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd" handleNotificationReceived:^(OSNotification *notification) {
-     //   NSLog(@"Received Notification - %@", notification.payload.notificationID);
+        //   NSLog(@"Received Notification - %@", notification.payload.notificationID);
     } handleNotificationAction:^(OSNotificationOpenedResult *result) {
         
         // This block gets called when the user reacts to a notification received
-       /*
-        OSNotificationPayload* payload = result.notification.payload;
-        
-    #warning make this pop the user drienctly into the relovent channel
-        
-        
-        NSString* messageTitle = @"OneSignal Example";
-        NSString* fullMessage = [payload.body copy];
-        
-        if (payload.additionalData) {
-            
-            if(payload.title)
-                messageTitle = payload.title;
-            
-            NSDictionary* additionalData = payload.additionalData;
-            
-            if (additionalData[@"actionSelected"])
-                fullMessage = [fullMessage stringByAppendingString:[NSString stringWithFormat:@"\nPressed ButtonId:%@", additionalData[@"actionSelected"]]];
-        }
-        
-        UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:messageTitle
-                                                            message:fullMessage
-                                                           delegate:self
-                                                  cancelButtonTitle:@"Close"
-                                                  otherButtonTitles:nil, nil];
-        [alertView show];
+        /*
+         OSNotificationPayload* payload = result.notification.payload;
+         
+         #warning make this pop the user drienctly into the relovent channel
+         
+         
+         NSString* messageTitle = @"OneSignal Example";
+         NSString* fullMessage = [payload.body copy];
+         
+         if (payload.additionalData) {
+         
+         if(payload.title)
+         messageTitle = payload.title;
+         
+         NSDictionary* additionalData = payload.additionalData;
+         
+         if (additionalData[@"actionSelected"])
+         fullMessage = [fullMessage stringByAppendingString:[NSString stringWithFormat:@"\nPressed ButtonId:%@", additionalData[@"actionSelected"]]];
+         }
+         
+         UIAlertView* alertView = [[UIAlertView alloc] initWithTitle:messageTitle
+         message:fullMessage
+         delegate:self
+         cancelButtonTitle:@"Close"
+         otherButtonTitles:nil, nil];
+         [alertView show];
          */
         
     } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @NO}];
-   
-
+    
+    
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCurrentLocation:) name:@"getCurrentLocation" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestLocation:) name:@"requestLocation" object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeProfileAndGoOnDuty:) name:@"makeProfile" object:nil];
-
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incrementFriendListBadgeIcon:) name:@"incrementFriendListBadgeIcon" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(decrementFriendListBadgeIcon:) name:@"decrementFriendListBadgeIcon" object:nil];
-
-    /*
-    let notificationName = Notification.Name("unreadMessage")
-    NotificationCenter.default.addObserver(self, selector: #selector(SwiftAppDelegateClass.incrementUnreadMessages), name: notificationName, object: nil)
-    */
     
-//#warning this does nor work
+    
+    
+    //#warning this does nor work
     /*
-    // Reachability *reachabilityInfo;
-    [[NSNotificationCenter defaultCenter] addObserver:self
-                                             selector:@selector(reachabilityChanged)
-                                                 name:kReachabilityChangedNotification
-                                               object:_networkReachability];
-    [_networkReachability startNotifier];
-    */
+     // Reachability *reachabilityInfo;
+     [[NSNotificationCenter defaultCenter] addObserver:self
+     selector:@selector(reachabilityChanged)
+     name:kReachabilityChangedNotification
+     object:_networkReachability];
+     [_networkReachability startNotifier];
+     */
     
     
     [self makeAppReadyToUse];
     
-    
     [self setupTabBar];
     
-//  [FBSDKLoginButton class];
-    
     [self generateCityList];
+    [self generateCountryList];
     
     if ([self docentProfileEmpty] == NO) {
         [self methodsThatRequireAProfile];
@@ -183,7 +180,7 @@
     
     
     [Constants debug:@1 withContent:@"Starting App Done"];
-
+    
     return YES;
 }
 
@@ -194,7 +191,7 @@
     [self setupFirebaseVars];
     
     // [self updateNumLaunches];
-
+    
 }
 
 -(void) setupSwiftAppDelegate {
@@ -233,42 +230,42 @@
 
 
 /*
--(void) updateNumLaunches {
-
-#warning chek me
-    
-    if ([self docentProfileEmpty] == NO) {
-   
-    
-    Firebase *usersDirectory = [[Constants firebasePath] childByAppendingPath:@"users"];
-    Firebase *theUserPath = [usersDirectory childByAppendingPath:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
-   // Firebase *personName = [theUserPath childByAppendingPath:@"name"];
-    
-        [theUserPath updateChildValues:@{ @"Num_Launches": [NSString stringWithFormat:@"%ld", (long)[[NSUserDefaults standardUserDefaults] integerForKey:kNumLaunchesKey]]
-                                           } withCompletionBlock:^(NSError *error, Firebase *ref) {
-                                               if (!error) {
-                                                   [Constants debug:@2 withContent:@"Successfully updated number of launches to firebase."];
-                                               } else {
-                                                   [Constants debug:@3 withContent:@"ERROR: couldn't update number of launchesto firebase."];
-                                                   [Constants makeErrorReportWithDescription:error.localizedDescription];
-                                               }
-                                           }];
-    }
-}
-*/
+ -(void) updateNumLaunches {
+ 
+ #warning chek me
+ 
+ if ([self docentProfileEmpty] == NO) {
+ 
+ 
+ Firebase *usersDirectory = [[Constants firebasePath] childByAppendingPath:@"users"];
+ Firebase *theUserPath = [usersDirectory childByAppendingPath:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
+ // Firebase *personName = [theUserPath childByAppendingPath:@"name"];
+ 
+ [theUserPath updateChildValues:@{ @"Num_Launches": [NSString stringWithFormat:@"%ld", (long)[[NSUserDefaults standardUserDefaults] integerForKey:kNumLaunchesKey]]
+ } withCompletionBlock:^(NSError *error, Firebase *ref) {
+ if (!error) {
+ [Constants debug:@2 withContent:@"Successfully updated number of launches to firebase."];
+ } else {
+ [Constants debug:@3 withContent:@"ERROR: couldn't update number of launchesto firebase."];
+ [Constants makeErrorReportWithDescription:error.localizedDescription];
+ }
+ }];
+ }
+ }
+ */
 
 -(void) setupFirebaseVars {
     
     FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
     
-        [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
-            [self updateFriendRequestBadgeIcon:snapshot];
-        }];
+    [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
+        [self updateFriendRequestBadgeIcon:snapshot];
+    }];
 }
 
 
 -(void)updateFriendRequestBadgeIcon:(FIRDataSnapshot*) snapshot {
-
+    
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBarItem * friendRequestTabBarItem = [tabBarController.tabBar.items objectAtIndex:2];
     
@@ -279,9 +276,9 @@
             int realCount = 0;
             
             for (int i = 0; i < friendRequestsDict.count; i++) {
-              //  if (friendRequestsDict[i] != [NSNull null]) {
-                    realCount ++;
-              //  }
+                //  if (friendRequestsDict[i] != [NSNull null]) {
+                realCount ++;
+                //  }
             }
             
             if (realCount > 0) {
@@ -289,7 +286,7 @@
             } else {
                 friendRequestTabBarItem.badgeValue = nil;
             }
-
+            
             
         } else if (friendRequestsDict.count == 0) {
             friendRequestTabBarItem.badgeValue = nil;
@@ -301,7 +298,7 @@
 
 #warning refacrtor these, most of code is duplicite
 -(void)incrementFriendListBadgeIcon:(NSNotification*) notification {
-
+    
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     
@@ -339,18 +336,18 @@
 // if the user is on duty then force them off duty
 -(void)takeDeviceOffDuty {
     [Constants debug:@1 withContent:@"takeDeviceOffDuty"];
-
+    
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
         
         [[NSNotificationCenter defaultCenter] postNotificationName:@"takeTheDeviceOffDuty" object:nil];
         [Constants debug:@1 withContent:@"takeDeviceOffDuty posted"];
-
+        
     }
 }
 
 -(BOOL) docentProfileEmpty {
-     NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kDocentUserId];
- 
+    NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kDocentUserId];
+    
     if ([theName isEqualToString:@""] || theName == nil || [theName isEqualToString:@"0"]) {
         return YES;
     } else {
@@ -359,7 +356,7 @@
 }
 
 -(void) showTutorial {
-
+    
     [Constants debug:@2 withContent:@"showTutorial"];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
@@ -375,12 +372,12 @@
 
 
 -(void) showLogin:(NSNotification*) theNotificaiton {
-
+    
     [Constants debug:@2 withContent:@"haveUserLogin"];
     
     UIStoryboard *storyboard = [UIStoryboard storyboardWithName:@"Main" bundle:nil];
     UINavigationController *vc = [storyboard instantiateViewControllerWithIdentifier:@"systemStatusNav"];
-
+    
     SystemStatusViewController *nextVC = (SystemStatusViewController *)([vc viewControllers][0]);
     nextVC.showHiddenStuff = NO;
     
@@ -391,7 +388,7 @@
 
 
 -(void) countParseCalls {
-
+    
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"%i", [Constants getMethodCallCount]]];
 }
 
@@ -399,12 +396,12 @@
 - (void) startDocentLocationStuff {
     
     [Constants debug:@1 withContent:@"startDocentLocationStuff"];
-
+    
     if (locationManager == nil) {
         locationManager = [CLLocationManager new];
         locationManager.delegate = self;
     }
-
+    
     locationManager.distanceFilter = kCLLocationAccuracyThreeKilometers;
     
     
@@ -423,7 +420,7 @@
 
 
 -(void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
-
+    
     [Constants debug:@1 withContent:@"didChangeAuthorizationStatus called"];
     
     if (status == kCLAuthorizationStatusDenied || status == kCLAuthorizationStatusRestricted)
@@ -456,51 +453,51 @@
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
     if ([self docentProfileEmpty] == NO && [[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-    
+        
         // is this the first time this method has been called
         if (_currentLocation == nil) {
             
             _currentLocation = [locations objectAtIndex:0];
-
+            
             
         } else {
             
             _currentLocation = [locations objectAtIndex:0];
-        /*
-            if ([self isAccuracyUnacceptablyLow:_currentLocation]) {
-                [self showLowAccuracyAlert];
-                
-            } else { */
-                [self postUserLocation:_currentLocation];
-         //   }
+            /*
+             if ([self isAccuracyUnacceptablyLow:_currentLocation]) {
+             [self showLowAccuracyAlert];
+             
+             } else { */
+            [self postUserLocation:_currentLocation];
+            //   }
         }
     }
 }
 
 
 -(void)postUserLocation:(CLLocation*)userLoc {
-
-
+    
+    
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: Calling the Internet with an updated location"]];
-
+    
     FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
     FIRDatabaseReference *userRef= [usersRef child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
     FIRDatabaseReference *coorRef = [userRef child:@"coor"];
     
-
+    
     
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
     f.numberStyle = NSNumberFormatterDecimalStyle;
     
     
-
+    
     NSNumber *lat = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
     NSNumber *lon = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
-
+    
     /*
-    NSNumber *lat = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
-    NSNumber *lon = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
-*/
+     NSNumber *lat = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
+     NSNumber *lon = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
+     */
     
     NSDictionary *locDic = @{
                              @"lon": lon,
@@ -516,11 +513,11 @@
             [Constants makeErrorReportWithDescription:error.localizedDescription];
         } else {
             [Constants debug:@2 withContent:@"Successfully added user to the firebase geofence."];
-
             
-           // [self postInitialFirebaseAnalyticsWithAutomatic:automatic];
+            
+            // [self postInitialFirebaseAnalyticsWithAutomatic:automatic];
         }
-     }];
+    }];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:@"currentLocationUpdated" object:[self findNearestLargeCity:thefuzzyLocation]];
 }
@@ -530,28 +527,28 @@
     if (_showingNearbyAlertview == YES) {
         return NO;
     } else {
-
+        
         if (_dateLowAccuracyAlertWasShown == nil) {
             return YES;
             
-            } else {
-                NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:_dateLowAccuracyAlertWasShown];
+        } else {
+            NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:_dateLowAccuracyAlertWasShown];
+            
+            //#warning discuss w iain what this number should be
+            if (timeInterval >= 15.0) {
+                return YES;
                 
-    //#warning discuss w iain what this number should be
-                if (timeInterval >= 15.0) {
-                    return YES;
-                    
-                } else {
-                    return NO;
-                }
+            } else {
+                return NO;
             }
-       // }
+        }
+        // }
     }
 }
 
 
 -(BOOL) NSNumberCompare:(NSNumber*) one :(NSNumber*) two {
-
+    
     if ([one compare:two] == NSOrderedSame) {
         return YES;
     } else {
@@ -565,12 +562,12 @@
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"toggelDocentStuff called, with notification, %@", notificaiton.description]];
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-     
-             if (locationManager == nil) {
-                 [self startDocentLocationStuff];
-             }
-            [locationManager startUpdatingLocation];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"showTheUserLocation" object:nil];
+        
+        if (locationManager == nil) {
+            [self startDocentLocationStuff];
+        }
+        [locationManager startUpdatingLocation];
+        [[NSNotificationCenter defaultCenter] postNotificationName:@"showTheUserLocation" object:nil];
         
     } else {
         [self disableDocentStuff];
@@ -589,7 +586,7 @@
 
 
 -(void) setFirebaseToOffGrid {
-
+    
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: Calling the Internet to go off grid."]];
     
     FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
@@ -597,7 +594,7 @@
     FIRDatabaseReference *coorRef = [userRef child:@"coor"];
     
     [coorRef setValue:@NO withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
-       
+        
         if (error) {
             [Constants debug:@3 withContent:@"FIREBASE: Calling the Internet to go off grid."];
             [Constants makeErrorReportWithDescription:error.localizedDescription];
@@ -616,9 +613,9 @@
     {
         case NotReachable:        {
             [Constants debug:@3 withContent:@"No internet Connection"];
-           
+            
             [self atemptToDisplayInternetAlert];
-
+            
             break;
         }
         case ReachableViaWWAN:        {
@@ -638,7 +635,7 @@
 
 
 -(void) atemptToDisplayInternetAlert {
-
+    
     if (self.window.rootViewController.isViewLoaded && self.window.rootViewController.view.window) {
         [self showNoInternetAlert];
     } else {
@@ -649,8 +646,8 @@
 
 -(void) showNoInternetAlert {
     [Constants debug:@1 withContent:@"Showing No Internet Alert View - App Delegate"];
-
-
+    
+    
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No Internet"
                                                                    message:@"Please connect to the internet."
                                                             preferredStyle:UIAlertControllerStyleAlert];
@@ -708,18 +705,6 @@
 }
 
 
-#warning facebook needed this before...
-/*
-- (BOOL)application:(UIApplication *)application
-            openURL:(NSURL *)url
-  sourceApplication:(NSString *)sourceApplication
-         annotation:(id)annotation {
-    return [[FBSDKApplicationDelegate sharedInstance] application:application
-                                                          openURL:url
-                                                sourceApplication:sourceApplication
-                                                       annotation:annotation];
-}*/
-
 -(void) makeProfileAndGoOnDuty:(NSNotification*) theNotification {
     
     [[NSUserDefaults standardUserDefaults] setObject:theNotification.object forKey:kDocentUserId];
@@ -738,13 +723,13 @@
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     
     [Constants debug:@1 withContent:@"applicationDidEnterBackground"];
-   }
+}
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     
     [Constants debug:@1 withContent:@"applicationWillEnterForeground"];
-
+    
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
 
@@ -752,13 +737,13 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     
     [Constants debug:@1 withContent:@"applicationDidBecomeActive"];
-
+    
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }
 
 
 - (void)applicationWillTerminate:(UIApplication *)application {
-//#warning this does not work qutie yet
+    //#warning this does not work qutie yet
     
     [Constants debug:@1 withContent:@"applicationWillTerminate"];
     
@@ -766,54 +751,45 @@
 }
 
 
-
-/*
-- (void)application:(UIApplication *)application
-didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
-{
-        // Store the deviceToken in the current installation and save it to Parse.
-        
-        // this is why the notificaont thigns needs to be last. to send a push notificaiotn we need the device token, and a user acount, but we didn;t make the user account until after we ask for a notifcaiton!
-        
-        PFInstallation *currentInstallation = [PFInstallation currentInstallation];
-        if ([PFUser currentUser] != nil)
-        {
-            currentInstallation[@"currentUser"]=[PFUser currentUser];
-        }
-        else {
-            [currentInstallation removeObjectForKey:@"currentUser"];
-        }
-        
-        [currentInstallation setDeviceTokenFromData:deviceToken];
-        [currentInstallation saveInBackground];
-}
-*/
-
-
 -(void) generateCityList {
     
     _colA = [NSMutableArray array];
     _colB = [NSMutableArray array];
     _colC = [NSMutableArray array];
+    _colD = [NSMutableArray array];
     NSString *fileContents = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"cities15000" ofType:@"csv"] encoding:NSUTF8StringEncoding error:nil];
-
     
-   // NSString* fileContents = [NSString stringWithContentsOfURL:@"cities150000.csv"];
+    // NSString* fileContents = [NSString stringWithContentsOfURL:@"cities150000.csv"];
     NSArray* rows = [fileContents componentsSeparatedByString:@"\n"];
     for (NSString *row in rows){
         NSArray* columns = [row componentsSeparatedByString:@","];
         [_colA addObject:columns[0]];
         [_colB addObject:columns[1]];
         [_colC addObject:columns[2]];
+        [_colD addObject:columns[3]];
     }
+}
 
+
+-(void) generateCountryList {
+    NSString *fileContents = [NSString stringWithContentsOfFile:[[NSBundle mainBundle] pathForResource:@"twoLetterCodes" ofType:@"csv"] encoding:NSUTF8StringEncoding error:nil];
+    
+    _countryFullName = [NSMutableArray array];
+    _countryCode = [NSMutableArray array];
+    
+    NSArray* rows = [fileContents componentsSeparatedByString:@"\n"];
+    for (NSString *row in rows){
+        NSArray* columns = [row componentsSeparatedByString:@","];
+        [_countryFullName addObject:columns[0]];
+        [_countryCode addObject:columns[1]];
+    }
 }
 
 
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation {
     
     if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-    
+        
         int index = 0;
         double lowestDistanceSoFar = DBL_MAX;
         
@@ -824,7 +800,7 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
             
             NSNumber * lat = [f numberFromString:_colB[i]];
             NSNumber * lon = [f numberFromString:_colC[i]];
-
+            
             CLLocation* possibleCity = [[CLLocation alloc] initWithLatitude:lat.doubleValue longitude:lon.doubleValue];
             
             NSNumber* theCurrentDistance = [NSNumber numberWithDouble:[theGoalLocation distanceFromLocation:possibleCity]];
@@ -834,11 +810,32 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
                 index = i;
             }
         }
-        return _colA[index];
+        
+        NSString* theCity = [NSString stringWithFormat:@"%@", _colA[index]];
+        NSString* theCountry = [NSString stringWithFormat:@"%@", [self findTheFullCountryName:_colD[index]]];
+        
+        if ([theCountry isEqualToString:@""]) {
+            // the cuntry coresponding from the countyr code was not found, show nothing
+            return theCity;
+        } else {
+            return [NSString stringWithFormat:@"%@, %@", theCity, theCountry];
+        }
         
     } else {
         return @"Off Grid";
     }
+}
+
+
+-(NSString*) findTheFullCountryName:(NSString*) goalCountryCode {
+    
+    for (int i = 0; i < _countryCode.count; i++) {
+        
+        if ([_countryCode[i] isEqualToString: goalCountryCode]) {
+            return _countryFullName[i];
+        }
+    }
+    return @"";
 }
 
 
@@ -849,17 +846,17 @@ didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
         NSInteger temp = [[UIApplication sharedApplication] applicationIconBadgeNumber];
         [[UIApplication sharedApplication] setApplicationIconBadgeNumber: temp += 1];
     }
-
+    
     /*
-    if (userInfo) {
-        NSLog(@"%@",userInfo);
-        
-        if ([userInfo objectForKey:@"aps"]) {
-            if([[userInfo objectForKey:@"aps"] objectForKey:@"badgecount"]) {
-                [UIApplication sharedApplication].applicationIconBadgeNumber = [[[userInfo objectForKey:@"aps"] objectForKey: @"badgecount"] intValue];
-            }
-        }
-    }
+     if (userInfo) {
+     NSLog(@"%@",userInfo);
+     
+     if ([userInfo objectForKey:@"aps"]) {
+     if([[userInfo objectForKey:@"aps"] objectForKey:@"badgecount"]) {
+     [UIApplication sharedApplication].applicationIconBadgeNumber = [[[userInfo objectForKey:@"aps"] objectForKey: @"badgecount"] intValue];
+     }
+     }
+     }
      */
 }
 
