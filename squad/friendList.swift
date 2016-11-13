@@ -35,85 +35,83 @@ class friendList : UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.refreshAllCells), name: Notification.Name("refreshAllFriendListCells"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.endFriendListEditing), name: Notification.Name("endFriendListEditing"), object: nil)
-        
-        
-        
-       // setupUserChannels()
-        
-        /*
-        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 
-        let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
-        friendsPath.observe(.value, with: { snapshot in
-            
-            var newItems: [individualFriend] = []
-            
-            for item in snapshot.children {
-                let requestItem = individualFriend(snapshot: item as! FIRDataSnapshot)
-                newItems.append(requestItem)
-            }
-            self.items = newItems
-            
-            
-            // now get the distances between you and them
-            // items must already be setup!
-            self.getDistancesToFriends();
-          
-
-            self.tableView.reloadData()
-        })
- */
     }
     
     
-    /*
-    func setupUserChannels () {
-
-        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
-        let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
-
-        thisUserPath.observe(.value, with: {snapshot in
-            
-            if let myChannels = snapshot.value as! NSDictionary! {
-                self.channelKeys = myChannels
-            }
-        })
+    func sortFunc(loc1: CLLocationCoordinate2D, loc2: CLLocationCoordinate2D) -> Bool {
+       
+        let cllocation1: CLLocation = CLLocation(latitude: loc1.latitude,
+                                              longitude: loc1.longitude)
+        let cllocation2: CLLocation = CLLocation(latitude: loc2.latitude,
+                                                 longitude: loc2.longitude)
+        
+        return cllocation1.distance(from: cllocation2) < cllocation2.distance(from: cllocation1)
     }
-    */
+    
+    
+    // this shorts it based on shortest to greatest distance
+    func sortList () {
+        
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        let myLocation = appDelegate.currentLocation as CLLocation
+        
+        self.items.sort { (friend1:individualFriend, friend2:individualFriend) -> Bool in
+            
+            if friend1.location != nil {
+                if friend2.location != nil {
+                
+                    let cllocation1: CLLocation = CLLocation(latitude: friend1.location!.latitude,
+                                                             longitude: friend1.location!.longitude)
+                    
+                    let cllocation2: CLLocation = CLLocation(latitude: friend2.location!.latitude,
+                                                             longitude: friend2.location!.longitude)
+                    
+                    let distance1 = myLocation.distance(from: cllocation1)
+                    let distance2 = myLocation.distance(from: cllocation2)
+                    
+                    return distance1 < distance2
+                }
+            }
+         return false
+        }
+    }
+    
     
     func displayList (_ theNotification: Notification) {
-        
-        // the following is an insane way of passing a var, redo it
-        
         let theList = theNotification.object as! NSDictionary
-        if let temp = theList.object(forKey: "a") as? [individualFriend] {
+        if let temp = theList.object(forKey: "friendList") as? [individualFriend] {
             items = temp
         }
-        
-        tableView.reloadData()
+        sortAndReDisplayData()
     }
     
     
     func updateTableViewData (_ theNotification: Notification) {
         let theList = theNotification.object as! NSDictionary
-        if let temp = theList.object(forKey: "a") as? [individualFriend] {
+        if let temp = theList.object(forKey: "friendList") as? [individualFriend] {
             items = temp
         }
-        
-        tableView.reloadData()
+        sortAndReDisplayData()
     }
     
     
     func refreshAllCells(_ theNotification: Notification) {
+        sortAndReDisplayData()
+    }
+    
+    func sortAndReDisplayData () {
+        sortList()
         tableView.reloadData()
     }
     
+    /*
     func updateSpecificCellWithNewData (_ index: Int) {
     
         let theCellIndexPath = IndexPath(item: index, section: 0)
         self.tableView.reloadRows(at: [theCellIndexPath], with: .automatic)
     }
-    
+    */
     
     func addPlusButton() {
     //  let addButton = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addNewFriend))
@@ -274,13 +272,13 @@ class friendList : UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         if tableView.isEditing {
-            // edit the persons name
+            // edit the person's name
             self.performSegue(withIdentifier: "editFriend", sender: indexPath)
 
         } else {
         
         
-        // do these folks have a channel together?
+        // do these users have a channel together?
         var theKeyString = "no-match"
         var madeNewChannel = false
         

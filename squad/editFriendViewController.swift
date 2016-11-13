@@ -25,7 +25,7 @@ class editFriendViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         
         self.navigationItem.title = "Friend Nickname"
-        self.navigationController?.navigationBar.tintColor = UIColor.white
+      //  self.navigationController?.navigationBar.tintColor = UIColor.white
         
         nicknameTextField.becomeFirstResponder()
         doneButton.isEnabled = false

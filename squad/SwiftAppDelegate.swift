@@ -101,7 +101,7 @@ import UIKit
                 if localFriendList[i].unreadMessage > 0 {
                     localFriendList[i].unreadMessage -= 1
                     let updatedList:NSDictionary = [
-                        "a" : self.localFriendList]
+                        "friendList" : self.localFriendList]
                     NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
                     break
                 }
@@ -122,7 +122,7 @@ import UIKit
             if localFriendList[i].key == theFriendPin {
                 localFriendList[i].unreadMessage += 1
                 let updatedList:NSDictionary = [
-                    "a" : self.localFriendList]
+                    "friendList" : self.localFriendList]
                 NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
 
                 //updateSpecificCellWithNewData(i)
@@ -135,7 +135,7 @@ import UIKit
     func pleaseSendUpdatedModel (_ notification:Notification) {
         if friendListReady == true {
             let updatedList:NSDictionary = [
-                "a" : self.localFriendList]
+                "friendList" : self.localFriendList]
             NotificationCenter.default.post(name: Notification.Name ("updateTableViewData"), object: updatedList)
         }
         // else, wait, this is the inital app load and it will automatically send the friend list when it is ready to show
@@ -163,7 +163,7 @@ import UIKit
             
             
             let updatedList:NSDictionary = [
-                "a" : self.localFriendList]
+                "friendList" : self.localFriendList]
             NotificationCenter.default.post(name: Notification.Name ("friendListReady"), object: updatedList)
 
            // var temp : NSDictionary
@@ -230,7 +230,7 @@ import UIKit
                             
                             
                             let updatedList:NSDictionary = [
-                                "a" : self.localFriendList]
+                                "friendList" : self.localFriendList]
                           //  NotificationCenter.default.post(name: Notification.Name ("friendListReady"), object: updatedList)
 
                             NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: updatedList)
@@ -242,7 +242,7 @@ import UIKit
                             self.localFriendList[index].location = nil
                             
                             let updatedList:NSDictionary = [
-                                "a" : self.localFriendList]
+                                "friendList" : self.localFriendList]
                          
                             NotificationCenter.default.post(name: Notification.Name("updateTableViewData"), object: updatedList)
 
