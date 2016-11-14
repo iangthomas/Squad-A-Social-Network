@@ -27,10 +27,9 @@ struct individualFriendRequest {
         key = snapshot.key
         let snapshotValue = snapshot.value as! [String: AnyObject]
         time = snapshotValue["Date"] as! String
-        requestersPin = snapshot.key as! String
+        requestersPin = snapshot.key //as! String
         ref = snapshot.ref
     }
-    
     
     func toAnyObject() -> Any {
         return [

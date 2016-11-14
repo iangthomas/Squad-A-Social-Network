@@ -13,7 +13,6 @@ class friendList : UITableViewController {
 
     var items: [individualFriend] = []
     
-    
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
     override func viewDidLoad() {
@@ -35,7 +34,6 @@ class friendList : UITableViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.refreshAllCells), name: Notification.Name("refreshAllFriendListCells"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(friendList.endFriendListEditing), name: Notification.Name("endFriendListEditing"), object: nil)
-
     }
     
     
@@ -49,34 +47,36 @@ class friendList : UITableViewController {
         return cllocation1.distance(from: cllocation2) < cllocation2.distance(from: cllocation1)
     }
     
-    
     // this shorts it based on shortest to greatest distance
     func sortList () {
         
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        let myLocation = appDelegate.currentLocation as CLLocation
         
-        self.items.sort { (friend1:individualFriend, friend2:individualFriend) -> Bool in
+        if appDelegate.currentLocation != nil {
             
-            if friend1.location != nil {
-                if friend2.location != nil {
+            let myLocation = appDelegate.currentLocation as CLLocation
+            
+            self.items.sort { (friend1:individualFriend, friend2:individualFriend) -> Bool in
                 
-                    let cllocation1: CLLocation = CLLocation(latitude: friend1.location!.latitude,
-                                                             longitude: friend1.location!.longitude)
-                    
-                    let cllocation2: CLLocation = CLLocation(latitude: friend2.location!.latitude,
-                                                             longitude: friend2.location!.longitude)
-                    
-                    let distance1 = myLocation.distance(from: cllocation1)
-                    let distance2 = myLocation.distance(from: cllocation2)
-                    
-                    return distance1 < distance2
+                if friend1.location != nil {
+                    if friend2.location != nil {
+                        
+                        let cllocation1: CLLocation = CLLocation(latitude: friend1.location!.latitude,
+                                                                 longitude: friend1.location!.longitude)
+                        
+                        let cllocation2: CLLocation = CLLocation(latitude: friend2.location!.latitude,
+                                                                 longitude: friend2.location!.longitude)
+                        
+                        let distance1 = myLocation.distance(from: cllocation1)
+                        let distance2 = myLocation.distance(from: cllocation2)
+                        
+                        return distance1 < distance2
+                    }
                 }
+                return false
             }
-         return false
         }
     }
-    
     
     func displayList (_ theNotification: Notification) {
         let theList = theNotification.object as! NSDictionary
@@ -86,7 +86,6 @@ class friendList : UITableViewController {
         sortAndReDisplayData()
     }
     
-    
     func updateTableViewData (_ theNotification: Notification) {
         let theList = theNotification.object as! NSDictionary
         if let temp = theList.object(forKey: "friendList") as? [individualFriend] {
@@ -94,7 +93,6 @@ class friendList : UITableViewController {
         }
         sortAndReDisplayData()
     }
-    
     
     func refreshAllCells(_ theNotification: Notification) {
         sortAndReDisplayData()
@@ -124,7 +122,6 @@ class friendList : UITableViewController {
         self.performSegue(withIdentifier: "addNewFriend", sender: self)
     }
     
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -139,13 +136,11 @@ class friendList : UITableViewController {
         return items.count
     }
     
-    
     func endFriendListEditing (_ Notification: Notification) {
         super.tableView.setEditing(false, animated: true)
         self.setEditing(false, animated: true)
         self.tableView.setEditing(false, animated: true)
     }
-    
     
     func addNickname(_ thePin: String) -> String {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
@@ -158,7 +153,6 @@ class friendList : UITableViewController {
             return "\(nickname), Pin: \(thePin)"
         }
     }
-    
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! FriendTableViewCell
@@ -187,8 +181,6 @@ class friendList : UITableViewController {
             cell.missedMessages?.text = ""
             cell.dotImage.isHidden = true
         }
-        
-        
         return cell
     }
     
@@ -267,7 +259,6 @@ class friendList : UITableViewController {
                 }
             }
     }
-    
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
@@ -362,8 +353,6 @@ class friendList : UITableViewController {
         }
     }
     
-    
-    
     func pushToChannel (_ theRef: FIRDatabaseReference, withPushId thePushId: String) {
         
         theRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -372,12 +361,10 @@ class friendList : UITableViewController {
             if let name = channelData["name"] as! String!, name.characters.count > 0 {
                 
                 var theDictionary: Dictionary<String, Any> = [:]
-
                 theDictionary["channel"] = (Channel(id: id, name: name))
                 theDictionary["pushNotifId"] = thePushId
                 
                 self.performSegue(withIdentifier: "ShowChannel", sender: theDictionary)
-                
             }
         })
     }

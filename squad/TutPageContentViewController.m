@@ -48,7 +48,6 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    
     _nextButton.tintColor = [UIColor whiteColor];
     
     self.view.backgroundColor = [Constants flockGreen];

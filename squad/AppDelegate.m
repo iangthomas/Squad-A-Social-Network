@@ -82,14 +82,13 @@
     NSInteger numLaunches = [defaults integerForKey:kNumLaunchesKey];
     [[NSUserDefaults standardUserDefaults] setInteger:numLaunches+1 forKey:kNumLaunchesKey];
     
-    [[Fabric sharedSDK] setDebug: YES];
-    [Fabric with:@[CrashlyticsKit]];
+ 
     
-    
-    
-    
+ 
 #warning for the beta this has been disabled
     //  if ([defaults boolForKey:kauto_crash_reporting]) {
+    [[Fabric sharedSDK] setDebug: YES];
+    [Fabric with:@[CrashlyticsKit]];
     [Fabric with:@[[Crashlytics class]]];
     
     [self postUpdatedAppVersion];
