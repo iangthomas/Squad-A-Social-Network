@@ -11,7 +11,7 @@ import CoreLocation
 
 class friendList : UITableViewController {
 
-    var items: [individualFriend] = []
+    var friendsList: [individualFriend] = []
     
     private lazy var channelRef: FIRDatabaseReference = FIRDatabase.database().reference().child("channels")
     
@@ -56,7 +56,7 @@ class friendList : UITableViewController {
             
             let myLocation = appDelegate.currentLocation as CLLocation
             
-            self.items.sort { (friend1:individualFriend, friend2:individualFriend) -> Bool in
+            self.friendsList.sort { (friend1:individualFriend, friend2:individualFriend) -> Bool in
                 
                 if friend1.location != nil {
                     if friend2.location != nil {
@@ -81,7 +81,7 @@ class friendList : UITableViewController {
     func displayList (_ theNotification: Notification) {
         let theList = theNotification.object as! NSDictionary
         if let temp = theList.object(forKey: "friendList") as? [individualFriend] {
-            items = temp
+            friendsList = temp
         }
         sortAndReDisplayData()
     }
@@ -89,7 +89,7 @@ class friendList : UITableViewController {
     func updateTableViewData (_ theNotification: Notification) {
         let theList = theNotification.object as! NSDictionary
         if let temp = theList.object(forKey: "friendList") as? [individualFriend] {
-            items = temp
+            friendsList = temp
         }
         sortAndReDisplayData()
     }
@@ -133,7 +133,7 @@ class friendList : UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return friendsList.count
     }
     
     func endFriendListEditing (_ Notification: Notification) {
@@ -156,7 +156,7 @@ class friendList : UITableViewController {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "itemCell", for: indexPath) as! FriendTableViewCell
-        let requestItem = items[indexPath.row]
+        let requestItem = friendsList[indexPath.row]
         
         cell.title?.text = addNickname(requestItem.key)
         
@@ -278,7 +278,7 @@ class friendList : UITableViewController {
         let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
         
         
-        let theFriend = self.items[(indexPath as NSIndexPath).row]
+        let theFriend = self.friendsList[(indexPath as NSIndexPath).row]
         let theFriendPin = theFriend.key
         let friendPinPath = FIRDatabase.database().reference().child("pins").child(theFriendPin)
         // get there unique id
@@ -401,12 +401,56 @@ class friendList : UITableViewController {
                 let targetController = destinationNavigationController.topViewController as! editFriendViewController
                 
                  //   let friendEditVC = segue.destination as! editFriendViewController
-                    targetController.friendList = items
-                    targetController.friendPin = items[theIndexPath.row].key
+                    targetController.friendList = friendsList
+                    targetController.friendPin = friendsList[theIndexPath.row].key
                     
                // }
             }
         }
     }
     
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == UITableViewCellEditingStyle.delete {
+            
+            let myUserPin = UserDefaults.standard.object(forKey: kPin) as! String
+            let friendToRemove = friendsList[indexPath.row]
+            
+            
+            // remove this person from the other person's list
+            let friendPinPath = FIRDatabase.database().reference().child("pins").child(friendToRemove.key)
+            // get there unique id
+            friendPinPath.observeSingleEvent(of: .value, with: { (snapshot) in
+                
+                let result = snapshot.value as? NSDictionary
+                if let uniqueFriendId = result?.value(forKey: "uniqueId") as? String {
+                    
+                    let theFormerFriendUserDirectory = FIRDatabase.database().reference().child("users").child(uniqueFriendId).child("friends").child(myUserPin)
+                    theFormerFriendUserDirectory.removeValue(completionBlock: { (error, ref) in
+                        if error == nil {
+                            // success
+                        }
+                    })
+                }
+            })
+            
+            
+            // remove the other perosn from my list
+            let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+
+            let thisUsersFriendsDirectory = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(friendToRemove.key)
+            thisUsersFriendsDirectory.removeValue(completionBlock: { (error, ref) in
+                if error == nil {
+                    // success
+                    self.sortAndReDisplayData()
+
+                    // add comments here
+                } else {
+                    // add comments here
+                }
+            })
+        }
+        
+        
+    }
 }
