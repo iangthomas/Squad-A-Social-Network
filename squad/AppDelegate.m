@@ -202,14 +202,16 @@
     
     UITabBarController *tabBarController = (UITabBarController *)self.window.rootViewController;
     UITabBar *tabBar = tabBarController.tabBar;
+    UITabBarItem *tabBarItem0 = [tabBar.items objectAtIndex:0];
     UITabBarItem *tabBarItem1 = [tabBar.items objectAtIndex:1];
-    UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:0];
+    UITabBarItem *tabBarItem2 = [tabBar.items objectAtIndex:2];
+
     
-    tabBarItem2.image = [[UIImage imageNamed:@"mapViewIconDark"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem2.selectedImage = [[UIImage imageNamed:@"mapViewIconWhite"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem0.image = [[UIImage imageNamed:@"threeLines"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+ 
+    tabBarItem1.image = [[UIImage imageNamed:@"cogDark"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
-    tabBarItem1.image = [[UIImage imageNamed:@"threeLines"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
-    tabBarItem1.selectedImage = [[UIImage imageNamed:@"threeLinesWhite"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
+    tabBarItem2.image = [[UIImage imageNamed:@"flagDark"] imageWithRenderingMode:UIImageRenderingModeAlwaysOriginal];
     
     [[UITabBar appearance] setBarTintColor:[Constants flockGreen]];
     [[UITabBarItem appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
