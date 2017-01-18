@@ -33,58 +33,19 @@
                                      text:text];
 }
 
-
 - (instancetype)initWithSenderId:(NSString *)senderId
                senderDisplayName:(NSString *)senderDisplayName
                             date:(NSDate *)date
                             text:(NSString *)text
 {
     NSParameterAssert(text != nil);
-    
+
     self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:NO];
     if (self) {
         _text = [text copy];
     }
     return self;
 }
-
-
-
-
-
-+ (instancetype)messageWithSenderId:(NSString *)senderId
-                        displayName:(NSString *)displayName
-                               text:(NSString *)text
-                      recipientRead:(NSString *)recipientRead
-{
-    return [[self alloc] initWithSenderId:senderId
-                        senderDisplayName:displayName
-                                     date:[NSDate date]
-                                     text:text
-                            recipientRead:recipientRead];
-}
-
-
-- (instancetype)initWithSenderId:(NSString *)senderId
-               senderDisplayName:(NSString *)senderDisplayName
-                            date:(NSDate *)date
-                            text:(NSString *)text
-                   recipientRead:(NSString *)recipientRead
-
-{
-    NSParameterAssert(text != nil);
-    
-    self = [self initWithSenderId:senderId senderDisplayName:senderDisplayName date:date isMedia:NO];
-    if (self) {
-        _text = [text copy];
-    }
-    return self;
-}
-
-
-
-
-
 
 + (instancetype)messageWithSenderId:(NSString *)senderId
                         displayName:(NSString *)displayName

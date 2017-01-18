@@ -82,14 +82,6 @@
                         displayName:(NSString *)displayName
                                text:(NSString *)text;
 
-
-// my modded method
-+ (instancetype)messageWithSenderId:(NSString *)senderId
-                        displayName:(NSString *)displayName
-                               text:(NSString *)text
-                      recipientRead:(NSString *)recipientRead;
-
-
 /**
  *  Initializes and returns a message object having the given senderId, senderDisplayName, date, and text.
  *
