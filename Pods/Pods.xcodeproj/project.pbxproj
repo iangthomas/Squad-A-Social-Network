@@ -270,7 +270,7 @@
 		7308178016834202FBF3D843794B066A /* JSQMessagesCollectionViewDataSource.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JSQMessagesCollectionViewDataSource.h; path = JSQMessagesViewController/Model/JSQMessagesCollectionViewDataSource.h; sourceTree = "<group>"; };
 		7620FC48DF87836DF229DC85A8030F2A /* JSQMessagesToolbarContentView.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = JSQMessagesToolbarContentView.h; path = JSQMessagesViewController/Views/JSQMessagesToolbarContentView.h; sourceTree = "<group>"; };
 		78B42169E6D2F980515086306F575792 /* GTMSessionFetcherLogging.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = GTMSessionFetcherLogging.m; path = Source/GTMSessionFetcherLogging.m; sourceTree = "<group>"; };
-		7A450CF6852E022EC0353A0CE24A7E70 /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Frameworks/frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
+		7A68AF02D02E6080B1E6D5DFF4DE9540 /* FirebaseCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = FirebaseCore.framework; path = Frameworks/FirebaseCore.framework; sourceTree = "<group>"; };
 		7B4011544ABBA2F24463E636C7755076 /* JSQSystemSoundPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = JSQSystemSoundPlayer.framework; path = JSQSystemSoundPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7CF19CB45548C95DA9C15E69C445334C /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/UIKit.framework; sourceTree = DEVELOPER_DIR; };
 		7EFD45644B06BC1AD1A1E7979BC5F551 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.0.sdk/System/Library/Frameworks/CoreLocation.framework; sourceTree = DEVELOPER_DIR; };
@@ -589,7 +589,7 @@
 		6D745C730C77436C449E9C08CD5DB851 /* FirebaseCore */ = {
 			isa = PBXGroup;
 			children = (
-				C89E251E2523FF377E5B3CE96F57A8BA /* Frameworks */,
+				F92E65FDE9C5AA6EA290266465C45941 /* Frameworks */,
 			);
 			name = FirebaseCore;
 			path = FirebaseCore;
@@ -799,14 +799,6 @@
 			path = "../Target Support Files/GoogleToolboxForMac";
 			sourceTree = "<group>";
 		};
-		C89E251E2523FF377E5B3CE96F57A8BA /* Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				7A450CF6852E022EC0353A0CE24A7E70 /* FirebaseCore.framework */,
-			);
-			name = Frameworks;
-			sourceTree = "<group>";
-		};
 		D1F3933BC5E0647A8EF305B1E0C810BD /* Support Files */ = {
 			isa = PBXGroup;
 			children = (
@@ -967,6 +959,14 @@
 				51DB542C458C034F82CFF3BF391F2312 /* Pods-squad */,
 			);
 			name = "Targets Support Files";
+			sourceTree = "<group>";
+		};
+		F92E65FDE9C5AA6EA290266465C45941 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				7A68AF02D02E6080B1E6D5DFF4DE9540 /* FirebaseCore.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		FE13512389A5CD05331790DBFCD2B10A /* Firebase */ = {

@@ -338,6 +338,7 @@
     UIUserNotificationSettings *grantedSettings = [[UIApplication sharedApplication] currentUserNotificationSettings];
     if (grantedSettings.types == UIUserNotificationTypeNone) {
         
+        [OneSignal setLocationShared:NO];
         [OneSignal registerForPushNotifications];
         [OneSignal setLocationShared:NO];
         

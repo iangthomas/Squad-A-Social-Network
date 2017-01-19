@@ -109,12 +109,13 @@
         //   NSLog(@"Received Notification - %@", notification.payload.notificationID);
     } handleNotificationAction:^(OSNotificationOpenedResult *result) {
         
+#warning make this pop the user directly into the specific channel
+
+        
         // This block gets called when the user reacts to a notification received
+        
         /*
          OSNotificationPayload* payload = result.notification.payload;
-         
-         #warning make this pop the user drienctly into the relovent channel
-         
          
          NSString* messageTitle = @"OneSignal Example";
          NSString* fullMessage = [payload.body copy];
@@ -140,7 +141,6 @@
         
     } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @NO}];
     
-#warning is a line above causing the duplicate messges?
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCurrentLocation:) name:@"getCurrentLocation" object:nil];
@@ -190,9 +190,7 @@
     
     [OneSignal setLocationShared:NO];
 
-    
     // [self updateNumLaunches];
-    
 }
 
 -(void) setupSwiftAppDelegate {
@@ -517,8 +515,6 @@
         } else {
             [Constants debug:@2 withContent:@"Successfully added user to the firebase geofence."];
             
-            
-            // [self postInitialFirebaseAnalyticsWithAutomatic:automatic];
         }
     }];
     
@@ -846,22 +842,19 @@
     // NSLog(@"remote notification: %@",[userInfo description]);
     
     if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
-        NSInteger temp = [[UIApplication sharedApplication] applicationIconBadgeNumber];
-        [[UIApplication sharedApplication] setApplicationIconBadgeNumber: temp += 1];
+        NSInteger currentBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber: currentBadgeNumber += 1];
     }
-    
-    /*
-     if (userInfo) {
-     NSLog(@"%@",userInfo);
-     
-     if ([userInfo objectForKey:@"aps"]) {
-     if([[userInfo objectForKey:@"aps"] objectForKey:@"badgecount"]) {
-     [UIApplication sharedApplication].applicationIconBadgeNumber = [[[userInfo objectForKey:@"aps"] objectForKey: @"badgecount"] intValue];
-     }
-     }
-     }
-     */
 }
+
+-(void)application:(UIApplication *) application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo fetchCompletionHandler:(nonnull void (^)(UIBackgroundFetchResult))completionHandler {
+    
+    if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
+        NSInteger currentBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber];
+        [[UIApplication sharedApplication] setApplicationIconBadgeNumber: currentBadgeNumber += 1];
+    }
+}
+
 
 -(void) postUpdatedAppVersion {
     if ([self docentProfileEmpty] == NO) {
