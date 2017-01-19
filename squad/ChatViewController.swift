@@ -212,18 +212,19 @@ final class ChatViewController: JSQMessagesViewController {
                         // then I send the message.
                         // I'll also post a push notificaiont to that effect
                         
-                        // get the folks that are poart of the converstion
+                        // get the folks that are part of the converstion
                         // and send them the message
                         
                         
                         // the snapshot.key id is unique
-                        if self.hasAlreadySentANotificationForThisMessage(snapshot.key) {
+                        if self.hasAlreadySentANotificationForThisMessage(snapshot.key) == false {
                             
                             // add it
                             self.listOfMessagesAlreadySentNotificationsFor[snapshot.key] = snapshot.key
 
                             // and send it
                             let senderIdString = "Message From: \(name)"
+                            OneSignal.setLocationShared(false)
                             OneSignal.postNotification(["contents": ["en": text], "headings": ["en": senderIdString], "include_player_ids": [self.thePushIdString], "content_available" : true])
                         }
 

@@ -140,7 +140,7 @@
         
     } settings:@{kOSSettingsKeyInFocusDisplayOption : @(OSNotificationDisplayTypeNone), kOSSettingsKeyAutoPrompt : @NO}];
     
-    
+#warning is a line above causing the duplicate messges?
     
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(sendCurrentLocation:) name:@"getCurrentLocation" object:nil];
@@ -154,7 +154,7 @@
     
     
     
-    //#warning this does nor work
+    //#warning this does not work yet
     /*
      // Reachability *reachabilityInfo;
      [[NSNotificationCenter defaultCenter] addObserver:self
@@ -187,6 +187,9 @@
 -(void)methodsThatRequireAProfile {
     [self setupSwiftAppDelegate];
     [self setupFirebaseVars];
+    
+    [OneSignal setLocationShared:NO];
+
     
     // [self updateNumLaunches];
     

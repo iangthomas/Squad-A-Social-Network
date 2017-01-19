@@ -339,6 +339,8 @@
     if (grantedSettings.types == UIUserNotificationTypeNone) {
         
         [OneSignal registerForPushNotifications];
+        [OneSignal setLocationShared:NO];
+        
         
         /*
          if ([[UIApplication sharedApplication] respondsToSelector:@selector(isRegisteredForRemoteNotifications)])
