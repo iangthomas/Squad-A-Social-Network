@@ -20,6 +20,9 @@
  * THE SOFTWARE.
  */
 
+//  Code Modifications © 2017 Geodex Systems
+//  All Rights Reserved.
+
 internal class Channel {
   internal let id: String
   internal let name: String

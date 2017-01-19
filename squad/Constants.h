@@ -1,6 +1,5 @@
 //
 //  Constants.h
-//  nimbustest
 //
 //  Created by Ian Thomas on 7/1/15.
 //  Copyright (c) 2015 Geodex. All rights reserved.

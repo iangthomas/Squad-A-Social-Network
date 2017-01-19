@@ -1,3 +1,6 @@
+//  Copyright © 2017 Geodex Systems
+//  All Rights Reserved.
+
 #import "PVAttractionAnnotationView.h"
 #import "PVAttractionAnnotation.h"
 
@@ -7,11 +10,8 @@
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     if (self) {
         PVAttractionAnnotation *attractionAnnotation = self.annotation;
-        
-        
-        
+
         /*
-        
         if ([attractionAnnotation.imageName isEqualToString:@"green"]) {
             self.image = [UIImage imageNamed:@"greenDot"];
 
@@ -22,8 +22,7 @@
             self.image = [UIImage imageNamed:@"greyDot"];
         }
        */
-        
-        
+
         
         if (attractionAnnotation.isGreenDotColor) {
             self.image = [UIImage imageNamed:@"greenDot"];

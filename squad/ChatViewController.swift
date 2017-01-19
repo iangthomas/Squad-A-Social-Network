@@ -20,6 +20,9 @@
  * THE SOFTWARE.
  */
 
+//  Code Modifications © 2017 Geodex Systems
+//  All Rights Reserved.
+
 import UIKit
 //import Photos
 //import Firebase
@@ -154,15 +157,7 @@ final class ChatViewController: JSQMessagesViewController {
         }
     }
     
-    
-    func hasAlreadySentANotificationForThisMessage (_ theKey: String) -> Bool {
-        if self.listOfMessagesAlreadySentNotificationsFor.count > 0 {
-            if self.listOfMessagesAlreadySentNotificationsFor[theKey] != nil {
-                return false
-            }
-        }
-        return true
-    }
+
     
     
     // MARK: Firebase related methods
@@ -207,27 +202,6 @@ final class ChatViewController: JSQMessagesViewController {
                                 }
                             }
                         }
-                    } else {
-                        
-                        // then I send the message.
-                        // I'll also post a push notificaiont to that effect
-                        
-                        // get the folks that are part of the converstion
-                        // and send them the message
-                        
-                        
-                        // the snapshot.key id is unique
-                        if self.hasAlreadySentANotificationForThisMessage(snapshot.key) == false {
-                            
-                            // add it
-                            self.listOfMessagesAlreadySentNotificationsFor[snapshot.key] = snapshot.key
-
-                            // and send it
-                            let senderIdString = "Message From: \(name)"
-                            OneSignal.setLocationShared(false)
-                            OneSignal.postNotification(["contents": ["en": text], "headings": ["en": senderIdString], "include_player_ids": [self.thePushIdString], "content_available" : true])
-                        }
-
                     }
                 }
                 
@@ -342,10 +316,18 @@ final class ChatViewController: JSQMessagesViewController {
         // 3
         itemRef.setValue(messageItem)
         
-        // 4
-        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        
+        // 4 post notification
+        
+        OneSignal.setLocationShared(false)
+
+        OneSignal.postNotification(["contents": ["en": messageItem["text"]], "headings": ["en": messageItem["senderName"]], "include_player_ids": [self.thePushIdString], "content_available" : true])
+
         
         // 5
+        JSQSystemSoundPlayer.jsq_playMessageSentSound()
+        
+        // 6
         finishSendingMessage()
         isTyping = false
     }

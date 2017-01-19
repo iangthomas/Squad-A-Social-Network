@@ -1,10 +1,12 @@
 //
 //  Constants.m
-//  Nimbus
 //
 //  Created by Ian Thomas on 7/15/15.
 //
 //
+
+//  Copyright © 2017 Geodex Systems
+//  All Rights Reserved.
 
 #import <Foundation/Foundation.h>
 #import <Crashlytics/Crashlytics.h>

@@ -17,6 +17,8 @@
 
 @implementation ProfileViewController
 
+#warning mention that the photos button is not working in the chat view
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
@@ -30,7 +32,6 @@
     _appVersion.text = [NSString stringWithFormat:@"App Version: %@\nBuild #: %@ \n Build Date: %@", [infoDict objectForKey:@"CFBundleShortVersionString"], [infoDict objectForKey:@"CFBuildNumber"], [infoDict objectForKey:@"CFBuildDate"]];
     
     AppDelegate *theAppDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
-    
     
     // does this inititaly, then delegate notifications take it from here
     _userLocation.text = [NSString stringWithFormat:@"You're Near: %@", [theAppDelegate findNearestLargeCity:theAppDelegate.currentLocation]];

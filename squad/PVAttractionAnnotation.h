@@ -1,13 +1,11 @@
 #import <Foundation/Foundation.h>
 #import <MapKit/MapKit.h>
-//#import <Parse/Parse.h>
 
-typedef NS_ENUM(NSInteger, PVAttractionType) {
-    PVAttractionDefault = 0,
-    PVAttractionRide,
-    PVAttractionFood,
-    PVAttractionFirstAid
-};
+//  Copyright © 2017 Geodex Systems
+//  All Rights Reserved.
+
+
+#warning remove these old pireces of code
 
 @interface PVAttractionAnnotation : NSObject <MKAnnotation>
 
@@ -19,18 +17,12 @@ typedef NS_ENUM(NSInteger, PVAttractionType) {
 
 @property (nonatomic) BOOL isGreenDotColor;
 
-//@property (nonatomic) BOOL isUnlocked;
-
 
 @property (nonatomic, copy) NSString* uniqueId;
 @property (nonatomic) BOOL publiclyVisible;
 @property (nonatomic) BOOL enabled;
 
-
-
-
 @property (nonatomic, copy) NSNumber *radius;
-
 
 
 @end

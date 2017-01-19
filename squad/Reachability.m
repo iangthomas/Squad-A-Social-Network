@@ -45,6 +45,9 @@
  
  */
 
+//  Code Modifications © 2017 Geodex Systems
+//  All Rights Reserved.
+
 #import <arpa/inet.h>
 #import <ifaddrs.h>
 #import <netdb.h>

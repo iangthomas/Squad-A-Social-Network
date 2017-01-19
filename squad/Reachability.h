@@ -45,6 +45,9 @@
  
  */
 
+//  Code Modifications © 2017 Geodex Systems
+//  All Rights Reserved.
+
 #import <Foundation/Foundation.h>
 #import <SystemConfiguration/SystemConfiguration.h>
 #import <netinet/in.h>
