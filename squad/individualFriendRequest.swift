@@ -1,6 +1,6 @@
 //
 //  individualFriendRequest.swift
-//  squad
+//  Squad
 //
 //  Created by Ian Thomas on 11/3/16.
 //  Copyright © 2016 KKIT Creations. All rights reserved.

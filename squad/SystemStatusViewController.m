@@ -3,6 +3,7 @@
 //  Nimbus
 //
 //  Created by Ian Thomas on 11/7/15.
+//  Code Modifications © 2017 Geodex Systems. All Rights Reserved.
 //
 //
 

@@ -3,7 +3,7 @@
 //  squad
 //
 //  Created by Ian Thomas on 11/3/16.
-//  Copyright © 2016 KKIT Creations. All rights reserved.
+//  Copyright © 2016 Geodex Systems. All rights reserved.
 //
 
 #import "ProfileViewController.h"
@@ -17,7 +17,7 @@
 
 @implementation ProfileViewController
 
-#warning mention that the photos button is not working in the chat view
+#warning todo make the photos button working in the chat view
 
 - (void)viewDidLoad {
     [super viewDidLoad];

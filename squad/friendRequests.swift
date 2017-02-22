@@ -1,9 +1,9 @@
 //
 //  friendRequests.swift
-//  squad
+//  Squad
 //
 //  Created by Ian Thomas on 11/3/16.
-//  Copyright © 2016 KKIT Creations. All rights reserved.
+//  Copyright © 2016 Geodex Systems. All rights reserved.
 //
 
 import UIKit
@@ -145,7 +145,7 @@ class friendRequests: UITableViewController {
         
         if segmentedControl.selectedSegmentIndex == recievedSegmentedIndex {
         
-            guard let cell = tableView.cellForRow(at: indexPath) else { return }
+            guard tableView.cellForRow(at: indexPath) != nil else { return }
             let requestItem = recievedFriendRequests[indexPath.row]
             let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
 

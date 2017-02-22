@@ -3,7 +3,7 @@
 //  squad
 //
 //  Created by Ian Thomas on 11/10/16.
-//  Copyright © 2016 KKIT Creations. All rights reserved.
+//  Copyright © 2016 Geodex Systems. All rights reserved.
 //
 
 import UIKit

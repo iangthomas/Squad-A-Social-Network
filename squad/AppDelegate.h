@@ -1,6 +1,6 @@
 //
 //  AppDelegate.h
-//  beaconList
+//  Squad
 //
 //  Created by Ian Thomas on 11/2/15.
 //  Copyright © 2015 Geodex. All rights reserved.
@@ -8,9 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import <CoreLocation/CoreLocation.h>
-//#import <Parse/Parse.h>
 #import "Reachability.h"
-//#import <Firebase/Firebase.h>
 
 @import Firebase;
 
@@ -21,9 +19,6 @@
 @interface AppDelegate : UIResponder <UIApplicationDelegate, CLLocationManagerDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
-//@property (strong, nonatomic) NSArray* theSourcesArray;
-//@property (strong, nonatomic) NSString* theDateInfoWasPulledFromServer;
-//@property (nonatomic) BOOL requestInProgress;
 
 
 @property (strong, nonatomic) CLLocationManager *locationManager;
@@ -34,7 +29,6 @@
 
 @property (nonatomic, strong) NSArray<individualFriend *> *friendList;
 
-//@property (nonatomic, strong) SwiftAppDelegate *swiftAppDelegate;
 
 
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation;

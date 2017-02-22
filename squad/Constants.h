@@ -2,7 +2,7 @@
 //  Constants.h
 //
 //  Created by Ian Thomas on 7/1/15.
-//  Copyright (c) 2015 Geodex. All rights reserved.
+//  Copyright © 2016 Geodex Systems. All rights reserved.
 //
 
 #import <Firebase.h>

@@ -1,6 +1,6 @@
 //
 //  AppDelegate.m
-//  beaconList
+//  Squad
 //
 //  Created by Ian Thomas on 11/2/15.
 //  Copyright © 2015 Geodex. All rights reserved.
@@ -45,7 +45,6 @@
 @implementation AppDelegate
 
 @synthesize locationManager;
-//@synthesize networkReachability;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
@@ -85,22 +84,17 @@
  
     
  
-#warning for the beta this has been disabled
+#warning todo for the beta this has been disabled
     //  if ([defaults boolForKey:kauto_crash_reporting]) {
-    [[Fabric sharedSDK] setDebug: YES];
-    [Fabric with:@[CrashlyticsKit]];
-    [Fabric with:@[[Crashlytics class]]];
-    
-    [self postUpdatedAppVersion];
-    
-    
-    //   [[Fabric sharedSDK] setDebug: YES];
-    
+        [[Fabric sharedSDK] setDebug: YES];
+        [Fabric with:@[CrashlyticsKit]];
+        [Fabric with:@[[Crashlytics class]]];
+        
+        [self postUpdatedAppVersion];
+        
+        //   [[Fabric sharedSDK] setDebug: YES];
     
     //  }
-    
-    //   [OneSignal initWithLaunchOptions:launchOptions appId:@"d0a67531-fa19-4ccc-a749-4699ce969ddd"];
-    //       OneSignal.initWithLaunchOptions(launchOptions, appId: "5eb5a37e-b458-11e3-ac11-000c2940e62c")
     
     [[UIApplication sharedApplication] setApplicationIconBadgeNumber: 0];
     
@@ -109,7 +103,7 @@
         //   NSLog(@"Received Notification - %@", notification.payload.notificationID);
     } handleNotificationAction:^(OSNotificationOpenedResult *result) {
         
-#warning make this pop the user directly into the specific channel
+#warning todo make this pop the user directly into the specific channel
 
         
         // This block gets called when the user reacts to a notification received
@@ -153,18 +147,6 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(decrementFriendListBadgeIcon:) name:@"decrementFriendListBadgeIcon" object:nil];
     
     
-    
-    //#warning this does not work yet
-    /*
-     // Reachability *reachabilityInfo;
-     [[NSNotificationCenter defaultCenter] addObserver:self
-     selector:@selector(reachabilityChanged)
-     name:kReachabilityChangedNotification
-     object:_networkReachability];
-     [_networkReachability startNotifier];
-     */
-    
-    
     [self makeAppReadyToUse];
     
     [self setupTabBar];
@@ -175,7 +157,6 @@
     if ([self docentProfileEmpty] == NO) {
         [self methodsThatRequireAProfile];
     }
-    
     
     [Constants debug:@1 withContent:@"Starting App Done"];
     
@@ -297,7 +278,7 @@
     }
 }
 
-#warning refacrtor these, most of code is duplicite
+#warning todo refactor these following methods, some of code is a duplicate
 -(void)incrementFriendListBadgeIcon:(NSNotification*) notification {
     
     NSNumberFormatter *f = [[NSNumberFormatter alloc] init];
@@ -385,12 +366,6 @@
     [vc setModalPresentationStyle:UIModalPresentationFullScreen];
     [self.window makeKeyAndVisible];
     [self.window.rootViewController presentViewController:vc animated:NO completion:nil];
-}
-
-
--(void) countParseCalls {
-    
-    [Constants debug:@3 withContent:[NSString stringWithFormat:@"%i", [Constants getMethodCallCount]]];
 }
 
 

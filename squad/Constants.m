@@ -4,16 +4,13 @@
 //  Created by Ian Thomas on 7/15/15.
 //
 //
-
-//  Copyright © 2017 Geodex Systems
-//  All Rights Reserved.
+//  Copyright © 2016 Geodex Systems. All rights reserved.
+//  
 
 #import <Foundation/Foundation.h>
 #import <Crashlytics/Crashlytics.h>
-//#import "AppDelegate.h"
 
 #import "Constants.h"
-//#import <Parse.h>
 #include <sys/types.h>
 #include <sys/sysctl.h>
 
@@ -65,8 +62,6 @@ static NSString* idInfo;
 
 +(void)makeErrorReportWithDescription:(NSString*) theDescription {
 
-   // FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
-
     FIRDatabaseReference *errorDir = [[[FIRDatabase database] reference] child:@"errorReports"];
     
     NSMutableDictionary *theError = [[NSMutableDictionary alloc] init];
@@ -78,8 +73,6 @@ static NSString* idInfo;
     theError[@"Device_Type"] = [currentDevice model];
     theError[@"System_Version"] = [currentDevice systemVersion];
     theError[@"platform"] = [self platform];
-
-   // AppDelegate *theAppDelegate = (AppDelegate *)[[UIApplication sharedApplication] delegate];
     
 #if DEBUG == 1
     theError[@"is_DeveloperViaDebug"] = @YES;
@@ -136,52 +129,6 @@ static NSString* idInfo;
 +(int)getMethodCallCount {
     return methodCallCount;
 }
-/*
-+(NSMutableDictionary*)storeMessageLocally:(PFObject*)message {
-    NSArray * allKeys = [message allKeys];
-    NSMutableDictionary * retDict = [[NSMutableDictionary alloc] init];
-    
-    for (NSString * key in allKeys) {
-        // store only the parts we need
-        if ([key isEqualToString:@"title"] == YES ||
-            [key isEqualToString:@"lat"] == YES ||
-            [key isEqualToString:@"lon"] == YES ||
-            [key isEqualToString:@"radius"] == YES ||
-            [key isEqualToString:@"uniqueId"] == YES ||
-            [key isEqualToString:@"name"] == YES || // used the profile viewer
-            [key isEqualToString:@"targetNumber"] == YES ||
-            [key isEqualToString:@"enabled"] == YES ||
-            [key isEqualToString:@"websiteText"] == YES ||
-            [key isEqualToString:@"publiclyVisible"] == YES ||
-            [key isEqualToString:@"ownedBy"] == YES ||
-            [key isEqualToString:@"theDescription"] == YES ||
-            [key isEqualToString:@"dateCreated"] == YES ||
-            [key isEqualToString:@"dateUpdated"] == YES ||
-            [key isEqualToString:@"addEdit"] == YES ||
-            [key isEqualToString:@"ownedByUserID"] == YES ||
-            [key isEqualToString:@"bannerImage"] == YES ||
-            [key isEqualToString:@"lineOne"] == YES ||
-            [key isEqualToString:@"lineTwo"] == YES ||
-            [key isEqualToString:@"lineThree"] == YES
-            )
-        {
-            [retDict setObject:[message objectForKey:key] forKey:key];
-        }
-    }
-    return retDict;
-}
-*/
-
-/*
-+(Firebase*) firebasePath {
-    return [[Firebase alloc] initWithUrl:@"https://flock-to-unlock.firebaseio.com"];
-}
-
-
-+(Firebase*) firebasePathGeofences {
-    return [[Constants firebasePath] childByAppendingPath:@"geofences"];
-}
-*/
 
 +(UIColor*)flockGreen {
     return [UIColor colorWithRed:0.29 green:0.78 blue:0.69 alpha:1.0];
@@ -205,7 +152,7 @@ static NSString* idInfo;
 }
 
 
-// coppied from the app delegate
+// copied from the app delegate
 +(BOOL) shouldDisplayGeofence:(NSMutableDictionary*)attraction {
     
     NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId];

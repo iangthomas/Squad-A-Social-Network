@@ -9,9 +9,6 @@
 /* Begin PBXBuildFile section */
 		3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */; };
 		3C2E735D1DCC050400C2B809 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 3C2E735C1DCC050400C2B809 /* Settings.bundle */; };
-		3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */; };
-		3C2E73651DCC05CC00C2B809 /* PVAttractionAnnotation.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */; };
-		3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */; };
 		3C2E736A1DCC3E1A00C2B809 /* addNewFriend.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */; };
 		3C2E736C1DCC65BB00C2B809 /* friendRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E736B1DCC65BB00C2B809 /* friendRequests.swift */; };
 		3C2E73701DCC6C3500C2B809 /* individualFriendRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3C2E736F1DCC6C3500C2B809 /* individualFriendRequest.swift */; };
@@ -42,12 +39,6 @@
 		3C2E73591DCBEE7200C2B809 /* ProfileViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ProfileViewController.h; sourceTree = "<group>"; };
 		3C2E735A1DCBEE7200C2B809 /* ProfileViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ProfileViewController.m; sourceTree = "<group>"; };
 		3C2E735C1DCC050400C2B809 /* Settings.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Settings.bundle; sourceTree = "<group>"; };
-		3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = mapViewViewController.h; sourceTree = "<group>"; };
-		3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = mapViewViewController.m; sourceTree = "<group>"; };
-		3C2E73611DCC05CC00C2B809 /* PVAttractionAnnotation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVAttractionAnnotation.h; sourceTree = "<group>"; };
-		3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotation.m; sourceTree = "<group>"; };
-		3C2E73631DCC05CC00C2B809 /* PVAttractionAnnotationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PVAttractionAnnotationView.h; sourceTree = "<group>"; };
-		3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PVAttractionAnnotationView.m; sourceTree = "<group>"; };
 		3C2E73681DCC3E1A00C2B809 /* squad-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "squad-Bridging-Header.h"; sourceTree = "<group>"; };
 		3C2E73691DCC3E1A00C2B809 /* addNewFriend.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = addNewFriend.swift; sourceTree = "<group>"; };
 		3C2E736B1DCC65BB00C2B809 /* friendRequests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = friendRequests.swift; sourceTree = "<group>"; };
@@ -99,17 +90,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3C2E73671DCC05D100C2B809 /* Map Aux */ = {
-			isa = PBXGroup;
-			children = (
-				3C2E73611DCC05CC00C2B809 /* PVAttractionAnnotation.h */,
-				3C2E73621DCC05CC00C2B809 /* PVAttractionAnnotation.m */,
-				3C2E73631DCC05CC00C2B809 /* PVAttractionAnnotationView.h */,
-				3C2E73641DCC05CC00C2B809 /* PVAttractionAnnotationView.m */,
-			);
-			name = "Map Aux";
-			sourceTree = "<group>";
-		};
 		3C69C1AD1DCB043600898FA7 = {
 			isa = PBXGroup;
 			children = (
@@ -139,8 +119,6 @@
 				3C69C1E51DCB069900898FA7 /* AppDelegate.h */,
 				3C69C1E61DCB069900898FA7 /* AppDelegate.m */,
 				3C54817A1DCF02B300376A34 /* SwiftAppDelegate.swift */,
-				3C2E735E1DCC05B900C2B809 /* mapViewViewController.h */,
-				3C2E735F1DCC05B900C2B809 /* mapViewViewController.m */,
 				3C2E73711DCD205B00C2B809 /* friendList.swift */,
 				3C5481781DCEAB3200376A34 /* FriendTableViewCell.swift */,
 				3C2E73731DCD21F400C2B809 /* individualFriend.swift */,
@@ -157,7 +135,6 @@
 				3C69C1E01DCB066500898FA7 /* Constants.m */,
 				3C69C1E11DCB066500898FA7 /* Reachability.h */,
 				3C69C1E21DCB066500898FA7 /* Reachability.m */,
-				3C2E73671DCC05D100C2B809 /* Map Aux */,
 				3C69C1DE1DCB065500898FA7 /* Tutorial */,
 				3C69C1D21DCB060900898FA7 /* GoogleService-Info.plist */,
 				3C69C1CA1DCB043600898FA7 /* Info.plist */,
@@ -374,8 +351,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3C2E73661DCC05CC00C2B809 /* PVAttractionAnnotationView.m in Sources */,
-				3C2E73601DCC05B900C2B809 /* mapViewViewController.m in Sources */,
 				3C2E73741DCD21F400C2B809 /* individualFriend.swift in Sources */,
 				3C2E735B1DCBEE7200C2B809 /* ProfileViewController.m in Sources */,
 				3C2E73761DCD27FB00C2B809 /* Channel.swift in Sources */,
@@ -386,7 +361,6 @@
 				3C2E73721DCD205B00C2B809 /* friendList.swift in Sources */,
 				3C2E73701DCC6C3500C2B809 /* individualFriendRequest.swift in Sources */,
 				3C69C1BB1DCB043600898FA7 /* main.m in Sources */,
-				3C2E73651DCC05CC00C2B809 /* PVAttractionAnnotation.m in Sources */,
 				3C69C1E71DCB069900898FA7 /* AppDelegate.m in Sources */,
 				3CAA6C221DD5ACBD009F60FD /* editFriendViewController.swift in Sources */,
 				3C69C1DC1DCB064900898FA7 /* TutPageContentViewController.m in Sources */,
