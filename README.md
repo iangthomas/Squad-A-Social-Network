@@ -12,7 +12,7 @@ You can only friend fellow users if they give you their secret pin number.
 When you a traveling, open the App and see if your friends are in the same city.
 Send them a message and meet up IRL.<br /><br />
 
-Licences<br />
+Licences:<br />
 City and Country data is from Geonames. <br />
 http://download.geonames.org/export/dump/ <br />
 It is licensed under a Creative Commons Attribution 3.0 License.
