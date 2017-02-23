@@ -1,4 +1,4 @@
-# Squad-A-Social-Network
+# Squad: a Social Network
 A privacy-centered social network, that organizes friends by "fuzzy" locations. 
 
 
