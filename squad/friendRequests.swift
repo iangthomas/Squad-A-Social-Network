@@ -46,7 +46,7 @@ class friendRequests: UITableViewController {
     // refactor the following two...
 
     func loadRecievedFriendRequests () {
-        let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let myUserId = UserDefaults.standard.object(forKey: kUserId) as! String
         let friendRequestsPath = FIRDatabase.database().reference().child("users").child(myUserId).child("friendRequests")
         friendRequestsPath.observe(.value, with: { snapshot in
             var newItems: [individualFriendRequest] = []
@@ -62,7 +62,7 @@ class friendRequests: UITableViewController {
     }
     
     func loadSentFriendRequests () {
-        let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let myUserId = UserDefaults.standard.object(forKey: kUserId) as! String
         let friendRequestsPath = FIRDatabase.database().reference().child("users").child(myUserId).child("outstandingFriendRequests")
         friendRequestsPath.observe(.value, with: { snapshot in
             var newItems: [individualFriendRequest] = []
@@ -147,7 +147,7 @@ class friendRequests: UITableViewController {
         
             guard tableView.cellForRow(at: indexPath) != nil else { return }
             let requestItem = recievedFriendRequests[indexPath.row]
-            let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+            let myUserId = UserDefaults.standard.object(forKey: kUserId) as! String
 
             let alert = UIAlertController(title: "Friend Request", message: "Accept this person's friend request", preferredStyle: .alert)
             alert.addAction(acceptFriendRequestAction(requestItem))
@@ -158,7 +158,7 @@ class friendRequests: UITableViewController {
     
     func acceptFriendRequestAction(_ requestItem: individualFriendRequest) -> UIAlertAction {
         
-        let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let myUserId = UserDefaults.standard.object(forKey: kUserId) as! String
         let myPin = UserDefaults.standard.object(forKey: kPin) as! String
 
         let acceptAction = UIAlertAction(title: "Accept", style: .default, handler: { action in

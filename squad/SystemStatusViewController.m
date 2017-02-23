@@ -141,8 +141,8 @@
 }
 
 
--(BOOL) docentProfileEmpty {
-    NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kDocentUserId];
+-(BOOL) userProfileEmpty {
+    NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kUserId];
     
     if ([theName isEqualToString:@""] || theName == nil || [theName isEqualToString:@"0"]) {
         return YES;
@@ -153,7 +153,7 @@
 
 
 -(void) updateSocialButton {
-    if ([self docentProfileEmpty] == NO) {
+    if ([self userProfileEmpty] == NO) {
         [self setButton:_SocialImageButton toColor:@"Green"];
     } else if (emailTextBox.hidden == NO) {
         [self setButton:_SocialImageButton toColor:@"Cyan"];
@@ -395,14 +395,14 @@
     switch ([CLLocationManager authorizationStatus]) {
         case kCLAuthorizationStatusAuthorizedAlways:
             
-            if ([self docentProfileEmpty] == NO) {
+            if ([self userProfileEmpty] == NO) {
                 [self closeTutorialView:nil];
             }
             break;
             
         case kCLAuthorizationStatusAuthorizedWhenInUse:
             
-            if ([self docentProfileEmpty] == NO) {
+            if ([self userProfileEmpty] == NO) {
                 [self closeTutorialView:nil];
             }
             break;
@@ -415,7 +415,7 @@
 
 -(IBAction)socialButtonTapped:(id)sender {
     
-    if ([self docentProfileEmpty]) {
+    if ([self userProfileEmpty]) {
         
         if (emailTextBox.hidden == NO) { // if the user is entering an email address, have the button act like a contine button
             [self prepForEmailSignup];
@@ -633,14 +633,14 @@
 
 -(void) updateGetStartedButton:(NSNotification*) notificaiton {
     
-    if ([self docentProfileEmpty] == NO) {
+    if ([self userProfileEmpty] == NO) {
         
         switch ([CLLocationManager authorizationStatus]) {
             case kCLAuthorizationStatusAuthorizedAlways:
                 
                 [self enableGetStartedButton];
                 // this next line starts everything
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"isVisibleSwitchChanged" object:nil];
                 
                 break;
                 
@@ -648,7 +648,7 @@
                 
                 [self enableGetStartedButton];
                 // this next line starts everything
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"isVisibleSwitchChanged" object:nil];
                 
                 break;
                 
@@ -715,7 +715,7 @@
     [Constants debug:@1 withContent:@"Showing no internet alert view - system status"];
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No Internet"
-                                                                   message:@"Please connect to the internet to change duty status."
+                                                                   message:@"Please connect to the internet to change visible status."
                                                             preferredStyle:UIAlertControllerStyleAlert];
     /*
      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault

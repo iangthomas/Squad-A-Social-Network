@@ -189,7 +189,7 @@ class friendList : UITableViewController {
             // no match, make a new channel
             // no -> make one, add it to both users and show it.
             
-            let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+            let userId = UserDefaults.standard.object(forKey: kUserId) as! String
             
             // generate the main channel
             // let channelsPath = FIRDatabase.database().reference().child("channels")
@@ -274,7 +274,7 @@ class friendList : UITableViewController {
         var madeNewChannel = false
         
         
-        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let userId = UserDefaults.standard.object(forKey: kUserId) as! String
         let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
         
         
@@ -436,7 +436,7 @@ class friendList : UITableViewController {
             
             
             // remove the other perosn from my list
-            let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+            let userId = UserDefaults.standard.object(forKey: kUserId) as! String
 
             let thisUsersFriendsDirectory = FIRDatabase.database().reference().child("users").child(userId).child("friends").child(friendToRemove.key)
             thisUsersFriendsDirectory.removeValue(completionBlock: { (error, ref) in

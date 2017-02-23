@@ -25,8 +25,8 @@
 #define knearby_flock_alert @"nearby_flock_alert"
 
 #define kidOfGenfenceDeviceIsIn @"idOfGenfenceDeviceIsIn"
-#define kOnDuty @"onDuty"
-#define kDocentUserId @"docentUserId"
+#define kUserVisible @"onDuty"
+#define kUserId @"docentUserId"
 #define kPin @"pin"
 #define kNumLaunchesKey @"numTimesAppLaunched"
 

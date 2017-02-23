@@ -31,7 +31,7 @@ import UIKit
     
     func getChatChannels () {
         
-        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let userId = UserDefaults.standard.object(forKey: kUserId) as! String
         let userPin = UserDefaults.standard.object(forKey: kPin) as! String
 
         let thisUserPath = FIRDatabase.database().reference().child("users").child(userId).child("channels")
@@ -145,7 +145,7 @@ import UIKit
     
     func getFriends () {
         
-        let userId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+        let userId = UserDefaults.standard.object(forKey: kUserId) as! String
         
         let friendsPath = FIRDatabase.database().reference().child("users").child(userId).child("friends")
         friendsPath.observe(.value, with: { snapshot in

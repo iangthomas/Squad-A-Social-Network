@@ -61,22 +61,22 @@
 
 -(void)setInitialSwitchPositionAndUi {
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
         [_onOffGrid setSelectedSegmentIndex:1];
-        [Constants debug:@1 withContent:@"Switch indicates Docent is ON Duty"];
+        [Constants debug:@1 withContent:@"Switch indicates user is visible"];
     } else {
         [_onOffGrid setSelectedSegmentIndex:0];
-        [Constants debug:@1 withContent:@"Switch indicates Docent is OFF Duty"];
+        [Constants debug:@1 withContent:@"Switch indicates user is not visible"];
     }
     
     [_onOffGrid addTarget:self action:@selector(switchChanged:) forControlEvents:UIControlEventValueChanged];
 }
 
--(void) updateSwitchToOffDuty:(NSNotification*) notification {
+-(void) updateSwitchToNotVisible:(NSNotification*) notification {
     
     [_onOffGrid setSelectedSegmentIndex:0];
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOnDuty];
-    [Constants debug:@2 withContent:@"Docent was taken OFF Duty because of switching users"];
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserVisible];
+    [Constants debug:@2 withContent:@"User was taken off visible  because of switching users"];
     
 }
 
@@ -86,9 +86,9 @@
         
         if ([self connectedToInternet]) {
             _userLocation.text = @"Loading...";
-            [Constants debug:@1 withContent:@"Docent switched to OFF Duty"];
-            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kOnDuty];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
+            [Constants debug:@1 withContent:@"user switched to not visible"];
+            [[NSUserDefaults standardUserDefaults] setBool:NO forKey:kUserVisible];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"isVisibleSwitchChanged" object:nil];
             
         } else {
             [theControl setSelectedSegmentIndex:1];
@@ -97,9 +97,9 @@
     } else {
         if ([self connectedToInternet]) {
             _userLocation.text = @"Loading...";
-            [Constants debug:@1 withContent:@"Docent switched to ON Duty"];
-            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kOnDuty];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"onDutySwitchChanged" object:nil];
+            [Constants debug:@1 withContent:@"user switched to visible"];
+            [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserVisible];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"isVisibleSwitchChanged" object:nil];
         } else {
             [theControl setSelectedSegmentIndex:0];
         }
@@ -142,7 +142,7 @@
     [Constants debug:@1 withContent:@"Showing no internet alert view - system status"];
     
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"No Internet"
-                                                                   message:@"Please connect to the internet to change duty status."
+                                                                   message:@"Please connect to the internet to change visible status."
                                                             preferredStyle:UIAlertControllerStyleAlert];
     /*
      UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault

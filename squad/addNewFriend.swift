@@ -19,7 +19,7 @@ class addNewFriend: UIViewController, UITextFieldDelegate {
     
     let myPin = UserDefaults.standard.object(forKey: kPin) as! String
     var sentRequest : Bool = false
-    let myUserId = UserDefaults.standard.object(forKey: kDocentUserId) as! String
+    let myUserId = UserDefaults.standard.object(forKey: kUserId) as! String
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -63,15 +63,13 @@
     NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
     NSDictionary *appDefaults = [[NSDictionary alloc] initWithObjectsAndKeys:
                                  @"", kidOfGenfenceDeviceIsIn,
-                                 @"NO", kOnDuty,
-                                 @"", kDocentUserId,
+                                 @"NO", kUserVisible,
+                                 @"", kUserId,
                                  @"", kPin,
                                  @"", kAppIDNumber,
                                  @"YES", kauto_anonymous_stats,
                                  @"YES", kauto_crash_reporting,
                                  @"YES", kVibration_enabled,
-                                 @"YES", knearby_flock_alert,
-                                 @"NO", kgeofenceEditAccess,
                                  nil];
     
     
@@ -141,7 +139,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(requestLocation:) name:@"requestLocation" object:nil];
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeProfileAndGoOnDuty:) name:@"makeProfile" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeProfileAndGoOnVisible:) name:@"makeProfile" object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(incrementFriendListBadgeIcon:) name:@"incrementFriendListBadgeIcon" object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(decrementFriendListBadgeIcon:) name:@"decrementFriendListBadgeIcon" object:nil];
@@ -154,7 +152,7 @@
     [self generateCityList];
     [self generateCountryList];
     
-    if ([self docentProfileEmpty] == NO) {
+    if ([self userProfileEmpty] == NO) {
         [self methodsThatRequireAProfile];
     }
     
@@ -211,34 +209,9 @@
 }
 
 
-/*
- -(void) updateNumLaunches {
- 
- #warning chek me
- 
- if ([self docentProfileEmpty] == NO) {
- 
- 
- Firebase *usersDirectory = [[Constants firebasePath] childByAppendingPath:@"users"];
- Firebase *theUserPath = [usersDirectory childByAppendingPath:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
- // Firebase *personName = [theUserPath childByAppendingPath:@"name"];
- 
- [theUserPath updateChildValues:@{ @"Num_Launches": [NSString stringWithFormat:@"%ld", (long)[[NSUserDefaults standardUserDefaults] integerForKey:kNumLaunchesKey]]
- } withCompletionBlock:^(NSError *error, Firebase *ref) {
- if (!error) {
- [Constants debug:@2 withContent:@"Successfully updated number of launches to firebase."];
- } else {
- [Constants debug:@3 withContent:@"ERROR: couldn't update number of launchesto firebase."];
- [Constants makeErrorReportWithDescription:error.localizedDescription];
- }
- }];
- }
- }
- */
-
 -(void) setupFirebaseVars {
     
-    FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"friendRequests"];
+    FIRDatabaseReference *friendRequests= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kUserId]] child:@"friendRequests"];
     
     [friendRequests observeEventType:FIRDataEventTypeValue withBlock:^(FIRDataSnapshot * _Nonnull snapshot) {
         [self updateFriendRequestBadgeIcon:snapshot];
@@ -314,27 +287,15 @@
     }
 }
 
-
-// if the user is on duty then force them off duty
--(void)takeDeviceOffDuty {
-    [Constants debug:@1 withContent:@"takeDeviceOffDuty"];
-    
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-        
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"takeTheDeviceOffDuty" object:nil];
-        [Constants debug:@1 withContent:@"takeDeviceOffDuty posted"];
-        
-    }
-}
-
--(BOOL) docentProfileEmpty {
-    NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kDocentUserId];
+-(BOOL) userProfileEmpty {
+    NSString* theName = [[NSUserDefaults standardUserDefaults] stringForKey:kUserId];
     
     if ([theName isEqualToString:@""] || theName == nil || [theName isEqualToString:@"0"]) {
         return YES;
     } else {
         return NO;
     }
+
 }
 
 -(void) showTutorial {
@@ -369,9 +330,9 @@
 }
 
 
-- (void) startDocentLocationStuff {
+- (void) startUserLocationServices {
     
-    [Constants debug:@1 withContent:@"startDocentLocationStuff"];
+    [Constants debug:@1 withContent:@"startUserLocationServices"];
     
     if (locationManager == nil) {
         locationManager = [CLLocationManager new];
@@ -379,10 +340,7 @@
     }
     
     locationManager.distanceFilter = kCLLocationAccuracyThreeKilometers;
-    
-    
     locationManager.desiredAccuracy = kCLLocationAccuracyThreeKilometers;
-    //[locationManager startMonitoringSignificantLocationChanges];
     locationManager.activityType = CLActivityTypeOther;
     [locationManager startUpdatingLocation];
     [locationManager requestWhenInUseAuthorization];
@@ -391,7 +349,7 @@
 
 -(void) requestLocation:(NSNotification*) theNotificaiton {
     
-    [self startDocentLocationStuff];
+    [self startUserLocationServices];
 }
 
 
@@ -428,11 +386,10 @@
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
-    if ([self docentProfileEmpty] == NO && [[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
+    if ([self userProfileEmpty] == NO && [[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
         
-        // is this the first time this method has been called
-        if (_currentLocation == nil) {
-            
+        if (_currentLocation == nil) {   // checks if this the first time this method has been called
+
             _currentLocation = [locations objectAtIndex:0];
             
             
@@ -457,7 +414,7 @@
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: Calling the Internet with an updated location"]];
     
     FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
-    FIRDatabaseReference *userRef= [usersRef child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
+    FIRDatabaseReference *userRef= [usersRef child:[[NSUserDefaults standardUserDefaults] objectForKey:kUserId]];
     FIRDatabaseReference *coorRef = [userRef child:@"coor"];
     
     
@@ -469,11 +426,7 @@
     
     NSNumber *lat = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
     NSNumber *lon = [f numberFromString: [NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
-    
-    /*
-     NSNumber *lat = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.latitude] doubleValue]]];
-     NSNumber *lon = [NSNumber numberWithDouble:[NSString stringWithFormat: @"%.1f", [[NSNumber numberWithDouble:userLoc.coordinate.longitude] doubleValue]]];
-     */
+
     
     NSDictionary *locDic = @{
                              @"lon": lon,
@@ -531,29 +484,29 @@
 }
 
 
--(void) toggelDocentStuff:(NSNotification*) notificaiton {
+-(void) toggelUserLocationServices:(NSNotification*) notificaiton {
     
-    [Constants debug:@3 withContent:[NSString stringWithFormat:@"toggelDocentStuff called, with notification, %@", notificaiton.description]];
+    [Constants debug:@3 withContent:[NSString stringWithFormat:@"toggelUserLocationServices called, with notification, %@", notificaiton.description]];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
         
         if (locationManager == nil) {
-            [self startDocentLocationStuff];
+            [self startUserLocationServices];
         }
         [locationManager startUpdatingLocation];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"showTheUserLocation" object:nil];
         
     } else {
-        [self disableDocentStuff];
+        [self disableUserLocationServices];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"hideTheUserLocation" object:nil];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"currentLocationUpdated" object:@"Off Grid"];
     }
 }
 
 
--(void) disableDocentStuff {
+-(void) disableUserLocationServices {
     
-    [Constants debug:@1 withContent:@"disableDocentStuff called."];
+    [Constants debug:@1 withContent:@"disableUserLocationServices called."];
     [locationManager stopUpdatingLocation];
     [self setFirebaseToOffGrid];
 }
@@ -564,7 +517,7 @@
     [Constants debug:@3 withContent:[NSString stringWithFormat:@"FIREBASE: Calling the Internet to go off grid."]];
     
     FIRDatabaseReference *usersRef= [[[FIRDatabase database] reference] child:@"users"];
-    FIRDatabaseReference *userRef= [usersRef child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]];
+    FIRDatabaseReference *userRef= [usersRef child:[[NSUserDefaults standardUserDefaults] objectForKey:kUserId]];
     FIRDatabaseReference *coorRef = [userRef child:@"coor"];
     
     [coorRef setValue:@NO withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
@@ -643,21 +596,21 @@
 
 -(void) initialSetup {
     
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggelDocentStuff:) name:@"onDutySwitchChanged" object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(toggelUserLocationServices:) name:@"isVisibleSwitchChanged" object:nil];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-        [Constants debug:@2 withContent:@"Device is on Duty"];
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
+        [Constants debug:@2 withContent:@"Device is visible"];
     } else {
-        [Constants debug:@2 withContent:@"Device is off Duty"];
+        [Constants debug:@2 withContent:@"Device is not visible"];
     }
     
-    if ([self docentProfileEmpty]) {
+    if ([self userProfileEmpty]) {
         
         [self showTutorial];
     } else {
-        if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
+        if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
             
-            [self toggelDocentStuff:nil];
+            [self toggelUserLocationServices:nil];
         }
     }
 }
@@ -668,7 +621,7 @@
     [Constants debug:@2 withContent:[NSString stringWithFormat:@"Attempting to send current locaiton, userLocationLastUpdated: %@, Current location accuracy: %f", _userLocaitonLastUpdated, _currentLocation.horizontalAccuracy]];
     
     if (_userLocaitonLastUpdated == NULL) {
-        [self startDocentLocationStuff];
+        [self startUserLocationServices];
     }
     if (_currentLocation.horizontalAccuracy < 500 == NO || _currentLocation == nil) {
         [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(sendCurrentLocation:) userInfo:nil repeats:NO];
@@ -679,10 +632,10 @@
 }
 
 
--(void) makeProfileAndGoOnDuty:(NSNotification*) theNotification {
+-(void) makeProfileAndGoVisible:(NSNotification*) theNotification {
     
-    [[NSUserDefaults standardUserDefaults] setObject:theNotification.object forKey:kDocentUserId];
-    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kOnDuty];
+    [[NSUserDefaults standardUserDefaults] setObject:theNotification.object forKey:kUserId];
+    [[NSUserDefaults standardUserDefaults] setBool:YES forKey:kUserVisible];
     
     [self methodsThatRequireAProfile];
 }
@@ -762,7 +715,7 @@
 
 -(NSString*)findNearestLargeCity:(CLLocation*) theGoalLocation {
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
         
         int index = 0;
         double lowestDistanceSoFar = DBL_MAX;
@@ -832,9 +785,9 @@
 
 
 -(void) postUpdatedAppVersion {
-    if ([self docentProfileEmpty] == NO) {
+    if ([self userProfileEmpty] == NO) {
         
-        FIRDatabaseReference *updateAppVersionPath= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId]] child:@"App_Version"];
+        FIRDatabaseReference *updateAppVersionPath= [[[[[FIRDatabase database] reference] child:@"users"]child:[[NSUserDefaults standardUserDefaults] objectForKey:kUserId]] child:@"App_Version"];
         
         [updateAppVersionPath setValue:[[NSBundle mainBundle] objectForInfoDictionaryKey:@"CFBundleShortVersionString"] withCompletionBlock:^(NSError * _Nullable error, FIRDatabaseReference * _Nonnull ref) {
             

@@ -88,14 +88,14 @@ static NSString* idInfo;
     
     theError[@"idOfGenfenceDeviceIsIn"] = [[NSUserDefaults standardUserDefaults] objectForKey:kidOfGenfenceDeviceIsIn];
     
-    if ([[NSUserDefaults standardUserDefaults] boolForKey:kOnDuty]) {
-        theError[@"onDuty"] = @YES;
+    if ([[NSUserDefaults standardUserDefaults] boolForKey:kUserVisible]) {
+        theError[@"isVisible"] = @YES;
     } else {
-        theError[@"onDuty"] = @NO;
+        theError[@"isVisible"] = @NO;
     }
     
     
-    theError[@"docentUserId"] = [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId];
+    theError[@"userId"] = [[NSUserDefaults standardUserDefaults] objectForKey:kUserId];
     theError[@"numTimesAppLaunched"] = [[NSUserDefaults standardUserDefaults] objectForKey:kNumLaunchesKey];
     
     
@@ -155,7 +155,7 @@ static NSString* idInfo;
 // copied from the app delegate
 +(BOOL) shouldDisplayGeofence:(NSMutableDictionary*)attraction {
     
-    NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey:kDocentUserId];
+    NSString* userId = [[NSUserDefaults standardUserDefaults] objectForKey:kUserId];
     
   //  NSString* ownedbyuserId = attraction[@"ownedByUserId"];
     
