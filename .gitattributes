@@ -1,2 +1,2 @@
 $ cat .gitattributes
-*.m linguist-language=Swift
+*.h linguist-language=Swift
