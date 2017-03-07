@@ -1,5 +1,5 @@
 # Squad: a Social Network
-A privacy-centered social network, that organizes friends by "fuzzy" locations. The focus here is privacy and geography.<br />
+A privacy-centered social network, that organizes friends by "fuzzy" locations. The focus is privacy and geography.<br />
 
 Do you have a hard time keeping track of your extended group of friends?
 “Did so-and-so just move to Springfield? But which one?”<br />
